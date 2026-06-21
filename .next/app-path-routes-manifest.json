@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/robots.txt/route": "/robots.txt",
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/about/page": "/about",
+  "/page": "/",
+  "/product/[slug]/page": "/product/[slug]",
+  "/shop/page": "/shop",
+  "/faq/page": "/faq"
+}
