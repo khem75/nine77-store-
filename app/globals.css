@@ -1,0 +1,67 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    color-scheme: dark;
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: #0A0A0A;
+    color: #ffffff;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100%;
+    background: linear-gradient(180deg, #070707 0%, #0A0A0A 100%);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+::selection {
+    background: rgba(212, 175, 55, 0.3);
+}
+
+#root,
+#__next {
+    min-height: 100vh;
+}
+
+.gradient-border {
+    position: relative;
+    border: 1px solid rgba(212, 175, 55, 0.14);
+}
+
+.gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.75), rgba(184, 134, 11, 0.75));
+    filter: blur(24px);
+    opacity: 0.45;
+    border-radius: inherit;
+}
+
+.glass-panel {
+    background: rgba(15, 15, 15, 0.68);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.shimmer-panel {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.02) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 2.5s infinite;
+}
