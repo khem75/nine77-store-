@@ -11,33 +11,24 @@ export const buildWhatsAppUrl = ({
     size,
     quantity,
 }: WhatsAppOrderOptions): string => {
-    const message = `🖤 NINE77 ORDER REQUEST
+    const message = `Hello NINE77,
 
-━━━━━━━━━━━━━━━
-PRODUCT DETAILS
-━━━━━━━━━━━━━━━
+I would like to place an order.
 
-📦 Product: ${productName}
-💰 Price: Rs. ${price}
-📏 Size: ${size}
-🔢 Quantity: ${quantity}
+Product: ${productName}
+Price: Rs. ${price.toLocaleString()}
+Size: ${size}
+Quantity: ${quantity}
 
-━━━━━━━━━━━━━━━
-CUSTOMER DETAILS
-━━━━━━━━━━━━━━━
-
-👤 Name:
-📱 Phone Number:
-📍 Address:
-
-━━━━━━━━━━━━━━━
+Customer Name:
+Phone Number:
+Delivery Address:
 
 Please confirm availability and delivery details.
 
-Thank you,
-NINE77 Customer`;
+Thank you.`;
 
-    return `https://wa.me/9779845465529?text=${encodeURIComponent(
+    return `https://wa.me/9779810605409?text=${encodeURIComponent(
         message
     )}`;
 };
