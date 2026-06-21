@@ -1,10 +1,11 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { products } from '@/data/products';
 
 const stats = [
     { label: 'Happy Customers', value: '500+' },
-    { label: 'Exclusive Pieces', value: '9' },
+    { label: 'Exclusive Pieces', value: products.length.toString() },
     { label: 'Premium Quality', value: '100%' },
     { label: 'Vision', value: '1' }
 ];
@@ -23,8 +24,13 @@ export default function Stats() {
                             transition={{ duration: 0.55, delay: index * 0.1 }}
                             className="rounded-[28px] border border-white/10 bg-white/5 p-8 text-center"
                         >
-                            <p className="text-4xl font-black text-gold">{stat.value}</p>
-                            <p className="mt-4 text-sm uppercase tracking-[0.35em] text-white/70">{stat.label}</p>
+                            <p className="text-4xl font-black text-gold">
+                                {stat.value}
+                            </p>
+
+                            <p className="mt-4 text-sm uppercase tracking-[0.35em] text-white/70">
+                                {stat.label}
+                            </p>
                         </motion.div>
                     ))}
                 </div>

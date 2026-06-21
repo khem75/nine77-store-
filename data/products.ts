@@ -6,107 +6,179 @@ export const products: Product[] = [
         name: 'Henley',
         slug: 'henley',
         price: 1350,
-        description: 'Signature luxury Henley crafted for elevated streetwear. A sculpted silhouette with premium weight and refined minimal detail.',
+        description:
+            'Signature luxury Henley crafted for elevated streetwear. A sculpted silhouette with premium weight and refined minimal detail.',
         category: 'Tops',
-        images: [],
+        images: [
+            '/products/henley-1.jpg',
+            '/products/henley-2.jpg',
+            '/products/henley-3.jpg',
+            '/products/henley-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: true,
-        newArrival: false
+        newArrival: false,
     },
     {
         id: 'vintage-t-shirt',
         name: 'Vintage T-Shirt',
         slug: 'vintage-t-shirt',
         price: 1350,
-        description: 'Soft premium cotton with understated branding and vintage-inspired construction for refined layering and everyday luxury.',
+        description:
+            'Soft premium cotton with understated branding and vintage-inspired construction for refined layering and everyday luxury.',
         category: 'Tops',
-        images: [],
+        images: [
+            '/products/vintage-t-shirt-1.jpg',
+            '/products/vintage-t-shirt-2.jpg',
+            '/products/vintage-t-shirt-3.jpg',
+            '/products/vintage-t-shirt-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: true,
-        newArrival: true
+        newArrival: true,
     },
     {
         id: 'old-money-tee',
         name: 'Old Money Tee',
         slug: 'old-money-tee',
         price: 1450,
-        description: 'A luxury wardrobe essential with a clean editorial edge. Elevated tee styling designed for quiet statement dressing.',
+        description:
+            'A luxury wardrobe essential with a clean editorial edge. Elevated tee styling designed for quiet statement dressing.',
         category: 'Tops',
-        images: [],
+        images: [
+            '/products/old-money-tee-1.jpg',
+            '/products/old-money-tee-2.jpg',
+            '/products/old-money-tee-3.jpg',
+            '/products/old-money-tee-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: false,
-        newArrival: true
+        newArrival: true,
     },
     {
         id: 'barrel-pants',
         name: 'Barrel Pants',
         slug: 'barrel-pants',
         price: 1800,
-        description: 'Modern barrel silhouette crafted from premium suiting fabric, offering a relaxed fit with structured luxury detail.',
+        description:
+            'Modern barrel silhouette crafted from premium suiting fabric, offering a relaxed fit with structured luxury detail.',
         category: 'Pants',
-        images: [],
+        images: [
+            '/products/barrel-pants-1.jpg',
+            '/products/barrel-pants-2.jpg',
+            '/products/barrel-pants-3.jpg',
+            '/products/barrel-pants-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: true,
-        newArrival: false
+        newArrival: false,
     },
     {
         id: 'amd-pants',
         name: 'AMD Pants',
         slug: 'amd-pants',
         price: 1800,
-        description: 'Engineered streetwear pants with technical tailoring and premium texture, brought to life for refined urban dressing.',
+        description:
+            'Engineered streetwear pants with technical tailoring and premium texture, brought to life for refined urban dressing.',
         category: 'Pants',
-        images: [],
+        images: [
+            '/products/amd-pants-1.jpg',
+            '/products/amd-pants-2.jpg',
+            '/products/amd-pants-3.jpg',
+            '/products/amd-pants-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: false,
-        newArrival: false
+        newArrival: false,
     },
     {
         id: 'linen-trousers',
         name: 'Linen Trousers',
         slug: 'linen-trousers',
         price: 1450,
-        description: 'Lightweight luxury linen trousers with tailored ease. A refined silhouette for elevated warm-weather dressing.',
+        description:
+            'Lightweight luxury linen trousers with tailored ease. A refined silhouette for elevated warm-weather dressing.',
         category: 'Pants',
-        images: [],
+        images: [
+            '/products/linen-trousers-1.jpg',
+            '/products/linen-trousers-2.jpg',
+            '/products/linen-trousers-3.jpg',
+            '/products/linen-trousers-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: false,
-        newArrival: true
+        newArrival: true,
     },
     {
         id: 'muscle-tee',
         name: 'Muscle Tee',
         slug: 'muscle-tee',
         price: 1350,
-        description: 'Structured luxury muscle tee with premium finishes and a sculpted fit designed for modern layering.',
+        description:
+            'Structured luxury muscle tee with premium finishes and a sculpted fit designed for modern layering.',
         category: 'Tops',
-        images: [],
+        images: [
+            '/products/muscle-tee-1.jpg',
+            '/products/muscle-tee-2.jpg',
+            '/products/muscle-tee-3.jpg',
+            '/products/muscle-tee-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: true,
-        newArrival: false
+        newArrival: false,
     },
     {
         id: 'crop-tee',
         name: 'Crop Tee',
         slug: 'crop-tee',
         price: 1250,
-        description: 'Cropped luxury tee with effortless styling and minimalist identity. A standout addition to elevated streetwear edits.',
+        description:
+            'Cropped luxury tee with effortless styling and minimalist identity. A standout addition to elevated streetwear edits.',
         category: 'Tops',
-        images: [],
+        images: [
+            '/products/crop-tee-1.jpg',
+            '/products/crop-tee-2.jpg',
+            '/products/crop-tee-3.jpg',
+            '/products/crop-tee-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: false,
-        newArrival: false
+        newArrival: false,
+    },
+
+    {
+        id: 'linen-shirt',
+        name: 'Linen Shirt',
+        slug: 'linen-shirt',
+        price: 1650,
+        description: 'Premium linen shirt crafted for effortless luxury. Lightweight, breathable, and designed with a relaxed silhouette for elevated everyday wear.',
+        category: 'Tops',
+        images: [
+            '/products/linen-shirt-1.jpg',
+            '/products/linen-shirt-2.jpg',
+            '/products/linen-shirt-3.jpg',
+            '/products/linen-shirt-4.jpg'
+        ],
+        sizes: ['S', 'M', 'L', 'XL'],
+        featured: true,
+        newArrival: true
     },
     {
         id: 'windcheater',
         name: 'Windcheater',
         slug: 'windcheater',
         price: 2750,
-        description: 'Bold luxury outerwear with premium windproof construction and an elevated street-ready silhouette.',
+        description:
+            'Bold luxury outerwear with premium windproof construction and an elevated street-ready silhouette.',
         category: 'Outerwear',
-        images: [],
+        images: [
+            '/products/windcheater-1.jpg',
+            '/products/windcheater-2.jpg',
+            '/products/windcheater-3.jpg',
+            '/products/windcheater-4.jpg',
+        ],
         sizes: ['S', 'M', 'L', 'XL'],
         featured: false,
-        newArrival: true
-    }
+        newArrival: true,
+    },
 ];

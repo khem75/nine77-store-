@@ -1,10 +1,11 @@
 'use client';
 
+import Image from 'next/image';
 import { useMemo, useState } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
 import { formatPrice } from '@/utils';
 import type { Product } from '@/types/product';
-import ImagePlaceholder from '@/components/image-placeholder';
 import RelatedProducts from '@/components/related-products';
 
 interface ProductDetailProps {
@@ -18,6 +19,7 @@ export default function ProductDetail({
 }: ProductDetailProps) {
     const [quantity, setQuantity] = useState(1);
     const [size, setSize] = useState<'S' | 'M' | 'L' | 'XL'>('M');
+    const [currentImage, setCurrentImage] = useState(0);
 
     const orderUrl = useMemo(
         () =>
@@ -30,14 +32,101 @@ export default function ProductDetail({
         [product.name, product.price, size, quantity]
     );
 
+    const nextImage = () => {
+        setCurrentImage((prev) =>
+            prev === product.images.length - 1 ? 0 : prev + 1
+        );
+    };
+
+    const prevImage = () => {
+        setCurrentImage((prev) =>
+            prev === 0 ? product.images.length - 1 : prev - 1
+        );
+    };
+
     return (
         <>
             <section className="px-6 py-16 lg:px-8">
                 <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-start">
-                    <div>
-                        <ImagePlaceholder />
+
+                    {/* Product Gallery */}
+                    <div className="space-y-4">
+                        <div className="relative overflow-hidden rounded-[32px] border border-white/10 bg-black">
+                            <div className="relative aspect-[4/5] w-full">
+                                <Image
+                                    src={product.images[currentImage]}
+                                    alt={product.name}
+                                    fill
+                                    priority
+                                    className="object-cover"
+                                />
+                            </div>
+
+                            {product.images.length > 1 && (
+                                <>
+                                    <button
+                                        onClick={prevImage}
+                                        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/70 p-3 text-white backdrop-blur"
+                                    >
+                                        <ChevronLeft size={20} />
+                                    </button>
+
+                                    <button
+                                        onClick={nextImage}
+                                        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/70 p-3 text-white backdrop-blur"
+                                    >
+                                        <ChevronRight size={20} />
+                                    </button>
+                                </>
+                            )}
+                        </div>
+
+                        {product.images.length > 1 && (
+                            <div className="flex items-center justify-center gap-4">
+                                <button
+                                    onClick={prevImage}
+                                    className="text-white/60 hover:text-gold"
+                                >
+                                    <ChevronLeft size={20} />
+                                </button>
+
+                                <span className="text-sm uppercase tracking-[0.25em] text-white">
+                                    {currentImage + 1} / {product.images.length}
+                                </span>
+
+                                <button
+                                    onClick={nextImage}
+                                    className="text-white/60 hover:text-gold"
+                                >
+                                    <ChevronRight size={20} />
+                                </button>
+                            </div>
+                        )}
+
+                        <div className="grid grid-cols-2 gap-4">
+                            {product.images.map((image, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setCurrentImage(index)}
+                                    className={`relative overflow-hidden rounded-2xl border ${currentImage === index
+                                        ? 'border-gold'
+                                        : 'border-white/10'
+                                        }`}
+                                >
+                                    <div className="relative aspect-[4/5]">
+                                        <Image
+                                            src={image}
+                                            alt={`${product.name} ${index + 1}`}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                </button>
+                            ))}
+                        </div>
                     </div>
 
+                    {/* Product Info */}
                     <div className="space-y-8">
                         <div className="rounded-[28px] border border-white/10 bg-white/5 p-10">
                             <p className="text-sm uppercase tracking-[0.35em] text-gold">
