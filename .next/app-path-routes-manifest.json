@@ -1,11 +1,10 @@
 {
-  "/_global-error/page": "/_global-error",
   "/_not-found/page": "/_not-found",
-  "/about/page": "/about",
-  "/faq/page": "/faq",
-  "/page": "/",
-  "/product/[slug]/page": "/product/[slug]",
   "/robots.txt/route": "/robots.txt",
-  "/shop/page": "/shop",
-  "/sitemap.xml/route": "/sitemap.xml"
+  "/sitemap.xml/route": "/sitemap.xml",
+  "/about/page": "/about",
+  "/product/[slug]/page": "/product/[slug]",
+  "/page": "/",
+  "/faq/page": "/faq",
+  "/shop/page": "/shop"
 }
