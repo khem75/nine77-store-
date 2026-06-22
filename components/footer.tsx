@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { Instagram, Facebook, Music2 } from 'lucide-react';
 
 export default function Footer() {
     return (
@@ -24,25 +25,25 @@ export default function Footer() {
 
                         <ul className="space-y-3 text-sm text-white/70">
                             <li>
-                                <Link href="/" className="hover:text-gold">
+                                <Link href="/" className="hover:text-gold transition">
                                     Home
                                 </Link>
                             </li>
 
                             <li>
-                                <Link href="/shop" className="hover:text-gold">
+                                <Link href="/shop" className="hover:text-gold transition">
                                     Shop
                                 </Link>
                             </li>
 
                             <li>
-                                <Link href="/about" className="hover:text-gold">
+                                <Link href="/about" className="hover:text-gold transition">
                                     About
                                 </Link>
                             </li>
 
                             <li>
-                                <Link href="/faq" className="hover:text-gold">
+                                <Link href="/faq" className="hover:text-gold transition">
                                     FAQ
                                 </Link>
                             </li>
@@ -65,15 +66,40 @@ export default function Footer() {
                             Social
                         </h4>
 
-                        <ul className="space-y-3 text-sm text-white/70">
+                        <ul className="space-y-4 text-sm text-white/70">
                             <li>
                                 <a
                                     href="https://www.instagram.com/nine.77___/"
                                     target="_blank"
                                     rel="noreferrer"
-                                    className="hover:text-gold"
+                                    className="flex items-center gap-2 hover:text-gold transition"
                                 >
+                                    <Instagram size={16} />
                                     Instagram
+                                </a>
+                            </li>
+
+                            <li>
+                                <a
+                                    href="https://www.tiktok.com/@nine.77___"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="flex items-center gap-2 hover:text-gold transition"
+                                >
+                                    <Music2 size={16} />
+                                    TikTok
+                                </a>
+                            </li>
+
+                            <li>
+                                <a
+                                    href="https://www.facebook.com/share/1DtEy4K4MX/?mibextid=wwXIfr"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="flex items-center gap-2 hover:text-gold transition"
+                                >
+                                    <Facebook size={16} />
+                                    Facebook
                                 </a>
                             </li>
                         </ul>
@@ -91,7 +117,7 @@ export default function Footer() {
                             href="https://github.com/khem75"
                             target="_blank"
                             rel="noreferrer"
-                            className="text-gold hover:text-white"
+                            className="text-gold hover:text-white transition"
                         >
                             Khem R. Joshi
                         </a>

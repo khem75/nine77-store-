@@ -3,8 +3,8 @@
   "/robots.txt/route": "/robots.txt",
   "/sitemap.xml/route": "/sitemap.xml",
   "/about/page": "/about",
-  "/product/[slug]/page": "/product/[slug]",
-  "/page": "/",
   "/faq/page": "/faq",
-  "/shop/page": "/shop"
+  "/page": "/",
+  "/shop/page": "/shop",
+  "/product/[slug]/page": "/product/[slug]"
 }
