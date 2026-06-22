@@ -1,71 +1,135 @@
 'use client';
 
-import { motion, AnimatePresence } from 'framer-motion';
-import Link from 'next/link';
-import { X, Menu, MessageSquare } from 'lucide-react';
 import { useState } from 'react';
-
-const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Shop', href: '/shop' },
-    { label: 'About', href: '/about' },
-    { label: 'FAQ', href: '/faq' }
-];
+import Link from 'next/link';
+import { Menu, X, Home, ShoppingBag, Info, CircleHelp } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function MobileMenu() {
     const [open, setOpen] = useState(false);
 
+    const closeMenu = () => setOpen(false);
+
     return (
-        <div className="md:hidden">
+        <>
             <button
-                type="button"
                 onClick={() => setOpen(true)}
-                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-3 py-2 text-white transition hover:bg-white/10"
-                aria-label="Open menu"
+                className="md:hidden rounded-xl border border-white/10 bg-white/5 p-2 text-white"
             >
-                <Menu size={20} />
+                <Menu size={24} />
             </button>
+
             <AnimatePresence>
-                {open ? (
+                {open && (
                     <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        exit={{ opacity: 0, x: 50 }}
-                        className="fixed inset-0 z-50 bg-black/80 px-6 py-8 backdrop-blur-xl"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="fixed inset-0 z-[999] bg-black"
                     >
-                        <div className="flex items-center justify-between">
-                            <span className="text-xl font-semibold uppercase tracking-[0.4em] text-white">NINE77</span>
+                        <div className="flex items-center justify-between border-b border-white/10 px-6 py-5">
+                            <h2 className="text-xl font-black tracking-[0.3em] text-white">
+                                NINE77
+                            </h2>
+
                             <button
-                                type="button"
-                                onClick={() => setOpen(false)}
-                                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 p-2 text-white"
-                                aria-label="Close menu"
+                                onClick={closeMenu}
+                                className="rounded-full border border-white/10 p-2 text-white"
                             >
-                                <X size={20} />
+                                <X size={24} />
                             </button>
                         </div>
-                        <div className="mt-10 space-y-6">
-                            {navItems.map((item) => (
+
+                        <div className="px-6 py-8">
+                            <p className="mb-6 text-xs uppercase tracking-[0.4em] text-gold">
+                                Menu
+                            </p>
+
+                            <div className="space-y-5">
                                 <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    onClick={() => setOpen(false)}
-                                    className="block text-2xl font-semibold uppercase tracking-[0.2em] text-white transition hover:text-gold"
+                                    href="/"
+                                    onClick={closeMenu}
+                                    className="flex items-center gap-4 border-b border-white/10 pb-4 text-xl font-medium text-white"
                                 >
-                                    {item.label}
+                                    <Home size={22} />
+                                    Home
                                 </Link>
-                            ))}
-                        </div>
-                        <div className="mt-12 flex items-center gap-3 rounded-3xl bg-white/5 p-4">
-                            <MessageSquare className="text-gold" size={18} />
-                            <div>
-                                <p className="text-sm uppercase text-muted">Order on WhatsApp</p>
-                                <p className="text-sm text-white/80">Quick luxury support</p>
+
+                                <Link
+                                    href="/shop"
+                                    onClick={closeMenu}
+                                    className="flex items-center gap-4 border-b border-white/10 pb-4 text-xl font-medium text-white"
+                                >
+                                    <ShoppingBag size={22} />
+                                    Shop
+                                </Link>
+
+                                <Link
+                                    href="/about"
+                                    onClick={closeMenu}
+                                    className="flex items-center gap-4 border-b border-white/10 pb-4 text-xl font-medium text-white"
+                                >
+                                    <Info size={22} />
+                                    About
+                                </Link>
+
+                                <Link
+                                    href="/faq"
+                                    onClick={closeMenu}
+                                    className="flex items-center gap-4 border-b border-white/10 pb-4 text-xl font-medium text-white"
+                                >
+                                    <CircleHelp size={22} />
+                                    FAQ
+                                </Link>
+                            </div>
+
+                            <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-5">
+                                <p className="text-xs uppercase tracking-[0.3em] text-gold">
+                                    Support
+                                </p>
+
+                                <a
+                                    href="https://wa.me/9779845465529"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="mt-4 block text-white"
+                                >
+                                    WhatsApp Support
+                                </a>
+                            </div>
+
+                            <div className="mt-8 flex gap-4">
+                                <a
+                                    href="https://www.instagram.com/nine.77___/"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rounded-full border border-white/10 px-4 py-2 text-white"
+                                >
+                                    Instagram
+                                </a>
+
+                                <a
+                                    href="https://www.tiktok.com/@nine.77__"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rounded-full border border-white/10 px-4 py-2 text-white"
+                                >
+                                    TikTok
+                                </a>
+
+                                <a
+                                    href="https://www.facebook.com/share/1DtEy4K4MX/?mibextid=wwXIfr"
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    className="rounded-full border border-white/10 px-4 py-2 text-white"
+                                >
+                                    Facebook
+                                </a>
                             </div>
                         </div>
                     </motion.div>
-                ) : null}
+                )}
             </AnimatePresence>
-        </div>
+        </>
     );
 }
