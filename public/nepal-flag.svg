@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 490">
+
+  <!-- ═══ BLUE BORDER ═══ -->
+  <!-- Upper pennant outer -->
+  <polygon points="0,0 265,0 0,224" fill="#003893"/>
+  <!-- Lower pennant outer -->
+  <polygon points="0,202 400,202 0,490" fill="#003893"/>
+
+  <!-- ═══ CRIMSON FILL ═══ -->
+  <!-- Upper pennant inner -->
+  <polygon points="18,18 244,18 18,206" fill="#DC143C"/>
+  <!-- Lower pennant inner -->
+  <polygon points="18,222 378,222 18,472" fill="#DC143C"/>
+
+  <!-- ═══ CRESCENT MOON (upper section) ═══ -->
+  <!-- White base circle -->
+  <circle cx="100" cy="84" r="44" fill="white"/>
+  <!-- Crimson overlay offset → crescent -->
+  <circle cx="118" cy="68" r="39" fill="#DC143C"/>
+  <!-- 5 small white stars on crescent -->
+  <circle cx="78"  cy="72"  r="5" fill="white"/>
+  <circle cx="68"  cy="88"  r="4" fill="white"/>
+  <circle cx="74"  cy="104" r="3.5" fill="white"/>
+  <circle cx="90"  cy="115" r="3" fill="white"/>
+  <circle cx="108" cy="112" r="2.5" fill="white"/>
+
+  <!-- ═══ 12-RAYED SUN (lower section) ═══ -->
+  <g transform="translate(115,338)">
+    <!-- 12 rounded rays at 30° each -->
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(30)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(60)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(90)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(120)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(150)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(180)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(210)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(240)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(270)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(300)"/>
+    <rect x="-5" y="-60" width="10" height="22" rx="5" fill="white" transform="rotate(330)"/>
+    <!-- Outer ring -->
+    <circle r="44" fill="white"/>
+    <!-- Crimson sun body -->
+    <circle r="32" fill="#DC143C"/>
+    <!-- White center dot -->
+    <circle r="12" fill="white"/>
+    <!-- Crimson inner dot -->
+    <circle r="6" fill="#DC143C"/>
+  </g>
+
+</svg>

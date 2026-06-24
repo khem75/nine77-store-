@@ -3,19 +3,27 @@
 import { motion } from 'framer-motion';
 import { MessageCircle } from 'lucide-react';
 
+const WHATSAPP_URL =
+    'https://wa.me/9779810605409?text=Hello%20NINE77%2C%20I%20would%20like%20to%20place%20an%20order.';
+
 export default function WhatsappButton() {
     return (
         <motion.a
-            href="https://wa.me/9779845465529"
+            href={WHATSAPP_URL}
             target="_blank"
             rel="noreferrer"
-            whileHover={{ scale: 1.05 }}
-            animate={{ y: [0, -4, 0] }}
-            transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
-            className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-3 rounded-full bg-gold px-4 py-3 text-sm font-semibold uppercase tracking-[0.2em] text-black shadow-glow"
+            initial={{ opacity: 0, scale: 0.5, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: 2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            whileHover={{ scale: 1.08 }}
+            whileTap={{ scale: 0.92 }}
+            className="group fixed bottom-24 right-5 z-50 hidden items-center gap-3 rounded-full bg-gold px-4 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-black shadow-glow transition-all duration-300 hover:shadow-glow-lg hover:gap-4 md:bottom-8 md:right-8 md:flex"
         >
-            <MessageCircle size={18} />
-            Order on WhatsApp
+            {/* Ping animation */}
+            <span className="absolute -inset-0.5 animate-ping rounded-full bg-gold/40 opacity-0 group-hover:opacity-100" />
+
+            <MessageCircle size={17} strokeWidth={2.5} />
+            <span className="relative">Order Now</span>
         </motion.a>
     );
 }

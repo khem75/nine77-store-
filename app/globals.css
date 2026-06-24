@@ -2,21 +2,47 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ================================
+   NINE77 — Cinematic Design System
+   ================================ */
+
 :root {
     color-scheme: dark;
-    font-family: 'Inter', system-ui, sans-serif;
-    background-color: #0A0A0A;
-    color: #ffffff;
+    --font-outfit: 'Outfit', system-ui, sans-serif;
+    --font-rajdhani: 'Rajdhani', monospace;
+    --gold: #D4AF37;
+    --gold-light: #F0CB5A;
+    --gold-dark: #B8860B;
+    --bg: #080808;
+    --bg-2: #0D0D0D;
 }
 
 html {
-    scroll-behavior: smooth;
+    scroll-behavior: auto; /* Lenis handles smooth scrolling */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
 }
 
 body {
     margin: 0;
     min-height: 100%;
-    background: linear-gradient(180deg, #070707 0%, #0A0A0A 100%);
+    background: #080808;
+    color: #ffffff;
+    font-family: var(--font-outfit), system-ui, sans-serif;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Noise texture overlay for tactile depth */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
 * {
@@ -29,15 +55,56 @@ select {
     font: inherit;
 }
 
+/* Premium text selection */
 ::selection {
-    background: rgba(212, 175, 55, 0.3);
+    background: rgba(212, 175, 55, 0.25);
+    color: #F0CB5A;
 }
 
 #root,
 #__next {
     min-height: 100vh;
+    position: relative;
+    z-index: 1;
 }
 
+/* ── Scrollbar ── */
+::-webkit-scrollbar {
+    width: 3px;
+}
+::-webkit-scrollbar-track {
+    background: #080808;
+}
+::-webkit-scrollbar-thumb {
+    background: rgba(212, 175, 55, 0.4);
+    border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(212, 175, 55, 0.7);
+}
+
+/* ── Glass panels ── */
+.glass {
+    background: rgba(14, 14, 14, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.glass-gold {
+    background: rgba(14, 14, 14, 0.7);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.glass-panel {
+    background: rgba(15, 15, 15, 0.68);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Gold glow border ── */
 .gradient-border {
     position: relative;
     border: 1px solid rgba(212, 175, 55, 0.14);
@@ -54,14 +121,154 @@ select {
     border-radius: inherit;
 }
 
-.glass-panel {
-    background: rgba(15, 15, 15, 0.68);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
+/* ── Shimmer ── */
 .shimmer-panel {
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.02) 100%);
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.02) 0%,
+        rgba(255, 255, 255, 0.08) 50%,
+        rgba(255, 255, 255, 0.02) 100%
+    );
     background-size: 200% 100%;
     animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* ── Gold text gradient ── */
+.text-gold-gradient {
+    background: linear-gradient(135deg, #F0CB5A 0%, #D4AF37 50%, #B8860B 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* ── Editorial underline ── */
+.editorial-underline {
+    position: relative;
+    display: inline-block;
+}
+.editorial-underline::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212,175,55,0.8), transparent);
+    transform: scaleX(0);
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.editorial-underline:hover::after {
+    transform: scaleX(1);
+}
+
+/* ── Section reveal animation utility ── */
+.reveal-hidden {
+    opacity: 0;
+    transform: translateY(50px);
+}
+.reveal-visible {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ── Magnetic button base ── */
+.btn-magnetic {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    will-change: transform;
+}
+
+/* ── Horizontal scroll container ── */
+.horizontal-scroll-container {
+    display: flex;
+    will-change: transform;
+}
+
+/* ── Canvas container (R3F) ── */
+.r3f-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* ── Mobile bottom nav safe area ── */
+.mobile-nav-safe {
+    padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* ── Perspective card 3D tilt ── */
+.perspective-card {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+}
+
+/* ── Noise grid bg ── */
+.grid-bg {
+    background-image:
+        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+}
+
+/* ── Full bleed section ── */
+.section-full {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* ── Cinematic letterbox bars ── */
+.letterbox::before,
+.letterbox::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: #080808;
+    z-index: 10;
+}
+.letterbox::before { top: 0; }
+.letterbox::after  { bottom: 0; }
+
+/* ── Accessibility: reduce motion ── */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* ── Mobile bottom nav padding ── */
+.pb-mobile-nav {
+    padding-bottom: 88px;
+}
+
+/* ── Blurred orb decoration ── */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    will-change: transform;
+}
+.orb-gold {
+    background: radial-gradient(circle, rgba(212,175,55,0.3) 0%, transparent 70%);
+}
+.orb-white {
+    background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%);
 }
