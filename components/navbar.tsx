@@ -1,10 +1,11 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useRef, useState, useCallback } from 'react';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, Menu, X, Home, ShoppingBag, Info, CircleHelp, Instagram, ArrowUpRight } from 'lucide-react';
+import { MessageCircle, Menu, X, Home, ShoppingBag, Info, CircleHelp, ArrowUpRight } from 'lucide-react';
 
 const navLinks = [
     { label: 'Home',  href: '/',      icon: Home },
@@ -212,7 +213,50 @@ function MobileDrawer({
                             </div>
 
                             {/* Divider */}
-                            <div className="my-8 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+                            <div className="my-6 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+
+                            {/* Floating featured product image */}
+                            <motion.div
+                                custom={navLinks.length - 1}
+                                variants={itemVariants}
+                                initial="hidden"
+                                animate="visible"
+                                exit="exit"
+                                className="relative mb-6 overflow-hidden rounded-2xl border border-white/8 bg-white/3"
+                            >
+                                {/* Slow float animation wrapper */}
+                                <motion.div
+                                    animate={{ y: [0, -8, 0] }}
+                                    transition={{
+                                        duration: 4,
+                                        repeat: Infinity,
+                                        ease: 'easeInOut',
+                                    }}
+                                    className="relative h-44 w-full"
+                                >
+                                    <Image
+                                        src="/products/windcheater-1.jpg"
+                                        alt="NINE77 Windcheater"
+                                        fill
+                                        className="object-cover object-top"
+                                        sizes="360px"
+                                        priority={false}
+                                    />
+                                    {/* Gold shimmer overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#080808]/80 via-transparent to-transparent" />
+                                    <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
+                                </motion.div>
+
+                                {/* Label */}
+                                <div className="absolute bottom-0 left-0 right-0 px-4 py-3">
+                                    <p className="text-[9px] uppercase tracking-[0.4em] text-gold/60">Featured</p>
+                                    <p className="text-sm font-bold uppercase tracking-[0.15em] text-white">Windcheater</p>
+                                </div>
+
+                                {/* Corner bracket accent */}
+                                <div className="absolute right-3 top-3 h-5 w-5 border-r border-t border-gold/30" />
+                                <div className="absolute bottom-3 left-3 h-5 w-5 border-b border-l border-gold/30" />
+                            </motion.div>
 
                             {/* WhatsApp CTA */}
                             <motion.div
