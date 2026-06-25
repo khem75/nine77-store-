@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useLayoutEffect } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -61,7 +61,32 @@ export default function LookbookHorizontal() {
     const trackRef = useRef<HTMLDivElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(headerRef, { once: true, amount: 0.5 });
+    // Keep refs to GSAP context + matchMedia so we can kill them on unmount
+    const ctxRef = useRef<gsap.Context | null>(null);
+    const mmRef = useRef<gsap.MatchMedia | null>(null);
 
+    // ── SYNCHRONOUS cleanup via useLayoutEffect ────────────────────────────
+    // useLayoutEffect's cleanup fires synchronously in React's commit phase,
+    // BEFORE any DOM nodes are removed. This guarantees GSAP un-pins the
+    // section and restores it to its original parent before React's
+    // removeChild runs — eliminating the "not a child of this node" crash.
+    useLayoutEffect(() => {
+        return () => {
+            // Kill every ScrollTrigger — including pinned ones — immediately.
+            ScrollTrigger.getAll().forEach((t) => t.kill(true));
+
+            if (ctxRef.current) {
+                ctxRef.current.revert();
+                ctxRef.current = null;
+            }
+            if (mmRef.current) {
+                mmRef.current.revert();
+                mmRef.current = null;
+            }
+        };
+    }, []); // empty deps → cleanup only runs on unmount
+
+    // ── GSAP setup (runs after paint, as GSAP recommends) ─────────────────
     useEffect(() => {
         const section = sectionRef.current;
         const track = trackRef.current;
@@ -69,8 +94,8 @@ export default function LookbookHorizontal() {
 
         const cards = Array.from(track.querySelectorAll('.lookbook-card'));
 
-        // Horizontal scroll via GSAP ScrollTrigger
         const mm = gsap.matchMedia();
+        mmRef.current = mm;
 
         mm.add('(min-width: 768px)', () => {
             const totalWidth = track.scrollWidth - window.innerWidth;
@@ -112,10 +137,10 @@ export default function LookbookHorizontal() {
                 });
             }, section);
 
-            return () => ctx.revert();
+            ctxRef.current = ctx;
         });
 
-        return () => mm.revert();
+        // No cleanup here — useLayoutEffect above handles it synchronously
     }, []);
 
     return (

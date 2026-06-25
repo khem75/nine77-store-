@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
 
 export default function SmoothScrollProvider({
@@ -8,23 +9,36 @@ export default function SmoothScrollProvider({
 }: {
     children: React.ReactNode;
 }) {
-    // Wait until React has fully hydrated before initializing Lenis.
-    // This prevents the "removeChild" hydration mismatch error.
-    const [mounted, setMounted] = useState(false);
+    const pathname = usePathname();
+    const lenisRef = useRef<Lenis | null>(null);
+    const rafIdRef = useRef<number | null>(null);
+    // Track whether this is the very first mount (hydration phase)
+    const isFirstMount = useRef(true);
 
     useEffect(() => {
-        setMounted(true);
-    }, []);
+        // ── Cleanup any running instance ──────────────────────
+        if (rafIdRef.current !== null) {
+            cancelAnimationFrame(rafIdRef.current);
+            rafIdRef.current = null;
+        }
+        if (lenisRef.current) {
+            lenisRef.current.destroy();
+            lenisRef.current = null;
+            delete (window as any).__lenis;
+        }
 
-    useEffect(() => {
-        if (!mounted) return;
+        // Only scroll to top on subsequent navigations, not the initial mount.
+        // Calling scrollTo during hydration causes the removeChild DOM error.
+        if (!isFirstMount.current) {
+            window.scrollTo(0, 0);
+        }
 
-        let lenis: Lenis | null = null;
-
-        // Defer Lenis init by one tick so React finishes committing the DOM first
+        // Defer Lenis init so React fully commits the DOM before we touch it.
+        // On first mount this also acts as the hydration guard.
         const timer = setTimeout(() => {
+            isFirstMount.current = false;
             try {
-                lenis = new Lenis({
+                const lenis = new Lenis({
                     duration: 1.4,
                     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                     smoothWheel: true,
@@ -33,36 +47,36 @@ export default function SmoothScrollProvider({
                     infinite: false,
                 });
 
-                let rafId: number;
                 function raf(time: number) {
-                    lenis!.raf(time);
-                    rafId = requestAnimationFrame(raf);
+                    lenis.raf(time);
+                    rafIdRef.current = requestAnimationFrame(raf);
                 }
-                rafId = requestAnimationFrame(raf);
+                rafIdRef.current = requestAnimationFrame(raf);
 
-                // Expose lenis globally for GSAP ScrollTrigger sync
+                lenisRef.current = lenis;
+                // Expose globally for GSAP ScrollTrigger sync
                 (window as any).__lenis = lenis;
-
-                // Cleanup stored in closure
-                (lenis as any).__cleanup = () => {
-                    cancelAnimationFrame(rafId);
-                };
             } catch (e) {
-                // Silently fail — smooth scroll is a progressive enhancement
+                // Smooth scroll is a progressive enhancement — fail silently
                 console.warn('[Lenis] init failed:', e);
             }
         }, 0);
 
         return () => {
             clearTimeout(timer);
-            if (lenis) {
-                const cleanup = (lenis as any).__cleanup;
-                if (cleanup) cleanup();
-                lenis.destroy();
+            if (rafIdRef.current !== null) {
+                cancelAnimationFrame(rafIdRef.current);
+                rafIdRef.current = null;
+            }
+            if (lenisRef.current) {
+                lenisRef.current.destroy();
+                lenisRef.current = null;
                 delete (window as any).__lenis;
             }
         };
-    }, [mounted]);
+    // Re-run on every route change so Lenis resets cleanly
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [pathname]);
 
     return <>{children}</>;
 }
