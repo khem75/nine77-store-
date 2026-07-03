@@ -156,7 +156,7 @@ function MobileDrawer({
                         </div>
 
                         {/* Nav links */}
-                        <nav className="flex-1 overflow-y-auto px-5 py-8">
+                        <nav className="flex-1 overflow-y-auto px-5 py-8" data-lenis-prevent>
                             <p className="mb-6 text-[10px] uppercase tracking-[0.45em] text-white/25">
                                 Navigate
                             </p>

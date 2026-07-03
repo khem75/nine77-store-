@@ -63,7 +63,7 @@ export default function MobileMenu() {
                                 </div>
 
                                 {/* Content */}
-                                <div className="flex-1 overflow-y-auto px-6 py-8">
+                                <div className="flex-1 overflow-y-auto px-6 py-8" data-lenis-prevent>
                                     <p className="mb-8 text-xs uppercase tracking-[0.4em] text-gold">
                                         Menu
                                     </p>
