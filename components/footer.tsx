@@ -6,7 +6,7 @@ import { Instagram, Facebook, Music2 } from 'lucide-react';
 export default function Footer() {
     return (
         <footer className="border-t border-white/10 bg-black">
-            <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+            <div className="mx-auto max-w-7xl px-6 pt-14 pb-28 md:pb-14 lg:px-8">
                 <div className="grid gap-10 md:grid-cols-4">
                     <div>
                         <h3 className="text-xl font-black uppercase tracking-[0.3em] text-white">
@@ -111,13 +111,13 @@ export default function Footer() {
                         © {new Date().getFullYear()} NINE77. All Rights Reserved.
                     </p>
 
-                    <p className="mt-3 text-xs uppercase tracking-[0.2em] text-white/30">
+                    <p className="mt-3 text-xs uppercase tracking-[0.2em] text-white/40">
                         Designed & Developed by{' '}
                         <a
-                            href="https://github.com/khem75"
+                            href="https://khemjoshi.tech/"
                             target="_blank"
                             rel="noreferrer"
-                            className="text-gold hover:text-white transition"
+                            className="font-semibold text-gold-gradient hover:brightness-125 transition duration-300"
                         >
                             Khem R. Joshi
                         </a>
