@@ -53,7 +53,7 @@ export default function Hero() {
             {/* ── 3D Canvas fullscreen background (unmounts off-screen to save GPU resources) ── */}
             <motion.div
                 style={{ scale: scale3d, opacity }}
-                className="absolute inset-0 z-0 hidden sm:block"
+                className="absolute inset-0 z-0 block"
             >
                 {isInView && <HeroScene />}
             </motion.div>

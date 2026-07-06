@@ -20,6 +20,16 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
     const [tilt, setTilt] = useState<Tilt>({ x: 0, y: 0, glareX: 50, glareY: 50 });
     const [isHovered, setIsHovered] = useState(false);
 
+    const [imgSrc, setImgSrc] = useState(product.images[0] || '/luxury-streetwear-garment.png');
+    const [fallbackActive, setFallbackActive] = useState(false);
+
+    const handleImageError = () => {
+        if (!fallbackActive) {
+            setImgSrc('/luxury-streetwear-garment.png');
+            setFallbackActive(true);
+        }
+    };
+
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const card = cardRef.current;
         if (!card) return;
@@ -55,9 +65,9 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
                 delay: index * 0.1,
                 ease: [0.16, 1, 0.3, 1],
             }}
-            className="h-full"
+            className="w-full max-w-none aspect-[4/5] md:aspect-auto md:h-full"
         >
-            <Link href={`/product/${product.slug}`} className="block h-full">
+            <Link href={`/product/${product.slug}`} className="block w-full max-w-none h-full">
                 <motion.article
                     onMouseMove={handleMouseMove}
                     onMouseEnter={() => setIsHovered(true)}
@@ -70,7 +80,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
                             ? 'transform 0.1s ease'
                             : 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
                     }}
-                    className="group relative flex h-full flex-col overflow-hidden rounded-[18px] border border-white/8 bg-[#0B0B0B] shadow-[0_10px_30px_rgba(0,0,0,0.18)] md:rounded-[28px] md:bg-background-2 md:shadow-card"
+                    className="group relative flex w-full max-w-none flex-col overflow-hidden rounded-[18px] border border-white/8 bg-[#0B0B0B] shadow-[0_10px_30px_rgba(0,0,0,0.18)] p-4 md:p-0 md:rounded-[28px] md:bg-background-2 md:shadow-card aspect-[4/5] md:aspect-auto justify-between h-full"
                 >
                     {/* Glare effect */}
                     {isHovered && (
@@ -83,49 +93,60 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
                     )}
 
                     {/* Image area */}
-                    <div className="relative overflow-hidden bg-black/40 p-0 md:p-0">
-                        {/* Mobile image height reduced to 132px (25% height reduction). Aspect ratio maintained, no cropping */}
-                        <div className="relative h-[132px] w-full overflow-hidden rounded-[14px] md:h-auto md:aspect-[4/5] md:rounded-none">
+                    <div className="relative w-full h-[75%] overflow-hidden rounded-[12px] bg-[#090909] shrink-0 md:h-auto md:aspect-[4/5] md:rounded-none md:p-0 md:bg-[#090909]">
+                        {/* Mobile image aspect ratio & fallback. Desktop image hover swap */}
+                        <div className="relative w-full h-full md:absolute md:inset-0">
                             <Image
-                                src={product.images[0]}
+                                src={imgSrc}
                                 alt={product.name}
-                                fill
-                                className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03] md:group-hover:scale-105 md:group-hover:opacity-0"
-                                sizes="(max-width: 768px) 48vw, (max-width: 1280px) 45vw, 25vw"
+                                width={400}
+                                height={500}
                                 loading="lazy"
+                                onError={handleImageError}
+                                className="transition-transform duration-700 group-hover:scale-[1.03] md:group-hover:scale-105 md:group-hover:opacity-0 md:absolute md:inset-0 md:w-full md:h-full md:object-contain"
+                                style={{
+                                    aspectRatio: '4 / 5',
+                                    width: '100%',
+                                    height: 'auto',
+                                    objectFit: 'contain',
+                                    overflow: 'hidden',
+                                    borderRadius: 'inherit'
+                                }}
                             />
                             {product.images[1] && (
-                                <Image
-                                    src={product.images[1]}
-                                    alt={`${product.name} — alternate`}
-                                    fill
-                                    className="object-cover object-center opacity-0 transition-all duration-700 group-hover:opacity-100"
-                                    sizes="(max-width: 768px) 48vw, (max-width: 1280px) 45vw, 25vw"
-                                    loading="lazy"
-                                />
+                                <div className="hidden md:block absolute inset-0">
+                                    <Image
+                                        src={product.images[1]}
+                                        alt={`${product.name} — alternate`}
+                                        fill
+                                        className="object-contain object-center opacity-0 transition-all duration-700 group-hover:opacity-100"
+                                        sizes="(max-width: 768px) 48vw, (max-width: 1280px) 45vw, 25vw"
+                                        loading="lazy"
+                                    />
+                                </div>
                             )}
                         </div>
 
-                        {/* Top badges */}
-                        <div className="absolute left-3 top-3 right-3 flex items-start justify-between md:left-4 md:top-4 md:right-4">
+                        {/* Top badges (desktop only) */}
+                        <div className="hidden md:flex absolute left-4 top-4 right-4 items-start justify-between z-10">
                             {badge && (
-                                <span className="rounded-full bg-gold px-2 py-1 text-[7px] font-bold uppercase tracking-[0.28em] text-black md:px-3 md:py-1 md:text-[9px]">
+                                <span className="rounded-full bg-gold px-3 py-1 text-[9px] font-bold uppercase tracking-[0.28em] text-black">
                                     {badge}
                                 </span>
                             )}
                         </div>
                     </div>
 
-                    {/* Card body (Contains Name and Price only) */}
-                    <div className="flex flex-1 flex-col gap-3 px-3 pb-3 pt-2 md:p-5">
-                        <div className="flex items-start justify-between gap-2 md:gap-3">
-                            <div className="min-w-0">
-                                <span className="block truncate text-[16px] font-semibold uppercase tracking-[0.06em] text-white transition-colors duration-300 group-hover:text-gold md:text-base md:font-bold">
+                    {/* Card body (Contains Name and Price only, takes remaining 25% on mobile) */}
+                    <div className="flex h-[25%] flex-col justify-center min-h-0 pt-1 md:h-auto md:flex-1 md:gap-3 md:px-5 md:pb-5 md:pt-4">
+                        <div className="flex items-center justify-between gap-2 md:gap-3 min-w-0">
+                            <div className="min-w-0 flex-1">
+                                <span className="block truncate text-[14px] font-semibold uppercase tracking-[0.06em] text-white transition-colors duration-300 group-hover:text-gold md:text-base md:font-bold">
                                     {product.name}
                                 </span>
                             </div>
                             <div className="shrink-0 text-right">
-                                <p className="text-[18px] font-black text-gold md:text-base">{formatPrice(product.price)}</p>
+                                <p className="text-[16px] font-black text-gold md:text-base">{formatPrice(product.price)}</p>
                             </div>
                         </div>
                     </div>

@@ -114,7 +114,7 @@ export default function ShopPage() {
                     </div>
                 </header>
 
-                <div className="px-[12px] pb-24 pt-4">
+                <div className="px-4 pb-24 pt-4">
                     <motion.div
                         ref={mobileHeaderRef}
                         initial={{ opacity: 0, y: 20 }}
@@ -176,7 +176,7 @@ export default function ShopPage() {
                                 <p className="text-sm text-white/40">Try adjusting your filters</p>
                             </div>
                         ) : (
-                            <div className="grid grid-cols-2 gap-[10px]">
+                            <div className="grid grid-cols-2 gap-[12px]">
                                 {filteredProducts.map((product, index) => (
                                     <MobileShopCard
                                         key={product.id}

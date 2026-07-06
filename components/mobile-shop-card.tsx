@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useState } from 'react';
 import type { Product } from '@/types/product';
 import { formatPrice } from '@/utils';
 
@@ -13,7 +14,15 @@ export default function MobileShopCard({
     product: Product;
     index?: number;
 }) {
-    const badge = product.newArrival ? 'NEW' : product.featured ? 'BESTSELLER' : null;
+    const [imgSrc, setImgSrc] = useState(product.images[0] || '/luxury-streetwear-garment.png');
+    const [fallbackActive, setFallbackActive] = useState(false);
+
+    const handleImageError = () => {
+        if (!fallbackActive) {
+            setImgSrc('/luxury-streetwear-garment.png');
+            setFallbackActive(true);
+        }
+    };
 
     return (
         <motion.div
@@ -21,41 +30,32 @@ export default function MobileShopCard({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, delay: index * 0.05, ease: [0.16, 1, 0.3, 1] }}
             whileTap={{ scale: 0.985 }}
-            className="h-[275px]"
+            className="w-full max-w-none aspect-[4/5]"
         >
             <Link
                 href={`/product/${product.slug}`}
-                className="group relative flex h-[275px] flex-col overflow-hidden rounded-[18px] border border-white/8 bg-[#0B0B0B] shadow-[0_12px_28px_rgba(0,0,0,0.18)] transition-transform duration-[250ms] ease-out active:-translate-y-1 block"
+                className="group relative flex aspect-[4/5] w-full max-w-none flex-col justify-between overflow-hidden rounded-[18px] border border-white/8 bg-[#0B0B0B] shadow-[0_12px_28px_rgba(0,0,0,0.18)] transition-transform duration-[250ms] ease-out active:-translate-y-1 block p-4"
             >
-                <div className="relative overflow-hidden bg-black/40 p-3 pb-1.5 h-[200px] shrink-0">
-                    {/* Image height set to fill the 75% height card area. object-fit: cover, center crop, aspect-ratio preserved */}
-                    <div className="relative h-full w-full overflow-hidden rounded-[14px] bg-black/20">
-                        <Image
-                            src={product.images[0]}
-                            alt={product.name}
-                            fill
-                            loading="lazy"
-                            sizes="48vw"
-                            className="object-cover object-center transition-transform duration-[250ms] ease-out group-active:scale-[1.03]"
-                        />
-                    </div>
-
-                    <div className="absolute left-3 right-3 top-3 flex items-start justify-between">
-                        {badge && (
-                            <span className="rounded-full border border-gold/35 bg-gold/95 px-2.5 py-1 text-[7px] font-bold uppercase tracking-[0.28em] text-black shadow-[0_8px_16px_rgba(0,0,0,0.18)]">
-                                {badge}
-                            </span>
-                        )}
-                    </div>
+                {/* Image area takes 75% height */}
+                <div className="relative h-[75%] w-full overflow-hidden rounded-[12px] bg-[#090909] shrink-0">
+                    <Image
+                        src={imgSrc}
+                        alt={product.name}
+                        width={400}
+                        height={500}
+                        loading="lazy"
+                        onError={handleImageError}
+                        className="transition-transform duration-[250ms] ease-out group-active:scale-[1.03] block w-full h-auto aspect-[4/5] object-contain overflow-hidden rounded-[inherit]"
+                    />
                 </div>
 
-                {/* Card body (Name and Price only, occupies remaining 25% height) */}
-                <div className="flex flex-1 flex-col justify-center px-3 py-1.5 min-h-[75px]">
+                {/* Content area occupies 25% height */}
+                <div className="flex h-[25%] flex-col justify-center min-h-0 pt-1">
                     <div className="min-w-0">
-                        <h3 className="truncate text-[14px] font-semibold uppercase tracking-[0.06em] text-white">
+                        <h3 className="truncate text-[13px] font-semibold uppercase tracking-[0.06em] text-white">
                             {product.name}
                         </h3>
-                        <p className="mt-0.5 text-[16px] font-black text-gold">
+                        <p className="mt-0.5 text-[15px] font-black text-gold">
                             {formatPrice(product.price)}
                         </p>
                     </div>

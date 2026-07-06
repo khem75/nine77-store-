@@ -23,11 +23,12 @@ export default function MobileBottomNav() {
             className="md:hidden"
             style={{
                 position: 'fixed',
-                bottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)',
                 left: '50%',
                 transform: 'translateX(-50%)',
+                bottom: 'max(16px, env(safe-area-inset-bottom))',
                 width: 'min(92vw, 420px)',
-                zIndex: 999,
+                zIndex: 9999,
+                borderRadius: '24px',
             }}
             aria-label="Mobile navigation"
         >

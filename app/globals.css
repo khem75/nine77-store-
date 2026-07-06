@@ -24,6 +24,7 @@ html {
     text-rendering: optimizeLegibility;
     overflow-x: hidden;
     max-width: 100vw;
+    -webkit-overflow-scrolling: touch;
 }
 
 body {
@@ -36,6 +37,8 @@ body {
     max-width: 100vw;
     width: 100%;
     position: relative;
+    -webkit-overflow-scrolling: touch;
+    will-change: scroll-position;
 }
 
 /* Noise texture overlay for tactile depth */
@@ -259,7 +262,7 @@ select {
 
 /* ── Mobile bottom nav padding ── */
 .pb-mobile-nav {
-    padding-bottom: 140px;
+    padding-bottom: 120px;
 }
 
 /* ── Blurred orb decoration ── */
