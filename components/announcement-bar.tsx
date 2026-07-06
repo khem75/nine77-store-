@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 
 const MARQUEE_ITEMS = [
@@ -18,10 +19,13 @@ const repeated = `${text}   ·   ${text}`;
 export default function AnnouncementBar() {
     // Only animate after mount to avoid SSR/CSR hydration mismatch
     const [ready, setReady] = useState(false);
+    const pathname = usePathname();
     useEffect(() => { setReady(true); }, []);
 
+    const isShopPage = pathname === '/shop';
+
     return (
-        <div className="relative z-50 overflow-hidden border-b border-gold/10 bg-black py-2">
+        <div className={`relative z-50 overflow-hidden border-b border-gold/10 bg-black py-2 ${isShopPage ? 'hidden md:block' : ''}`}>
             <div className="flex overflow-hidden">
                 {ready ? (
                     <motion.div

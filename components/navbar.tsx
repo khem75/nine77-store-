@@ -8,18 +8,18 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, Menu, X, Home, ShoppingBag, Info, CircleHelp, ArrowUpRight } from 'lucide-react';
 
 const navLinks = [
-    { label: 'Home',  href: '/',      icon: Home },
-    { label: 'Shop',  href: '/shop',  icon: ShoppingBag },
+    { label: 'Home', href: '/', icon: Home },
+    { label: 'Shop', href: '/shop', icon: ShoppingBag },
     { label: 'About', href: '/about', icon: Info },
-    { label: 'FAQ',   href: '/faq',   icon: CircleHelp },
+    { label: 'FAQ', href: '/faq', icon: CircleHelp },
 ];
 
 const WHATSAPP = 'https://wa.me/9779810605409?text=Hello%20NINE77%2C%20I%20have%20an%20inquiry.';
 
 const socialLinks = [
     { label: 'Instagram', href: 'https://www.instagram.com/nine.77___/' },
-    { label: 'TikTok',    href: 'https://www.tiktok.com/@nine.77__' },
-    { label: 'Facebook',  href: 'https://www.facebook.com/share/1DtEy4K4MX/?mibextid=wwXIfr' },
+    { label: 'TikTok', href: 'https://www.tiktok.com/@nine.77__' },
+    { label: 'Facebook', href: 'https://www.facebook.com/share/1DtEy4K4MX/?mibextid=wwXIfr' },
 ];
 
 /* ── Magnetic link wrapper ─────────────────────────── */
@@ -176,11 +176,10 @@ function MobileDrawer({
                                             <Link
                                                 href={href}
                                                 onClick={onClose}
-                                                className={`group relative flex items-center gap-4 rounded-2xl px-4 py-4 transition-all duration-300 ${
-                                                    isActive
+                                                className={`group relative flex items-center gap-4 rounded-2xl px-4 py-4 transition-all duration-300 ${isActive
                                                         ? 'bg-gold/8 text-gold'
                                                         : 'text-white/70 hover:bg-white/4 hover:text-white'
-                                                }`}
+                                                    }`}
                                             >
                                                 {/* Active pill */}
                                                 {isActive && (
@@ -191,11 +190,10 @@ function MobileDrawer({
                                                     />
                                                 )}
 
-                                                <span className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300 ${
-                                                    isActive
+                                                <span className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border transition-colors duration-300 ${isActive
                                                         ? 'border-gold/25 bg-gold/10 text-gold'
                                                         : 'border-white/8 bg-white/4 text-white/50 group-hover:border-gold/15 group-hover:text-white/80'
-                                                }`}>
+                                                    }`}>
                                                     <Icon size={16} strokeWidth={isActive ? 2 : 1.5} />
                                                 </span>
 
@@ -337,6 +335,7 @@ export default function Navbar() {
     const [scrolled, setScrolled] = useState(false);
     const [hidden, setHidden] = useState(false);
     const lastY = useRef(0);
+    const isShopPage = pathname === '/shop';
 
     useEffect(() => {
         const handleScroll = () => {
@@ -374,10 +373,10 @@ export default function Navbar() {
                     opacity: hidden ? 0 : 1,
                 }}
                 transition={{
-                    y:       { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+                    y: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
                     opacity: { duration: 0.3 },
                 }}
-                className={`sticky top-0 z-40 border-b transition-colors duration-500 ${navBg}`}
+                className={`sticky top-0 z-40 border-b transition-colors duration-500 ${navBg} ${isShopPage ? 'hidden md:block' : ''}`}
             >
                 <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
 
@@ -397,11 +396,10 @@ export default function Navbar() {
                                 <MagneticLink
                                     key={href}
                                     href={href}
-                                    className={`relative rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] transition-colors duration-300 ${
-                                        isActive
+                                    className={`relative rounded-full px-4 py-2 text-xs uppercase tracking-[0.3em] transition-colors duration-300 ${isActive
                                             ? 'text-white'
                                             : 'text-white/55 hover:text-white'
-                                    }`}
+                                        }`}
                                 >
                                     {/* Animated active pill */}
                                     {isActive && (
