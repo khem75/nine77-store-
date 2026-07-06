@@ -182,7 +182,6 @@ export default function ShopPage() {
                                         key={product.id}
                                         product={product}
                                         index={index}
-                                        onOpen={(selectedProduct) => setActiveProduct(selectedProduct)}
                                     />
                                 ))}
                             </div>
@@ -441,7 +440,6 @@ export default function ShopPage() {
                 ) : null}
             </AnimatePresence>
 
-            <MobileProductSheet product={activeProduct} open={Boolean(activeProduct)} onClose={() => setActiveProduct(null)} />
         </section>
     );
 }

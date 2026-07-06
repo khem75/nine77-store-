@@ -2,13 +2,14 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useMemo, useState, useRef } from 'react';
+import { useMemo, useState, useRef, useEffect } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, MessageCircle, ArrowLeft, Check, Share2 } from 'lucide-react';
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
 import { formatPrice } from '@/utils';
 import type { Product } from '@/types/product';
 import RelatedProducts from '@/components/related-products';
+import RecentlyViewed, { trackRecentlyViewed } from '@/components/recently-viewed-products';
 
 interface ProductDetailProps {
     product: Product;
@@ -22,6 +23,10 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
     const [addedToOrder, setAddedToOrder] = useState(false);
     const detailRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(detailRef, { once: true, amount: 0.2 });
+
+    useEffect(() => {
+        trackRecentlyViewed(product);
+    }, [product]);
 
     const orderUrl = useMemo(
         () => buildWhatsAppUrl({ productName: product.name, price: product.price, size, quantity }),
@@ -51,7 +56,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
     return (
         <>
-            <section className="relative min-h-screen py-10 md:py-20">
+            <section className="relative min-h-screen py-6 md:py-20">
                 {/* Ambient glow */}
                 <div className="pointer-events-none fixed right-1/4 top-1/3 h-80 w-80 -translate-y-1/2 translate-x-1/2 rounded-full bg-gold/5 blur-[120px]" />
 
@@ -59,7 +64,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                     {/* Back link */}
                     <Link
                         href="/shop"
-                        className="mb-8 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors duration-300 hover:text-gold"
+                        className="mb-6 inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors duration-300 hover:text-gold"
                     >
                         <ArrowLeft size={13} />
                         Back to Shop
@@ -67,7 +72,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
                     <div
                         ref={detailRef}
-                        className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start"
+                        className="grid gap-6 lg:gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-start"
                     >
                         {/* ── Gallery ── */}
                         <motion.div
@@ -158,7 +163,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                             className="space-y-6"
                         >
                             {/* Identity */}
-                            <div className="rounded-[28px] border border-white/8 bg-surface p-6 md:p-8">
+                            <div className="rounded-[28px] border border-white/8 bg-surface p-5 md:p-8">
                                 <div className="flex items-start justify-between gap-4">
                                     <div>
                                         <span className="text-[10px] uppercase tracking-[0.4em] text-gold">
@@ -197,7 +202,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                             </div>
 
                             {/* Order options */}
-                            <div className="rounded-[28px] border border-white/8 bg-surface p-6 space-y-6 md:p-8">
+                            <div className="rounded-[28px] border border-white/8 bg-surface p-5 space-y-5 md:p-8 md:space-y-6">
                                 {/* Size */}
                                 <div>
                                     <div className="mb-3 flex items-center justify-between">
@@ -314,6 +319,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
             </section>
 
             <RelatedProducts products={relatedProducts} />
+            <RecentlyViewed currentProductId={product.id} />
         </>
     );
 }

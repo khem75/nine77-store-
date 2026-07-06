@@ -2,12 +2,10 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView } from 'framer-motion';
-import { ArrowRight, Eye, Heart, MessageCircle, X } from 'lucide-react';
+import { useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 import type { Product } from '@/types/product';
 import { formatPrice } from '@/utils';
-import { buildWhatsAppUrl } from '@/lib/whatsapp';
 
 interface Tilt {
     x: number;
@@ -21,39 +19,6 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
     const isInView = useInView(cardRef, { once: true, amount: 0.2 });
     const [tilt, setTilt] = useState<Tilt>({ x: 0, y: 0, glareX: 50, glareY: 50 });
     const [isHovered, setIsHovered] = useState(false);
-    const [isQuickViewOpen, setIsQuickViewOpen] = useState(false);
-    const [selectedSize, setSelectedSize] = useState<(typeof product.sizes)[number]>(product.sizes[1] ?? product.sizes[0]);
-
-    const orderUrl = useMemo(
-        () =>
-            buildWhatsAppUrl({
-                productName: product.name,
-                price: product.price,
-                size: selectedSize,
-                quantity: 1,
-            }),
-        [product.name, product.price, selectedSize]
-    );
-
-    useEffect(() => {
-        if (!isQuickViewOpen) return;
-
-        const previousOverflow = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-
-        const handleKeyDown = (event: KeyboardEvent) => {
-            if (event.key === 'Escape') {
-                setIsQuickViewOpen(false);
-            }
-        };
-
-        window.addEventListener('keydown', handleKeyDown);
-
-        return () => {
-            document.body.style.overflow = previousOverflow;
-            window.removeEventListener('keydown', handleKeyDown);
-        };
-    }, [isQuickViewOpen]);
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
         const card = cardRef.current;
@@ -81,17 +46,18 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
     const badge = product.newArrival ? 'NEW' : product.featured ? 'BESTSELLER' : null;
 
     return (
-        <>
-            <motion.div
-                ref={cardRef}
-                initial={{ opacity: 0, y: 60, scale: 0.96 }}
-                animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
-                transition={{
-                    duration: 0.8,
-                    delay: index * 0.1,
-                    ease: [0.16, 1, 0.3, 1],
-                }}
-            >
+        <motion.div
+            ref={cardRef}
+            initial={{ opacity: 0, y: 60, scale: 0.96 }}
+            animate={isInView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{
+                duration: 0.8,
+                delay: index * 0.1,
+                ease: [0.16, 1, 0.3, 1],
+            }}
+            className="h-full"
+        >
+            <Link href={`/product/${product.slug}`} className="block h-full">
                 <motion.article
                     onMouseMove={handleMouseMove}
                     onMouseEnter={() => setIsHovered(true)}
@@ -118,7 +84,8 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
 
                     {/* Image area */}
                     <div className="relative overflow-hidden bg-black/40 p-3 pb-2 md:p-0">
-                        <div className="relative h-[176px] w-full overflow-hidden rounded-[14px] md:h-auto md:aspect-[4/5] md:rounded-none">
+                        {/* Mobile image height reduced to 132px (25% height reduction). Aspect ratio maintained, no cropping */}
+                        <div className="relative h-[132px] w-full overflow-hidden rounded-[14px] md:h-auto md:aspect-[4/5] md:rounded-none">
                             <Image
                                 src={product.images[0]}
                                 alt={product.name}
@@ -139,9 +106,6 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
                             )}
                         </div>
 
-                        {/* Gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-background-2/80 via-transparent to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
                         {/* Top badges */}
                         <div className="absolute left-3 top-3 right-3 flex items-start justify-between md:left-4 md:top-4 md:right-4">
                             {badge && (
@@ -149,196 +113,24 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
                                     {badge}
                                 </span>
                             )}
-                            <div className="ml-auto flex items-center gap-2">
-                                <button
-                                    type="button"
-                                    aria-label="Wishlist"
-                                    className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-black/45 text-white/55 backdrop-blur-sm transition-all duration-300 hover:border-gold/30 hover:text-gold md:h-8 md:w-8"
-                                >
-                                    <Heart size={11} />
-                                </button>
-                                <span className="rounded-full bg-black/60 px-3 py-1 text-[9px] uppercase tracking-[0.25em] text-white/60 backdrop-blur-sm">
-                                    {product.category}
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Quick view button */}
-                        <div className="absolute bottom-3 left-3 right-3 hidden justify-center md:bottom-4 md:left-4 md:right-4 md:flex md:opacity-0 md:transition-opacity md:duration-500 md:group-hover:opacity-100">
-                            <Link
-                                href={`/product/${product.slug}`}
-                                id={`product-card-view-${product.id}`}
-                                className="inline-flex h-10 items-center justify-center gap-2 rounded-full bg-gold/90 px-5 text-[10px] font-bold uppercase tracking-[0.3em] text-black opacity-0 shadow-glow-sm backdrop-blur-sm transition-all duration-500 hover:bg-gold group-hover:translate-y-0 group-hover:opacity-100 md:translate-y-8"
-                            >
-                                <Eye size={12} />
-                                Quick View
-                            </Link>
                         </div>
                     </div>
 
-                    {/* Card body */}
+                    {/* Card body (Contains Name and Price only) */}
                     <div className="flex flex-1 flex-col gap-3 px-3 pb-3 pt-2 md:p-5">
                         <div className="flex items-start justify-between gap-2 md:gap-3">
                             <div className="min-w-0">
-                                <Link
-                                    href={`/product/${product.slug}`}
-                                    className="block truncate text-[16px] font-semibold uppercase tracking-[0.06em] text-white transition-colors duration-300 hover:text-gold md:text-base md:font-bold"
-                                >
+                                <span className="block truncate text-[16px] font-semibold uppercase tracking-[0.06em] text-white transition-colors duration-300 group-hover:text-gold md:text-base md:font-bold">
                                     {product.name}
-                                </Link>
-                                <p className="mt-1 text-[12px] uppercase tracking-[0.22em] text-white/38 md:text-[10px] md:tracking-[0.25em]">
-                                    {product.sizes.join(' · ')}
-                                </p>
+                                </span>
                             </div>
                             <div className="shrink-0 text-right">
                                 <p className="text-[18px] font-black text-gold md:text-base">{formatPrice(product.price)}</p>
                             </div>
                         </div>
-
-                        {product.colors?.length ? (
-                            <div className="flex items-center gap-1.5 md:gap-2">
-                                {product.colors.slice(0, 4).map((color) => (
-                                    <span
-                                        key={color}
-                                        className="h-3.5 w-3.5 rounded-full border border-white/10 shadow-[0_0_0_1px_rgba(0,0,0,0.22)] md:h-4 md:w-4"
-                                        style={{ backgroundColor: color }}
-                                        aria-label={color}
-                                    />
-                                ))}
-                            </div>
-                        ) : null}
-
-                        <div className="mt-auto flex flex-col gap-2 md:hidden">
-                            <button
-                                type="button"
-                                onClick={() => setIsQuickViewOpen(true)}
-                                className="flex h-10 w-full items-center justify-center rounded-full border border-gold/45 bg-transparent text-[10px] font-semibold uppercase tracking-[0.24em] text-gold transition-all duration-[250ms] hover:bg-gold/[0.08] hover:text-white"
-                            >
-                                Quick View
-                            </button>
-                        </div>
-
-                        {/* Bottom CTA */}
-                        <Link
-                            href={`/product/${product.slug}`}
-                            className="group/btn mt-auto hidden items-center justify-between rounded-2xl border border-white/8 bg-white/4 px-4 py-3 text-xs font-semibold uppercase tracking-[0.18em] text-white/60 transition-all duration-300 hover:border-gold/30 hover:bg-gold/5 hover:text-gold md:flex"
-                        >
-                            <span>Order Now</span>
-                            <ArrowRight
-                                size={13}
-                                className="transition-transform duration-300 group-hover/btn:translate-x-1"
-                            />
-                        </Link>
                     </div>
                 </motion.article>
-            </motion.div>
-
-            <AnimatePresence>
-                {isQuickViewOpen ? (
-                    <motion.div
-                        className="fixed inset-0 z-[60] flex items-end justify-center bg-black/70 px-4 pb-4 pt-16 backdrop-blur-md md:hidden"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setIsQuickViewOpen(false)}
-                    >
-                        <motion.div
-                            initial={{ y: 40, opacity: 0, scale: 0.98 }}
-                            animate={{ y: 0, opacity: 1, scale: 1 }}
-                            exit={{ y: 30, opacity: 0, scale: 0.98 }}
-                            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                            onClick={(event) => event.stopPropagation()}
-                            className="w-full max-w-md overflow-hidden rounded-[24px] border border-white/10 bg-[#0B0B0B] shadow-[0_30px_80px_rgba(0,0,0,0.5)]"
-                        >
-                            <div className="relative h-64 bg-black/60 p-4">
-                                <button
-                                    type="button"
-                                    aria-label="Close quick view"
-                                    onClick={() => setIsQuickViewOpen(false)}
-                                    className="absolute right-4 top-4 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white/70 transition-colors duration-300 hover:border-gold/30 hover:text-gold"
-                                >
-                                    <X size={14} />
-                                </button>
-
-                                <div className="relative h-full w-full overflow-hidden rounded-[18px]">
-                                    <Image
-                                        src={product.images[0]}
-                                        alt={product.name}
-                                        fill
-                                        className="object-contain p-4"
-                                        sizes="100vw"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-4 px-4 pb-4 pt-3">
-                                <div className="flex items-start justify-between gap-3">
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-[0.35em] text-gold/80">Quick View</p>
-                                        <h3 className="mt-2 text-xl font-bold uppercase tracking-[0.06em] text-white">
-                                            {product.name}
-                                        </h3>
-                                    </div>
-                                    <p className="text-xl font-black text-gold">{formatPrice(product.price)}</p>
-                                </div>
-
-                                <div>
-                                    <p className="text-[10px] uppercase tracking-[0.3em] text-white/35">Available Sizes</p>
-                                    <div className="mt-2 flex flex-wrap gap-2">
-                                        {product.sizes.map((size) => (
-                                            <button
-                                                key={size}
-                                                type="button"
-                                                onClick={() => setSelectedSize(size)}
-                                                className={`h-10 min-w-10 rounded-full border px-4 text-xs font-semibold uppercase tracking-[0.18em] transition-all duration-300 ${selectedSize === size
-                                                    ? 'border-gold bg-gold text-black'
-                                                    : 'border-white/10 bg-white/5 text-white/70 hover:border-gold/30 hover:text-gold'
-                                                    }`}
-                                            >
-                                                {size}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {product.colors?.length ? (
-                                    <div>
-                                        <p className="text-[10px] uppercase tracking-[0.3em] text-white/35">Color Swatches</p>
-                                        <div className="mt-2 flex items-center gap-2">
-                                            {product.colors.slice(0, 4).map((color) => (
-                                                <span
-                                                    key={color}
-                                                    className="h-5 w-5 rounded-full border border-white/10"
-                                                    style={{ backgroundColor: color }}
-                                                />
-                                            ))}
-                                        </div>
-                                    </div>
-                                ) : null}
-
-                                <div className="flex items-center gap-2 pt-1">
-                                    <a
-                                        href={orderUrl}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="flex h-10 flex-1 items-center justify-center gap-2 rounded-full border border-gold/60 bg-transparent text-[10px] font-bold uppercase tracking-[0.28em] text-gold transition-all duration-300 hover:bg-gold hover:text-black"
-                                    >
-                                        <MessageCircle size={12} />
-                                        Order
-                                    </a>
-                                    <Link
-                                        href={`/product/${product.slug}`}
-                                        onClick={() => setIsQuickViewOpen(false)}
-                                        className="flex h-10 items-center justify-center rounded-full border border-white/10 bg-white/5 px-4 text-[10px] font-bold uppercase tracking-[0.28em] text-white/70 transition-all duration-300 hover:border-gold/30 hover:text-gold"
-                                    >
-                                        Details
-                                    </Link>
-                                </div>
-                            </div>
-                        </motion.div>
-                    </motion.div>
-                ) : null}
-            </AnimatePresence>
-        </>
+            </Link>
+        </motion.div>
     );
 }
