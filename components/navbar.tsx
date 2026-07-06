@@ -378,12 +378,12 @@ export default function Navbar() {
                 }}
                 className={`sticky top-0 z-40 border-b transition-colors duration-500 ${navBg} ${isShopPage ? 'hidden md:block' : ''}`}
             >
-                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8">
+                <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 lg:px-8 relative">
 
                     {/* Logo */}
                     <Link
                         href="/"
-                        className="relative z-10 text-xl font-black uppercase tracking-[0.4em] text-white transition-colors duration-300 hover:text-gold"
+                        className="relative z-10 text-xl font-black uppercase tracking-[0.4em] text-white transition-colors duration-300 hover:text-gold md:relative md:left-auto md:translate-x-0 absolute left-1/2 -translate-x-1/2"
                     >
                         NINE<span className="text-gold">77</span>
                     </Link>

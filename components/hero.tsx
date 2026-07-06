@@ -53,7 +53,7 @@ export default function Hero() {
             {/* ── 3D Canvas fullscreen background (unmounts off-screen to save GPU resources) ── */}
             <motion.div
                 style={{ scale: scale3d, opacity }}
-                className="absolute inset-0 z-0"
+                className="absolute inset-0 z-0 hidden sm:block"
             >
                 {isInView && <HeroScene />}
             </motion.div>
@@ -81,19 +81,19 @@ export default function Hero() {
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
-                    className="flex flex-col items-center gap-6"
+                    className="flex flex-col items-center gap-6 w-full"
                 >
                     {/* Label */}
                     <motion.div variants={itemVariants}>
-                        <span className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-4 py-1.5 text-[10px] uppercase tracking-[0.45em] text-gold backdrop-blur-sm">
+                        <span className="inline-flex items-center gap-2 rounded-full border border-gold/20 bg-gold/5 px-4 py-1.5 text-[9px] sm:text-[10px] uppercase tracking-[0.3em] sm:tracking-[0.45em] text-gold backdrop-blur-sm">
                             <Zap size={10} className="fill-gold text-gold" />
                             Premium Streetwear · Est. MMXXVI
                         </span>
                     </motion.div>
 
                     {/* Main heading */}
-                    <motion.div variants={itemVariants} className="max-w-[380px] sm:max-w-2xl">
-                        <h1 className="text-[clamp(3rem,14vw,7rem)] font-black uppercase leading-[0.9] tracking-[-0.02em] text-white">
+                    <motion.div variants={itemVariants} className="max-w-[320px] sm:max-w-2xl">
+                        <h1 className="text-[clamp(2.75rem,14vw,7rem)] font-black uppercase leading-[0.9] tracking-[-0.02em] text-white">
                             BUILT
                             <br />
                             <span className="text-gold-gradient">DIFFERENT</span>
@@ -104,7 +104,7 @@ export default function Hero() {
                     {/* Sub copy */}
                     <motion.p
                         variants={itemVariants}
-                        className="max-w-xs text-sm font-light leading-relaxed tracking-wide text-white/60 sm:max-w-md sm:text-base"
+                        className="max-w-xs text-xs sm:text-sm font-light leading-relaxed tracking-wide text-white/60 sm:max-w-md sm:text-base"
                     >
                         Luxury streetwear engineered for those who refuse to blend in.
                         Comfort. Craft. Statement.
@@ -113,12 +113,12 @@ export default function Hero() {
                     {/* CTAs */}
                     <motion.div
                         variants={itemVariants}
-                        className="flex flex-col items-center gap-3 sm:flex-row"
+                        className="flex flex-col items-center gap-3 sm:flex-row w-full max-w-[280px] sm:max-w-none px-4 sm:px-0"
                     >
                         <Link
                             href="/shop"
                             id="hero-shop-cta"
-                            className="group relative inline-flex items-center justify-center overflow-hidden rounded-full bg-gold px-8 py-4 text-xs font-bold uppercase tracking-[0.3em] text-black shadow-glow transition-all duration-500 hover:shadow-glow-lg active:scale-95"
+                            className="group relative inline-flex w-full sm:w-auto items-center justify-center overflow-hidden rounded-full bg-gold px-8 py-4 text-xs font-bold uppercase tracking-[0.3em] text-black shadow-glow transition-all duration-500 hover:shadow-glow-lg active:scale-95"
                         >
                             <span className="relative z-10">Shop Collection</span>
                             <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-gold-light to-gold transition-transform duration-500 group-hover:translate-x-0" />
@@ -127,7 +127,7 @@ export default function Hero() {
                         <Link
                             href="#arrivals"
                             id="hero-arrivals-cta"
-                            className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 text-xs font-semibold uppercase tracking-[0.3em] text-white backdrop-blur-sm transition-all duration-300 hover:border-gold/40 hover:bg-gold/5 hover:text-gold active:scale-95"
+                            className="inline-flex w-full sm:w-auto items-center justify-center rounded-full border border-white/10 bg-white/5 px-8 py-4 text-xs font-semibold uppercase tracking-[0.3em] text-white backdrop-blur-sm transition-all duration-300 hover:border-gold/40 hover:bg-gold/5 hover:text-gold active:scale-95"
                         >
                             New Arrivals
                         </Link>

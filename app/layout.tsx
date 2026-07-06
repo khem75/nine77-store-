@@ -66,7 +66,7 @@ export default function RootLayout({
         <html lang="en" className={`${outfit.variable} ${rajdhani.variable}`} suppressHydrationWarning>
             <body className="bg-background font-sans text-white antialiased" suppressHydrationWarning>
                 <SmoothScrollProvider>
-                    <div className="relative min-h-screen bg-background text-white">
+                    <div className="relative min-h-screen bg-background text-white" style={{ overflowX: 'hidden', maxWidth: '100vw' }}>
                         <AnnouncementBar />
                         <Navbar />
                         <main className="relative pb-mobile-nav md:pb-0">{children}</main>

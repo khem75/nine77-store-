@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { Product } from '@/types/product';
-import ProductCard from '@/components/product-card';
+import CompactProductCard from '@/components/compact-product-card';
 
 const STORAGE_KEY = 'nine77_recently_viewed_products';
 
@@ -37,9 +37,9 @@ export default function RecentlyViewed({ currentProductId }: { currentProductId:
     if (items.length === 0) return null;
 
     return (
-        <section className="border-t border-white/5 py-10">
+        <section className="border-t border-white/5 py-8">
             <div className="mx-auto max-w-7xl px-5 lg:px-8">
-                <div className="mb-6 space-y-1">
+                <div className="mb-5 space-y-1">
                     <span className="text-[10px] uppercase tracking-[0.45em] text-gold">
                         Recently Viewed
                     </span>
@@ -48,18 +48,18 @@ export default function RecentlyViewed({ currentProductId }: { currentProductId:
                     </h2>
                 </div>
                 
-                {/* Horizontal slider */}
+                {/* Horizontal slider using CompactProductCard */}
                 <div 
-                    className="flex gap-4 overflow-x-auto hide-scrollbar pb-4" 
+                    className="flex gap-3 overflow-x-auto hide-scrollbar pb-3" 
                     style={{ WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}
                 >
                     {items.map((product, i) => (
                         <div 
                             key={product.id} 
-                            className="w-[180px] shrink-0" 
+                            className="shrink-0" 
                             style={{ scrollSnapAlign: 'start' }}
                         >
-                            <ProductCard product={product} index={i} />
+                            <CompactProductCard product={product} index={i} />
                         </div>
                     ))}
                 </div>

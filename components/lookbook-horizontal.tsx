@@ -166,7 +166,11 @@ export default function LookbookHorizontal() {
             </div>
 
             {/* Horizontal track */}
-            <div ref={trackRef} className="flex gap-5 px-6 pb-16 md:flex-nowrap lg:px-8">
+            <div 
+                ref={trackRef} 
+                className="flex gap-5 px-6 pb-16 overflow-x-auto hide-scrollbar md:flex-nowrap lg:px-8"
+                style={{ WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}
+            >
                 {LOOKBOOK_ITEMS.map((item, i) => (
                     <motion.article
                         key={item.id}
@@ -174,6 +178,7 @@ export default function LookbookHorizontal() {
                         style={{
                             width: 'clamp(260px, 70vw, 320px)',
                             height: 'clamp(360px, 90vw, 480px)',
+                            scrollSnapAlign: 'start',
                         }}
                         initial={{ opacity: 0, y: 40 }}
                         animate={{ opacity: 1, y: 0 }}

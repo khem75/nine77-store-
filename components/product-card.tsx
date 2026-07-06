@@ -83,14 +83,14 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
                     )}
 
                     {/* Image area */}
-                    <div className="relative overflow-hidden bg-black/40 p-3 pb-2 md:p-0">
+                    <div className="relative overflow-hidden bg-black/40 p-0 md:p-0">
                         {/* Mobile image height reduced to 132px (25% height reduction). Aspect ratio maintained, no cropping */}
                         <div className="relative h-[132px] w-full overflow-hidden rounded-[14px] md:h-auto md:aspect-[4/5] md:rounded-none">
                             <Image
                                 src={product.images[0]}
                                 alt={product.name}
                                 fill
-                                className="object-contain p-4 transition-transform duration-700 group-hover:scale-[1.03] md:object-cover md:p-0 md:group-hover:scale-105 md:group-hover:opacity-0"
+                                className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03] md:group-hover:scale-105 md:group-hover:opacity-0"
                                 sizes="(max-width: 768px) 48vw, (max-width: 1280px) 45vw, 25vw"
                                 loading="lazy"
                             />
@@ -99,7 +99,7 @@ export default function ProductCard({ product, index = 0 }: { product: Product; 
                                     src={product.images[1]}
                                     alt={`${product.name} — alternate`}
                                     fill
-                                    className="object-contain p-4 opacity-0 transition-all duration-700 group-hover:opacity-100 md:object-cover md:p-0"
+                                    className="object-cover object-center opacity-0 transition-all duration-700 group-hover:opacity-100"
                                     sizes="(max-width: 768px) 48vw, (max-width: 1280px) 45vw, 25vw"
                                     loading="lazy"
                                 />

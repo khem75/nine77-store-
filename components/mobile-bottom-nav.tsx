@@ -18,65 +18,81 @@ export default function MobileBottomNav() {
     const pathname = usePathname();
 
     return (
-        <motion.nav
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-3 left-1/2 z-50 w-[calc(100%-1.5rem)] max-w-[430px] -translate-x-1/2 md:hidden"
+        /* Outer wrapper: fixed positioning only — NO transform here */
+        <div
+            className="md:hidden"
+            style={{
+                position: 'fixed',
+                bottom: 'calc(env(safe-area-inset-bottom, 0px) + 16px)',
+                left: '50%',
+                transform: 'translateX(-50%)',
+                width: 'min(92vw, 420px)',
+                zIndex: 999,
+            }}
             aria-label="Mobile navigation"
         >
-            <div className="rounded-[28px] border border-white/10 bg-[#0A0A0A]/78 shadow-[0_20px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
-                {/* Padding reduced slightly to decrease bottom nav height */}
-                <div className="flex items-center justify-around px-2 py-1.5" style={{ paddingBottom: 'max(8px, env(safe-area-inset-bottom))' }}>
-                    {navItems.map(({ label, href, icon: Icon }) => {
-                        const isActive = pathname === href;
-
-                        return (
-                            <Link
-                                key={label}
-                                href={href}
-                                className="relative flex flex-1 flex-col items-center gap-0.5 py-1.5"
-                                aria-current={isActive ? 'page' : undefined}
-                            >
-                                <AnimatePresence>
-                                    {isActive && (
-                                        <motion.span
-                                            layoutId="mobile-nav-indicator"
-                                            className="absolute inset-x-2 top-0.5 h-8 rounded-[14px] bg-gold/12"
-                                            transition={{ type: 'spring', stiffness: 360, damping: 30 }}
-                                        />
-                                    )}
-                                </AnimatePresence>
-
-                                {/* Icon size reduced slightly from 19 to 17 */}
-                                <Icon
-                                    size={17}
-                                    strokeWidth={isActive ? 2 : 1.5}
-                                    className={`relative z-10 transition-colors duration-300 ${isActive ? 'text-gold' : 'text-white/42'}`}
-                                />
-                                <span className={`relative z-10 text-[8px] uppercase tracking-[0.16em] transition-colors duration-300 ${isActive ? 'text-gold' : 'text-white/30'}`}>
-                                    {label}
-                                </span>
-                            </Link>
-                        );
-                    })}
-
-                    <motion.a
-                        href={ORDER_URL}
-                        target="_blank"
-                        rel="noreferrer"
-                        whileTap={{ scale: 0.95 }}
-                        className="relative flex flex-1 flex-col items-center gap-0.5 py-1.5"
-                        aria-label="Order"
+            {/* Inner: Framer Motion animation only — no transform that would conflict */}
+            <motion.div
+                initial={{ y: 100, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.6, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+                <div
+                    style={{ borderRadius: 24 }}
+                    className="border border-white/10 bg-[#0A0A0A]/90 shadow-[0_20px_60px_rgba(0,0,0,0.55)] backdrop-blur-2xl overflow-hidden"
+                >
+                    <div
+                        className="flex items-center"
+                        style={{ paddingBottom: 'max(6px, env(safe-area-inset-bottom, 0px))' }}
                     >
-                        <span className="absolute inset-x-2 top-0.5 h-8 rounded-[14px] bg-gold/90 shadow-[0_10px_24px_rgba(212,175,55,0.18)]" />
-                        <MessageCircle size={17} strokeWidth={2} className="relative z-10 text-black" />
-                        <span className="relative z-10 text-[8px] uppercase tracking-[0.16em] text-black">
-                            Order
-                        </span>
-                    </motion.a>
+                        {navItems.map(({ label, href, icon: Icon }) => {
+                            const isActive = pathname === href;
+                            return (
+                                <Link
+                                    key={label}
+                                    href={href}
+                                    className="relative flex flex-1 flex-col items-center gap-0.5 py-2"
+                                    aria-current={isActive ? 'page' : undefined}
+                                >
+                                    <AnimatePresence>
+                                        {isActive && (
+                                            <motion.span
+                                                layoutId="mobile-nav-indicator"
+                                                className="absolute inset-x-1 top-1 h-7 rounded-[12px] bg-gold/12"
+                                                transition={{ type: 'spring', stiffness: 360, damping: 30 }}
+                                            />
+                                        )}
+                                    </AnimatePresence>
+                                    <Icon
+                                        size={16}
+                                        strokeWidth={isActive ? 2 : 1.5}
+                                        className={`relative z-10 transition-colors duration-300 ${isActive ? 'text-gold' : 'text-white/40'}`}
+                                    />
+                                    <span className={`relative z-10 text-[7px] uppercase tracking-[0.15em] transition-colors duration-300 ${isActive ? 'text-gold' : 'text-white/30'}`}>
+                                        {label}
+                                    </span>
+                                </Link>
+                            );
+                        })}
+
+                        {/* Order via WhatsApp */}
+                        <motion.a
+                            href={ORDER_URL}
+                            target="_blank"
+                            rel="noreferrer"
+                            whileTap={{ scale: 0.95 }}
+                            className="relative flex flex-1 flex-col items-center gap-0.5 py-2"
+                            aria-label="Order via WhatsApp"
+                        >
+                            <span className="absolute inset-x-1 top-1 h-7 rounded-[12px] bg-gold/90 shadow-[0_6px_20px_rgba(212,175,55,0.25)]" />
+                            <MessageCircle size={16} strokeWidth={2} className="relative z-10 text-black" />
+                            <span className="relative z-10 text-[7px] uppercase tracking-[0.15em] text-black font-semibold">
+                                Order
+                            </span>
+                        </motion.a>
+                    </div>
                 </div>
-            </div>
-        </motion.nav>
+            </motion.div>
+        </div>
     );
 }

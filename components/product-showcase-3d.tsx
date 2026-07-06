@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -8,14 +8,25 @@ import { ArrowRight } from 'lucide-react';
 export default function ProductShowcase3D() {
     const sectionRef = useRef<HTMLElement>(null);
     const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 768);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
 
     const { scrollYProgress } = useScroll({
         target: sectionRef,
         offset: ['start end', 'end start'],
     });
 
-    const canvasY = useTransform(scrollYProgress, [0, 1], [60, -60]);
-    const textX = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+    const canvasYVal = useTransform(scrollYProgress, [0, 1], [60, -60]);
+    const textXVal = useTransform(scrollYProgress, [0, 1], [-40, 40]);
+
+    const canvasY = isMobile ? 0 : canvasYVal;
+    const textX = isMobile ? 0 : textXVal;
 
     return (
         <section

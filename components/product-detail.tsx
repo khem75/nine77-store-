@@ -56,11 +56,11 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
     return (
         <>
-            <section className="relative min-h-screen py-6 md:py-20">
+            <section className="relative min-h-screen py-4 md:py-20">
                 {/* Ambient glow */}
                 <div className="pointer-events-none fixed right-1/4 top-1/3 h-80 w-80 -translate-y-1/2 translate-x-1/2 rounded-full bg-gold/5 blur-[120px]" />
 
-                <div className="relative mx-auto max-w-7xl px-5 lg:px-8">
+                <div className="relative mx-auto max-w-7xl px-4 lg:px-8" style={{ overflowX: 'hidden' }}>
                     {/* Back link */}
                     <Link
                         href="/shop"
@@ -83,7 +83,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                         >
                             {/* Main image */}
                             <div className="group relative overflow-hidden rounded-[32px] border border-white/8 bg-background-2 shadow-cinematic">
-                                <div className="relative aspect-[4/5] w-full">
+                                <div className="relative h-[320px] md:h-auto md:aspect-[4/5] w-full">
                                     <AnimatePresence mode="wait">
                                         <motion.div
                                             key={currentImage}
@@ -129,19 +129,20 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                 </div>
                             </div>
 
-                            {/* Thumbnail strip */}
-                            <div className="grid grid-cols-4 gap-3">
+                            {/* Thumbnail strip (Horizontal slider underneath) */}
+                            <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-1" style={{ WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}>
                                 {product.images.map((img, idx) => (
                                     <button
                                         key={idx}
                                         onClick={() => setCurrentImage(idx)}
-                                        className={`relative overflow-hidden rounded-2xl border transition-all duration-300 ${
+                                        className={`relative shrink-0 w-[68px] h-[85px] overflow-hidden rounded-2xl border transition-all duration-300 ${
                                             currentImage === idx
                                                 ? 'border-gold shadow-glow-sm scale-105'
                                                 : 'border-white/8 opacity-60 hover:opacity-100'
                                         }`}
+                                        style={{ scrollSnapAlign: 'start' }}
                                     >
-                                        <div className="relative aspect-[4/5]">
+                                        <div className="relative w-full h-full">
                                             <Image
                                                 src={img}
                                                 alt={`${product.name} ${idx + 1}`}
@@ -160,41 +161,41 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                             initial={{ opacity: 0, x: 40 }}
                             animate={isInView ? { opacity: 1, x: 0 } : {}}
                             transition={{ duration: 1, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                            className="space-y-6"
+                            className="space-y-3"
                         >
                             {/* Identity */}
-                            <div className="rounded-[28px] border border-white/8 bg-surface p-5 md:p-8">
-                                <div className="flex items-start justify-between gap-4">
+                            <div className="rounded-[20px] border border-white/8 bg-surface p-4 md:p-8">
+                                <div className="flex items-start justify-between gap-3">
                                     <div>
-                                        <span className="text-[10px] uppercase tracking-[0.4em] text-gold">
+                                        <span className="text-[9px] uppercase tracking-[0.35em] text-gold">
                                             {product.category}
                                         </span>
-                                        <h1 className="mt-2 text-3xl font-black uppercase leading-[0.92] tracking-tight text-white sm:text-4xl">
+                                        <h1 className="mt-1.5 text-2xl font-black uppercase leading-[0.92] tracking-tight text-white sm:text-4xl">
                                             {product.name}
                                         </h1>
                                     </div>
                                     <button
                                         onClick={handleShare}
-                                        className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition-all duration-300 hover:border-gold/30 hover:text-gold"
+                                        className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 transition-all duration-300 hover:border-gold/30 hover:text-gold"
                                         aria-label="Share"
                                     >
-                                        <Share2 size={15} />
+                                        <Share2 size={13} />
                                     </button>
                                 </div>
 
-                                <p className="mt-5 text-sm leading-relaxed text-white/55">
+                                <p className="mt-2 text-xs leading-relaxed text-white/55">
                                     {product.description}
                                 </p>
 
-                                <div className="mt-6 flex items-center justify-between border-t border-white/5 pt-5">
+                                <div className="mt-3 flex items-center justify-between border-t border-white/5 pt-3">
                                     <div>
                                         <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Price</span>
-                                        <p className="mt-1 text-3xl font-black text-gold">
+                                        <p className="mt-0.5 text-2xl font-black text-gold">
                                             {formatPrice(product.price)}
                                         </p>
                                     </div>
                                     {product.newArrival && (
-                                        <span className="rounded-full bg-gold px-3 py-1.5 text-[9px] font-bold uppercase tracking-[0.3em] text-black">
+                                        <span className="rounded-full bg-gold px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.25em] text-black">
                                             New Arrival
                                         </span>
                                     )}
@@ -202,10 +203,10 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                             </div>
 
                             {/* Order options */}
-                            <div className="rounded-[28px] border border-white/8 bg-surface p-5 space-y-5 md:p-8 md:space-y-6">
+                            <div className="rounded-[20px] border border-white/8 bg-surface p-4 space-y-3 md:p-8 md:space-y-6">
                                 {/* Size */}
                                 <div>
-                                    <div className="mb-3 flex items-center justify-between">
+                                    <div className="mb-2 flex items-center justify-between">
                                         <span className="text-[10px] uppercase tracking-[0.35em] text-white/50">
                                             Select Size
                                         </span>
@@ -213,13 +214,13 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                             S — M — L — XL
                                         </span>
                                     </div>
-                                    <div className="flex flex-wrap gap-3">
+                                    <div className="flex flex-wrap gap-2">
                                         {product.sizes.map((s) => (
                                             <motion.button
                                                 key={s}
                                                 whileTap={{ scale: 0.92 }}
                                                 onClick={() => setSize(s as any)}
-                                                className={`relative h-12 w-12 rounded-2xl border text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
+                                                className={`relative h-[48px] w-[48px] rounded-[12px] border text-base font-bold uppercase tracking-wider transition-all duration-300 ${
                                                     size === s
                                                         ? 'border-gold bg-gold text-black shadow-glow-sm'
                                                         : 'border-white/10 bg-white/5 text-white/70 hover:border-gold/30 hover:text-gold'
@@ -228,7 +229,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                                 {size === s && (
                                                     <motion.span
                                                         layoutId="size-selected"
-                                                        className="absolute inset-0 rounded-2xl bg-gold"
+                                                        className="absolute inset-0 rounded-[12px] bg-gold"
                                                         style={{ zIndex: -1 }}
                                                     />
                                                 )}
@@ -240,22 +241,22 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
                                 {/* Quantity */}
                                 <div>
-                                    <span className="mb-3 block text-[10px] uppercase tracking-[0.35em] text-white/50">
+                                    <span className="mb-2 block text-[10px] uppercase tracking-[0.35em] text-white/50">
                                         Quantity
                                     </span>
-                                    <div className="inline-flex items-center rounded-2xl border border-white/10 bg-black/50">
+                                    <div className="inline-flex h-11 max-w-[180px] items-center rounded-2xl border border-white/10 bg-black/50">
                                         <button
                                             onClick={() => setQuantity((p) => Math.max(1, p - 1))}
-                                            className="flex h-12 w-12 items-center justify-center text-lg font-bold text-white/60 transition-colors hover:text-gold"
+                                            className="flex h-10 w-10 items-center justify-center text-lg font-bold text-white/60 transition-colors hover:text-gold"
                                         >
                                             −
                                         </button>
-                                        <span className="w-12 text-center text-base font-black text-white">
+                                        <span className="flex-1 text-center text-base font-black text-white">
                                             {quantity}
                                         </span>
                                         <button
                                             onClick={() => setQuantity((p) => p + 1)}
-                                            className="flex h-12 w-12 items-center justify-center text-lg font-bold text-white/60 transition-colors hover:text-gold"
+                                            className="flex h-10 w-10 items-center justify-center text-lg font-bold text-white/60 transition-colors hover:text-gold"
                                         >
                                             +
                                         </button>
@@ -281,7 +282,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                     whileHover={{ scale: 1.02 }}
                                     whileTap={{ scale: 0.97 }}
                                     id={`whatsapp-order-${product.id}`}
-                                    className="flex w-full items-center justify-center gap-3 rounded-2xl bg-gold py-4 text-sm font-bold uppercase tracking-[0.25em] text-black shadow-glow transition-all duration-500 hover:shadow-glow-lg"
+                                    className="flex w-full h-[54px] items-center justify-center gap-3 rounded-[16px] bg-gold text-sm font-bold uppercase tracking-[0.25em] text-black shadow-glow transition-all duration-500 hover:shadow-glow-lg"
                                 >
                                     <AnimatePresence mode="wait">
                                         {addedToOrder ? (

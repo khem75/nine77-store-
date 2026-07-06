@@ -22,6 +22,8 @@ html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    overflow-x: hidden;
+    max-width: 100vw;
 }
 
 body {
@@ -31,6 +33,8 @@ body {
     color: #ffffff;
     font-family: var(--font-outfit), system-ui, sans-serif;
     overflow-x: hidden;
+    max-width: 100vw;
+    width: 100%;
     position: relative;
 }
 
@@ -255,7 +259,7 @@ select {
 
 /* ── Mobile bottom nav padding ── */
 .pb-mobile-nav {
-    padding-bottom: 88px;
+    padding-bottom: 140px;
 }
 
 /* ── Blurred orb decoration ── */
