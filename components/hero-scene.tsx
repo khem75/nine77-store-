@@ -9,29 +9,24 @@ import * as THREE from 'three';
 function Particles({ count = 150 }: { count?: number }) {
     const mesh = useRef<THREE.Points>(null!);
 
-    const { geometry, phases } = useMemo(() => {
+    const geometry = useMemo(() => {
         const pos = new Float32Array(count * 3);
-        const phases: number[] = [];
         for (let i = 0; i < count; i++) {
             pos[i * 3 + 0] = (Math.random() - 0.5) * 18;
             pos[i * 3 + 1] = (Math.random() - 0.5) * 12;
             pos[i * 3 + 2] = (Math.random() - 0.5) * 8 - 4;
-            phases.push(Math.random() * Math.PI * 2);
         }
         const geo = new THREE.BufferGeometry();
         geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-        return { geometry: geo, phases };
+        return geo;
     }, [count]);
 
     useFrame(({ clock }) => {
         const t = clock.getElapsedTime();
-        const arr = mesh.current.geometry.attributes.position.array as Float32Array;
-        for (let i = 0; i < count; i++) {
-            arr[i * 3 + 1] += Math.sin(t * 0.3 + phases[i]) * 0.003;
-            arr[i * 3 + 0] += Math.cos(t * 0.2 + phases[i]) * 0.002;
-        }
-        mesh.current.geometry.attributes.position.needsUpdate = true;
-        mesh.current.rotation.y = t * 0.02;
+        // Animate particles via mesh transforms, keeping position buffer static (highly performant)
+        mesh.current.rotation.y = t * 0.015;
+        mesh.current.rotation.x = Math.sin(t * 0.1) * 0.03;
+        mesh.current.position.y = Math.sin(t * 0.2) * 0.08;
     });
 
     return (
@@ -47,6 +42,7 @@ function Particles({ count = 150 }: { count?: number }) {
         </points>
     );
 }
+
 
 /* ── Spinning torus rings ───────────────────────────────── */
 function TorusRings() {

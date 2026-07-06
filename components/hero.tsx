@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { Zap } from 'lucide-react';
 
 // Lazy-load the 3D canvas — never runs on the server
@@ -29,6 +29,7 @@ const itemVariants = {
 
 export default function Hero() {
     const heroRef = useRef<HTMLElement>(null);
+    const isInView = useInView(heroRef, { margin: '0px 0px -100px 0px' });
 
     const { scrollYProgress } = useScroll({
         target: heroRef,
@@ -49,13 +50,14 @@ export default function Hero() {
             ref={heroRef}
             className="relative flex min-h-[100svh] w-full flex-col overflow-hidden"
         >
-            {/* ── 3D Canvas fullscreen background ── */}
+            {/* ── 3D Canvas fullscreen background (unmounts off-screen to save GPU resources) ── */}
             <motion.div
                 style={{ scale: scale3d, opacity }}
                 className="absolute inset-0 z-0"
             >
-                <HeroScene />
+                {isInView && <HeroScene />}
             </motion.div>
+
 
             {/* ── Gradient vignette overlays ── */}
             <div className="pointer-events-none absolute inset-0 z-10">

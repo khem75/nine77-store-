@@ -69,7 +69,7 @@ export default function RootLayout({
                     <div className="relative min-h-screen bg-background text-white">
                         <AnnouncementBar />
                         <Navbar />
-                        <main className="pb-mobile-nav md:pb-0">{children}</main>
+                        <main className="relative pb-mobile-nav md:pb-0">{children}</main>
                         <Footer />
                         <MobileBottomNav />
                     </div>

@@ -3,6 +3,12 @@
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Lenis from 'lenis';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+}
 
 export default function SmoothScrollProvider({
     children,
@@ -11,16 +17,13 @@ export default function SmoothScrollProvider({
 }) {
     const pathname = usePathname();
     const lenisRef = useRef<Lenis | null>(null);
-    const rafIdRef = useRef<number | null>(null);
     // Track whether this is the very first mount (hydration phase)
     const isFirstMount = useRef(true);
 
     useEffect(() => {
+        let updateLenis: ((time: number) => void) | null = null;
+
         // ── Cleanup any running instance ──────────────────────
-        if (rafIdRef.current !== null) {
-            cancelAnimationFrame(rafIdRef.current);
-            rafIdRef.current = null;
-        }
         if (lenisRef.current) {
             lenisRef.current.destroy();
             lenisRef.current = null;
@@ -47,11 +50,15 @@ export default function SmoothScrollProvider({
                     infinite: false,
                 });
 
-                function raf(time: number) {
-                    lenis.raf(time);
-                    rafIdRef.current = requestAnimationFrame(raf);
-                }
-                rafIdRef.current = requestAnimationFrame(raf);
+                // Sync GSAP ScrollTrigger with Lenis scroll updates
+                lenis.on('scroll', ScrollTrigger.update);
+
+                // Drive Lenis via GSAP ticker for smoother synchronization
+                updateLenis = (time: number) => {
+                    lenis.raf(time * 1000);
+                };
+                gsap.ticker.add(updateLenis);
+                gsap.ticker.lagSmoothing(0);
 
                 lenisRef.current = lenis;
                 // Expose globally for GSAP ScrollTrigger sync
@@ -64,9 +71,8 @@ export default function SmoothScrollProvider({
 
         return () => {
             clearTimeout(timer);
-            if (rafIdRef.current !== null) {
-                cancelAnimationFrame(rafIdRef.current);
-                rafIdRef.current = null;
+            if (updateLenis) {
+                gsap.ticker.remove(updateLenis);
             }
             if (lenisRef.current) {
                 lenisRef.current.destroy();
@@ -74,8 +80,8 @@ export default function SmoothScrollProvider({
                 delete (window as any).__lenis;
             }
         };
-    // Re-run on every route change so Lenis resets cleanly
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // Re-run on every route change so Lenis resets cleanly
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [pathname]);
 
     return <>{children}</>;

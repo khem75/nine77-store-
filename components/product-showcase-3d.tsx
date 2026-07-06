@@ -1,15 +1,9 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import { useRef } from 'react';
 import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
-
-const ProductShowcaseScene = dynamic(
-    () => import('@/components/product-showcase-scene').then((m) => m.ProductShowcaseScene),
-    { ssr: false }
-);
 
 export default function ProductShowcase3D() {
     const sectionRef = useRef<HTMLElement>(null);
@@ -91,7 +85,7 @@ export default function ProductShowcase3D() {
                         </Link>
                     </motion.div>
 
-                    {/* Right: 3D canvas */}
+                    {/* Right: Product Image with premium hover transitions */}
                     <motion.div
                         style={{ y: canvasY }}
                         initial={{ opacity: 0, scale: 0.9 }}
@@ -99,9 +93,11 @@ export default function ProductShowcase3D() {
                         transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
                         className="relative"
                     >
-                        {/* Canvas container */}
+                        {/* Canvas container replaced with Image container */}
                         <div className="relative mx-auto aspect-square max-w-[400px] overflow-hidden rounded-[40px] border border-white/8 bg-background-2 shadow-cinematic lg:max-w-none">
-                            <ProductShowcaseScene />
+                            <div className="relative h-full w-full transition-transform duration-700 hover:scale-105">
+                                {/* Keeping container empty as requested */}
+                            </div>
 
                             {/* Scan line effect */}
                             <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-[40px]">
@@ -122,8 +118,8 @@ export default function ProductShowcase3D() {
                             transition={{ duration: 0.8, delay: 0.5 }}
                             className="absolute -bottom-4 -right-2 glass-gold rounded-2xl px-4 py-3 sm:-right-4"
                         >
-                            <p className="text-[8px] uppercase tracking-[0.35em] text-white/60">Interactive 3D</p>
-                            <p className="mt-0.5 text-sm font-bold text-gold">Drag to Explore</p>
+                            <p className="text-[8px] uppercase tracking-[0.35em] text-white/60">Featured Piece</p>
+                            <p className="mt-0.5 text-sm font-bold text-gold">NINE77 Concept</p>
                         </motion.div>
                     </motion.div>
                 </div>
@@ -131,3 +127,4 @@ export default function ProductShowcase3D() {
         </section>
     );
 }
+

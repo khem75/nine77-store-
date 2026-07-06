@@ -38,7 +38,7 @@ export default function ShopPage() {
             {/* Ambient glow */}
             <div className="pointer-events-none fixed left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold/4 blur-[130px]" />
 
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="relative mx-auto max-w-7xl px-4 md:px-6 lg:px-8">
                 {/* Header */}
                 <motion.div
                     ref={headerRef}
@@ -75,11 +75,10 @@ export default function ShopPage() {
                             <button
                                 key={cat}
                                 onClick={() => setCategory(cat)}
-                                className={`rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] transition-all duration-300 ${
-                                    category === cat
+                                className={`rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.25em] transition-all duration-300 ${category === cat
                                         ? 'border-gold bg-gold text-black shadow-glow-sm'
                                         : 'border-white/10 bg-white/5 text-white/60 hover:border-gold/30 hover:text-white'
-                                }`}
+                                    }`}
                             >
                                 {cat}
                             </button>
@@ -134,7 +133,7 @@ export default function ShopPage() {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.4 }}
-                        className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4"
+                        className="grid grid-cols-2 gap-x-3 gap-y-5 md:gap-5 xl:grid-cols-4"
                     >
                         {filteredProducts.map((product, i) => (
                             <ProductCard key={product.id} product={product} index={i} />

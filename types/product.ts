@@ -7,6 +7,7 @@ export type Product = {
     category: 'Tops' | 'Pants' | 'Outerwear';
     images: string[];
     sizes: Array<'S' | 'M' | 'L' | 'XL'>;
+    colors?: string[];
     featured?: boolean;
     newArrival?: boolean;
 };
