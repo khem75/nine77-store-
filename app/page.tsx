@@ -4,320 +4,207 @@ import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Star, Shield, Zap, Truck } from 'lucide-react';
+import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
 import Hero from '@/components/hero';
-import ProductCard from '@/components/product-card';
-import ProductShowcase3D from '@/components/product-showcase-3d';
+import TrustStrip from '@/components/trust-strip';
+import ShopByCollection from '@/components/shop-by-collection';
+import ShopTheLook from '@/components/shop-the-look';
 import LookbookHorizontal from '@/components/lookbook-horizontal';
+import ProductCard from '@/components/product-card';
 import WhatsappButton from '@/components/whatsapp-button';
 import { products } from '@/data/products';
 
-const featuredProducts = products.filter((p) => p.newArrival || p.featured).slice(0, 4);
-const bestSellers = products.filter((p) => p.featured).slice(0, 4);
+// Retrieve newest arrivals
+const newArrivals = products.filter((p) => p.newArrival).slice(0, 6);
 
-/* ── Reusable section heading ───────────────────────────── */
-function SectionHeader({
-    eyebrow,
-    title,
-    desc,
-}: {
-    eyebrow: string;
-    title: React.ReactNode;
-    desc?: string;
-}) {
-    const ref = useRef<HTMLDivElement>(null);
-    const inView = useInView(ref, { once: true, amount: 0.5 });
-    return (
-        <motion.div
-            ref={ref}
-            initial={{ opacity: 0, y: 40 }}
-            animate={inView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-            className="mb-10 space-y-3"
-        >
-            <span className="text-[10px] uppercase tracking-[0.45em] text-gold">{eyebrow}</span>
-            <h2 className="text-3xl font-black uppercase leading-[0.92] text-white sm:text-4xl lg:text-5xl">
-                {title}
-            </h2>
-            {desc && (
-                <p className="max-w-md text-sm text-white/50">{desc}</p>
-            )}
-        </motion.div>
-    );
-}
-
-/* ── Why NINE77 section ─────────────────────────────────── */
-function WhySection() {
-    const ref = useRef<HTMLDivElement>(null);
-    const inView = useInView(ref, { once: true, amount: 0.2 });
-
-    const pillars = [
-        {
-            icon: Star,
-            label: 'Premium Quality',
-            desc: 'Handpicked fabrics, rigorous quality checks, and meticulous finishing on every piece.',
-        },
-        {
-            icon: Shield,
-            label: 'Authentic Brand',
-            desc: 'Genuine NINE77 with unique identifiers. No knockoffs, no compromises.',
-        },
-        {
-            icon: Zap,
-            label: 'Instant Order',
-            desc: 'Select your size, generate your order message, and send it on WhatsApp in seconds.',
-        },
-        {
-            icon: Truck,
-            label: 'Fast Delivery',
-            desc: 'Reliable nationwide delivery with secure packaging for every order.',
-        },
-    ];
-
-    return (
-        <section className="relative overflow-hidden border-t border-white/5 py-20 md:py-32">
-            <div className="pointer-events-none absolute inset-0 grid-bg opacity-30" />
-            <div className="pointer-events-none absolute right-0 top-1/3 h-80 w-80 -translate-y-1/2 translate-x-1/2 rounded-full bg-gold/6 blur-[100px]" />
-
-            <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-                <SectionHeader
-                    eyebrow="Why NINE77"
-                    title={<>The <span className="text-gold-gradient">Difference</span>.</>}
-                    desc="Every element of NINE77 is engineered to exceed expectations."
-                />
-
-                <div ref={ref} className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-                    {pillars.map(({ icon: Icon, label, desc }, i) => (
-                        <motion.div
-                            key={label}
-                            initial={{ opacity: 0, y: 50 }}
-                            animate={inView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 0.7, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                            className="group rounded-[24px] border border-white/8 bg-surface p-6 transition-all duration-500 hover:border-gold/20 hover:bg-gold/5"
-                        >
-                            <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-gold/10 text-gold transition-all duration-500 group-hover:bg-gold/20">
-                                <Icon size={22} strokeWidth={1.5} />
-                            </div>
-                            <h3 className="text-sm font-bold uppercase tracking-[0.1em] text-white">
-                                {label}
-                            </h3>
-                            <p className="mt-2 text-xs leading-relaxed text-white/50">{desc}</p>
-                        </motion.div>
-                    ))}
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ── About teaser section ───────────────────────────────── */
-function AboutTeaser() {
-    const ref = useRef<HTMLDivElement>(null);
-    const inView = useInView(ref, { once: true, amount: 0.3 });
-
-    return (
-        <section className="relative overflow-hidden border-t border-white/5 py-20 md:py-32">
-            <div className="mx-auto max-w-7xl px-6 lg:px-8">
-                <div ref={ref} className="grid items-center gap-12 lg:grid-cols-2">
-                    {/* Image */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.93 }}
-                        animate={inView ? { opacity: 1, scale: 1 } : {}}
-                        transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                        className="relative overflow-hidden rounded-[36px] border border-white/8 bg-background-2 shadow-cinematic"
-                    >
-                        <div className="relative aspect-[4/3]">
-                            <Image
-                                src="/about-image.jpg"
-                                alt="NINE77 — Our Story"
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 1024px) 100vw, 50vw"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-                        </div>
-                        {/* Floating stat */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={inView ? { opacity: 1, y: 0 } : {}}
-                            transition={{ delay: 0.5, duration: 0.8 }}
-                            className="absolute bottom-5 right-5 glass-gold rounded-2xl p-4"
-                        >
-                            <p className="text-2xl font-black text-gold">2026</p>
-                            <p className="text-[9px] uppercase tracking-[0.3em] text-white/60">Founded</p>
-                        </motion.div>
-                    </motion.div>
-
-                    {/* Text */}
-                    <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={inView ? { opacity: 1, x: 0 } : {}}
-                        transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-                        className="space-y-6"
-                    >
-                        <span className="text-[10px] uppercase tracking-[0.45em] text-gold">Our Story</span>
-                        <h2 className="text-3xl font-black uppercase leading-[0.92] text-white sm:text-4xl">
-                            Redefining
-                            <br />
-                            <span className="text-gold-gradient">Streetwear.</span>
-                        </h2>
-                        <div className="space-y-4 text-sm leading-relaxed text-white/55">
-                            <p>
-                                NINE77 was born from a passion for premium streetwear that
-                                speaks without shouting. Every piece is a statement — crafted
-                                for those who understand that true luxury is in the details.
-                            </p>
-                            <p>
-                                From the stitching to the silhouette, we obsess over
-                                quality so you can wear confidence effortlessly.
-                            </p>
-                        </div>
-                        <Link
-                            href="/about"
-                            className="group inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-gold transition-all duration-300 hover:gap-5"
-                        >
-                            Our Full Story
-                            <ArrowRight size={15} className="transition-transform duration-300 group-hover:translate-x-1" />
-                        </Link>
-                    </motion.div>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-/* ── WhatsApp CTA section ───────────────────────────────── */
-function WhatsAppCTA() {
-    const ref = useRef<HTMLDivElement>(null);
-    const inView = useInView(ref, { once: true, amount: 0.4 });
-
-    return (
-        <section className="relative overflow-hidden border-t border-white/5 py-20">
-            <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_50%,rgba(212,175,55,0.08),transparent)]" />
-
-            <div className="relative mx-auto max-w-3xl px-6 text-center lg:px-8">
-                <motion.div
-                    ref={ref}
-                    initial={{ opacity: 0, y: 40 }}
-                    animate={inView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-                    className="space-y-6"
-                >
-                    <span className="text-[10px] uppercase tracking-[0.45em] text-gold">Order Process</span>
-                    <h2 className="text-3xl font-black uppercase leading-[0.92] text-white sm:text-5xl">
-                        Order in
-                        <br />
-                        <span className="text-gold-gradient">60 seconds.</span>
-                    </h2>
-                    <p className="mx-auto max-w-sm text-sm text-white/50">
-                        Select your product and size. We auto-generate your order message.
-                        Hit send on WhatsApp. It's that simple.
-                    </p>
-
-                    {/* Steps */}
-                    <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
-                        {['Pick a product', 'Choose your size', 'Send on WhatsApp'].map(
-                            (step, i) => (
-                                <div key={step} className="flex items-center gap-3">
-                                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-gold/30 bg-gold/5 text-[10px] font-black text-gold">
-                                        {i + 1}
-                                    </div>
-                                    <span className="text-xs uppercase tracking-[0.2em] text-white/60">{step}</span>
-                                    {i < 2 && (
-                                        <ArrowRight size={12} className="hidden text-white/20 sm:block" />
-                                    )}
-                                </div>
-                            )
-                        )}
-                    </div>
-
-                    <motion.a
-                        href="https://wa.me/9779810605409?text=Hello%20NINE77%2C%20I%20would%20like%20to%20shop!"
-                        target="_blank"
-                        rel="noreferrer"
-                        whileHover={{ scale: 1.04 }}
-                        whileTap={{ scale: 0.96 }}
-                        className="inline-flex items-center gap-3 rounded-full bg-gold px-10 py-5 text-sm font-bold uppercase tracking-[0.3em] text-black shadow-glow transition-all duration-500 hover:shadow-glow-lg"
-                    >
-                        Start Shopping
-                        <ArrowRight size={16} />
-                    </motion.a>
-                </motion.div>
-            </div>
-        </section>
-    );
-}
-
-/* ── Main page ──────────────────────────────────────────── */
 export default function HomePage() {
+    const brandRef = useRef<HTMLDivElement>(null);
+    const brandInView = useInView(brandRef, { once: true, amount: 0.3 });
+
+    const storyRef = useRef<HTMLDivElement>(null);
+    const storyInView = useInView(storyRef, { once: true, amount: 0.2 });
+
+    const newsletterRef = useRef<HTMLDivElement>(null);
+    const newsletterInView = useInView(newsletterRef, { once: true, amount: 0.35 });
+
     return (
         <>
-            {/* 1. Immersive fullscreen hero */}
+            {/* 1. Immersive Hero Art Installation */}
             <Hero />
+            <TrustStrip />
 
-            {/* 2. New Arrivals product grid */}
-            <section
-                id="arrivals"
-                className="relative border-t border-white/5 py-20 md:py-32"
-            >
-                <div className="pointer-events-none absolute left-1/2 top-0 h-80 w-96 -translate-x-1/2 rounded-full bg-gold/5 blur-[120px]" />
-                <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-                    <SectionHeader
-                        eyebrow="New Arrivals"
-                        title={<>Latest <span className="text-gold-gradient">Drops.</span></>}
-                        desc="Fresh from the studio — premium pieces engineered for those who refuse to blend in."
-                    />
-                    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-                        {featuredProducts.map((product, i) => (
-                            <ProductCard key={product.id} product={product} index={i} />
-                        ))}
-                    </div>
-                    <div className="mt-10 text-center">
+            {/* 2. Shop by Collection (Homepage Focus: Campaigns) */}
+            <ShopByCollection />
+
+            {/* 3. Luxury Brand Statement (Editorial Quote Section) */}
+            <section ref={brandRef} className="py-24 md:py-36 bg-[#070707] border-b border-white/[0.08] px-6 lg:px-12 flex items-center justify-center">
+                <div className="mx-auto max-w-4xl text-center space-y-8">
+                    <motion.div
+                        initial={{ opacity: 0, y: 30 }}
+                        animate={brandInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                        className="space-y-6"
+                    >
+                        <span className="text-[10px] font-black uppercase tracking-[0.45em] text-gold">
+                            Our Philosophy
+                        </span>
+                        <h2 className="text-[clamp(2.2rem,6.5vw,5.5rem)] font-black uppercase leading-[0.95] tracking-tight text-white select-none">
+                            BUILD
+                            <br />
+                            <span className="text-gold">DIFFERENT</span>
+                            <span className="text-white">.</span>
+                        </h2>
+                        {/* Horizontal thin dividers */}
+                        <div className="w-16 h-[1px] bg-white/20 mx-auto my-6" />
+                        <p className="text-lg md:text-2xl font-light text-white/55 leading-relaxed max-w-2xl mx-auto tracking-wide">
+                            "Luxury streetwear engineered for those who refuse to blend in. Fusing architectural geometry with museum-grade craftsmanship."
+                        </p>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* 4. New Drop (Horizontal scroll of 6 newest items; image & name only) */}
+            <section id="new-drop" className="py-20 md:py-32 border-b border-white/[0.08] bg-[#070707] px-6 lg:px-12">
+                <div className="mx-auto max-w-[1440px]">
+                    <div className="mb-12 flex items-baseline justify-between">
+                        <div>
+                            <p className="text-[10px] uppercase tracking-[0.45em] text-gold font-black">
+                                Latest Drops
+                            </p>
+                            <h2 className="mt-2 text-4xl font-extrabold uppercase tracking-tight text-white sm:text-5xl">
+                                New Drop
+                            </h2>
+                        </div>
                         <Link
                             href="/shop"
-                            className="inline-flex items-center gap-3 rounded-full border border-white/10 bg-white/5 px-8 py-4 text-xs font-semibold uppercase tracking-[0.25em] text-white backdrop-blur-sm transition-all duration-300 hover:border-gold/30 hover:bg-gold/5 hover:text-gold"
+                            className="group inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.25em] text-white/55 hover:text-white transition-colors"
                         >
-                            View All Products
-                            <ArrowRight size={14} />
+                            View All
+                            <ArrowUpRight size={13} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                         </Link>
                     </div>
-                </div>
-            </section>
 
-            {/* 3. Interactive 3D product showcase */}
-            <ProductShowcase3D />
-
-            {/* 4. Horizontal lookbook scroll */}
-            <LookbookHorizontal />
-
-            {/* 5. Best sellers grid */}
-            <section className="relative border-t border-white/5 py-20 md:py-32">
-                <div className="pointer-events-none absolute right-0 top-1/3 h-80 w-80 -translate-y-1/2 translate-x-1/4 rounded-full bg-gold/5 blur-[100px]" />
-                <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
-                    <SectionHeader
-                        eyebrow="Best Sellers"
-                        title={<>The <span className="text-gold-gradient">Essentials.</span></>}
-                        desc="Our most-loved pieces, worn by those who define the standard."
-                    />
-                    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-                        {bestSellers.map((product, i) => (
-                            <ProductCard key={product.id} product={product} index={i} />
+                    {/* Scroll Container */}
+                    <div
+                        className="flex gap-6 overflow-x-auto hide-scrollbar pb-6"
+                        style={{ WebkitOverflowScrolling: 'touch', scrollSnapType: 'x mandatory' }}
+                    >
+                        {newArrivals.map((product, idx) => (
+                            <div
+                                key={product.id}
+                                className="w-[240px] shrink-0 snap-start md:w-[280px]"
+                                style={{ scrollSnapAlign: 'start' }}
+                            >
+                                <ProductCard
+                                    product={product}
+                                    index={idx}
+                                    showPrice={false}
+                                />
+                            </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* 6. Why NINE77 features */}
-            <WhySection />
+            {/* 5. Shop The Look Outfit Editorials */}
+            <ShopTheLook />
 
-            {/* 7. About teaser */}
-            <AboutTeaser />
+            {/* 6. Lookbook horizontal Parallax */}
+            <LookbookHorizontal />
 
-            {/* 8. WhatsApp CTA */}
-            <WhatsAppCTA />
+            {/* 7. Brand Story Editorial */}
+            <section className="py-20 md:py-32 border-b border-white/[0.08] bg-[#070707] px-6 lg:px-12">
+                <div className="mx-auto max-w-[1440px]">
+                    <div ref={storyRef} className="grid gap-12 md:grid-cols-2 md:gap-20 items-center">
+                        {/* Story visual representation */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={storyInView ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
+                            className="relative aspect-[4/5] overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#111]"
+                        >
+                            <Image
+                                src="/about-image.jpg"
+                                alt="NINE77 Story Campaign"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 50vw"
+                                loading="lazy"
+                                className="object-cover opacity-80"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        </motion.div>
 
-            {/* Floating WhatsApp button (desktop) */}
+                        {/* Content text */}
+                        <motion.div
+                            initial={{ opacity: 0, x: 24 }}
+                            animate={storyInView ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.85, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                            className="space-y-6"
+                        >
+                            <p className="text-[10px] uppercase tracking-[0.45em] text-gold font-black">Brand Story</p>
+                            <h2 className="text-3xl font-extrabold uppercase tracking-tight text-white sm:text-5xl leading-[0.95] select-none">
+                                Built Different.<br />For the Bold.
+                            </h2>
+                            <p className="text-[14px] leading-relaxed text-white/50 font-light max-w-md">
+                                NINE77 fuses curated luxury material selectives with contemporary streetwear proportions. Each piece balances quiet sophistication with bold visual attitude, built to speak without shouting.
+                            </p>
+                            <p className="text-[14px] leading-relaxed text-white/50 font-light max-w-md">
+                                We obsess over structural fit, fabric weights, and visual longevity, ensuring every garment feels like a hand-curated art piece.
+                            </p>
+                            <div className="pt-2">
+                                <Link
+                                    href="/about"
+                                    className="group inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.25em] text-gold transition-all duration-300 hover:gap-3"
+                                >
+                                    Read Full Story
+                                    <ArrowRight size={13} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5" />
+                                </Link>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
+            {/* 8. Newsletter Signup */}
+            <section className="py-20 md:py-28 border-b border-white/[0.08] bg-[#070707] px-6 lg:px-12">
+                <div ref={newsletterRef} className="mx-auto max-w-xl text-center">
+                    <motion.div
+                        initial={{ opacity: 0, y: 24 }}
+                        animate={newsletterInView ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+                        className="space-y-5"
+                    >
+                        <p className="text-[10px] uppercase tracking-[0.45em] text-gold font-black">Join the Club</p>
+                        <h2 className="text-3xl font-extrabold uppercase tracking-tight text-white sm:text-4xl select-none">
+                            Newsletter
+                        </h2>
+                        <p className="text-sm text-white/50 leading-relaxed font-light">
+                            Subscribe to receive early drop notifications, release campaigns, and members-only restocks.
+                        </p>
+
+                        <form
+                            onSubmit={(e) => e.preventDefault()}
+                            className="mt-8 flex flex-col gap-3 sm:flex-row items-center w-full"
+                        >
+                            <input
+                                type="email"
+                                placeholder="Your email address"
+                                aria-label="Email address"
+                                className="h-12 w-full rounded-full border border-white/[0.1] bg-white/[0.02] px-5 text-[12px] text-white placeholder:text-white/30 outline-none focus:border-white/20 transition-all font-light"
+                            />
+                            <button
+                                type="submit"
+                                className="h-12 w-full sm:w-auto rounded-full bg-gold px-8 text-[11px] font-black uppercase tracking-[0.25em] text-black transition-all hover:bg-gold-light active:scale-95 shrink-0 shadow-[0_4px_15px_rgba(212,175,55,0.25)]"
+                            >
+                                Subscribe
+                            </button>
+                        </form>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Floating WhatsApp trigger */}
             <WhatsappButton />
         </>
     );

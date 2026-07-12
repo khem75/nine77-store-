@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import { Outfit, Rajdhani } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 
 import Navbar from '@/components/navbar';
@@ -9,18 +9,11 @@ import Footer from '@/components/footer';
 import MobileBottomNav from '@/components/mobile-bottom-nav';
 import SmoothScrollProvider from '@/components/smooth-scroll-provider';
 
-const outfit = Outfit({
+const inter = Inter({
     subsets: ['latin'],
     display: 'swap',
-    variable: '--font-outfit',
+    variable: '--font-sans',
     weight: ['300', '400', '500', '600', '700', '800', '900'],
-});
-
-const rajdhani = Rajdhani({
-    subsets: ['latin'],
-    display: 'swap',
-    variable: '--font-rajdhani',
-    weight: ['400', '500', '600', '700'],
 });
 
 export const viewport: Viewport = {
@@ -63,7 +56,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en" className={`${outfit.variable} ${rajdhani.variable}`} suppressHydrationWarning>
+        <html lang="en" className={`${inter.variable}`} suppressHydrationWarning>
             <body className="bg-background font-sans text-white antialiased" suppressHydrationWarning>
                 <SmoothScrollProvider>
                     <div className="relative min-h-screen bg-background text-white" style={{ overflowX: 'hidden', maxWidth: '100vw' }}>

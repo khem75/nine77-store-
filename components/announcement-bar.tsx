@@ -4,52 +4,27 @@ import { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 
-const MARQUEE_ITEMS = [
-    '⚡ NEW ARRIVALS JUST DROPPED',
-    '✦ FREE DELIVERY ON ORDERS ABOVE Rs. 2999',
-    '✦ PREMIUM STREETWEAR FOR THE BOLD',
-    '✦ ORDER VIA WHATSAPP — FAST & EASY',
-    '✦ NINE77 — BUILT DIFFERENT',
-    '✦ LIMITED EDITION PIECES',
+const separator = '   \u2726   ';
+const marqueeItems = [
+    'NEW DROP ’25',
+    'FREE DELIVERY ON ORDERS ABOVE RS. 2999',
+    'PREMIUM STREETWEAR FOR THE BOLD',
+    'ORDER VIA WHATSAPP — FAST & EASY',
 ];
-
-const text = MARQUEE_ITEMS.join('   ·   ');
-const repeated = `${text}   ·   ${text}`;
+const marqueeText = marqueeItems.join(separator);
+const repeatedText = `${marqueeText}${separator}${marqueeText}`;
 
 export default function AnnouncementBar() {
-    // Only animate after mount to avoid SSR/CSR hydration mismatch
     const [ready, setReady] = useState(false);
     const pathname = usePathname();
-    useEffect(() => { setReady(true); }, []);
-
-    const isShopPage = pathname === '/shop';
+    useEffect(() => setReady(true), []);
 
     return (
-        <div className={`relative z-50 overflow-hidden border-b border-gold/10 bg-black py-2 ${isShopPage ? 'hidden md:block' : ''}`}>
-            <div className="flex overflow-hidden">
-                {ready ? (
-                    <motion.div
-                        animate={{ x: [0, '-50%'] }}
-                        transition={{
-                            duration: 28,
-                            repeat: Infinity,
-                            ease: 'linear',
-                            repeatType: 'loop',
-                        }}
-                        className="flex shrink-0 whitespace-nowrap"
-                    >
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.35em] text-gold/80">
-                            {repeated}
-                        </span>
-                    </motion.div>
-                ) : (
-                    // Static fallback during SSR — prevents hydration mismatch
-                    <div className="flex shrink-0 whitespace-nowrap">
-                        <span className="text-[10px] font-semibold uppercase tracking-[0.35em] text-gold/80">
-                            {repeated}
-                        </span>
-                    </div>
-                )}
+        <div className={`relative z-50 flex h-8 items-center overflow-hidden border-b border-white/[0.06] bg-black ${pathname === '/shop' ? 'hidden md:flex' : ''}`}>
+            <div className="flex w-full overflow-hidden">
+                <motion.div animate={ready ? { x: [0, '-50%'] } : undefined} transition={{ duration: 38, repeat: Infinity, ease: 'linear' }} className="flex shrink-0 whitespace-nowrap">
+                    <span className="text-[9px] font-bold uppercase tracking-[0.38em] text-white/65">{repeatedText}</span>
+                </motion.div>
             </div>
         </div>
     );

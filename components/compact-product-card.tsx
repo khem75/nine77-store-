@@ -15,47 +15,34 @@ export default function CompactProductCard({
     index?: number;
 }) {
     const [imgSrc, setImgSrc] = useState(product.images[0] || '/luxury-streetwear-garment.png');
-    const [fallbackActive, setFallbackActive] = useState(false);
-
-    const handleImageError = () => {
-        if (!fallbackActive) {
-            setImgSrc('/luxury-streetwear-garment.png');
-            setFallbackActive(true);
-        }
-    };
+    const [fallback, setFallback] = useState(false);
 
     return (
         <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
-            className="w-[150px] h-[250px]"
+            transition={{ duration: 0.35, delay: index * 0.04, ease: [0.25, 0.46, 0.45, 0.94] }}
+            className="w-[148px]"
         >
             <Link
                 href={`/product/${product.slug}`}
-                className="group relative flex h-[250px] w-[150px] flex-col justify-between overflow-hidden rounded-[14px] border border-white/6 bg-[#0E0E0E] shadow-[0_8px_20px_rgba(0,0,0,0.15)] block p-3"
+                className="block w-full overflow-hidden rounded-[18px] border border-white/[0.08] bg-[#161616] transition-transform duration-300 hover:-translate-y-1 active:scale-[0.97]"
             >
-                {/* Image area (75% of height) */}
-                <div className="relative h-[75%] w-full overflow-hidden rounded-[10px] bg-[#090909] shrink-0">
+                <div className="relative w-full overflow-hidden bg-[#111111]" style={{ paddingBottom: '120%' }}>
                     <Image
                         src={imgSrc}
                         alt={product.name}
-                        width={150}
-                        height={187}
+                        fill
+                        sizes="150px"
                         loading="lazy"
-                        onError={handleImageError}
-                        className="transition-transform duration-[250ms] ease-out group-active:scale-[1.03] block w-full h-auto aspect-[4/5] object-contain overflow-hidden rounded-[inherit]"
+                        onError={() => { if (!fallback) { setImgSrc('/luxury-streetwear-garment.png'); setFallback(true); } }}
+                        className="object-contain object-center transition-transform duration-500 group-hover:scale-[1.03]"
                     />
                 </div>
 
-                {/* Info area (25% of height) */}
-                <div className="flex h-[25%] flex-col justify-center min-h-0 pt-1">
-                    <h4 className="truncate text-[12px] font-semibold uppercase tracking-[0.04em] text-white/90">
-                        {product.name}
-                    </h4>
-                    <p className="mt-0.5 text-[14px] font-black text-gold">
-                        {formatPrice(product.price)}
-                    </p>
+                <div className="px-3 py-2.5 border-t border-white/[0.06] bg-[#161616] flex flex-col justify-center">
+                    <span className="truncate text-[11px] font-medium leading-tight text-white">{product.name}</span>
+                    <span className="mt-0.5 text-[12px] font-semibold text-gold">{formatPrice(product.price)}</span>
                 </div>
             </Link>
         </motion.div>
