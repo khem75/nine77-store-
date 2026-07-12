@@ -412,7 +412,7 @@ export default function Hero() {
                         <motion.div style={mounted ? { y: copyY, opacity: copyOpacity } : undefined} className="w-full">
                             {/* Stagger Letter reveal */}
                             <p className="mb-5 text-[10px] font-bold uppercase tracking-[0.48em] text-gold md:mb-7 flex flex-wrap">
-                                {"New Drop ’25".split("").map((char, index) => (
+                                {"New Drop ’26".split("").map((char, index) => (
                                     <motion.span
                                         key={index}
                                         initial={{ opacity: 0, y: 8 }}

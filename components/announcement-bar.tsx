@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 
 const separator = '   \u2726   ';
 const marqueeItems = [
-    'NEW DROP ’25',
+    'NEW DROP ’26',
     'FREE DELIVERY ON ORDERS ABOVE RS. 2999',
     'PREMIUM STREETWEAR FOR THE BOLD',
     'ORDER VIA WHATSAPP — FAST & EASY',
