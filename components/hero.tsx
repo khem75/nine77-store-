@@ -471,18 +471,6 @@ export default function Hero() {
                                             {char}
                                         </motion.span>
                                     ))}
-                                    <motion.span
-                                        initial={{ y: "105%", opacity: 0 }}
-                                        animate={mounted ? { y: 0, opacity: 1 } : { y: "105%", opacity: 0 }}
-                                        transition={{
-                                            delay: 0.5 + 9 * 0.04,
-                                            duration: 0.8,
-                                            ease: [0.16, 1, 0.3, 1]
-                                        }}
-                                        className="inline-block text-white origin-bottom"
-                                    >
-                                        .
-                                    </motion.span>
                                 </span>
                             </h1>
 
