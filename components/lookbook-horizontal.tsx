@@ -58,8 +58,7 @@ export default function LookbookHorizontal() {
                             initial={{ opacity: 0, y: 24 }}
                             animate={inView ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                            className="group relative flex flex-col justify-end overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#161616]"
-                            style={{ height: 'max(400px, 50vh)' }}
+                            className="group relative flex flex-col justify-end overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#161616] h-[320px] sm:h-[380px] md:h-[450px] lg:h-[500px]"
                         >
                             {/* Imagery */}
                             <Image

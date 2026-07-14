@@ -197,7 +197,8 @@ export default function Hero() {
                 ref={heroRef}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                className="relative isolate min-h-[min(900px,100svh)] overflow-hidden border-b border-white/[0.08] bg-[#000000]"
+                className="relative isolate min-h-[min(900px,100svh)] min-h-[min(900px,100dvh)] overflow-hidden border-b border-white/[0.08] bg-[#000000]"
+                aria-label="Hero — Build Different"
             >
                 {/* BACKGROUND LAYER 2: Warm radial glow behind sculpture (Connected to mouse parallax) */}
                 <motion.div
@@ -403,7 +404,8 @@ export default function Hero() {
                 </motion.div>
 
                 {/* TEXT & CONTROLS CONTENT AREA */}
-                <div className="relative z-20 mx-auto flex min-h-[min(900px,100svh)] max-w-[1440px] items-end px-6 pb-24 pt-36 sm:px-10 md:items-center md:px-12 md:pb-8 md:pt-20 lg:px-16">
+                {/* pt accounts for: 32px announcement + 60px navbar on mobile; 72px navbar on md */}
+                <div className="relative z-20 mx-auto flex min-h-[min(900px,100svh)] max-w-[1440px] items-end px-6 pb-24 pt-[96px] sm:px-10 md:items-center md:px-12 md:pb-8 md:pt-[88px] lg:px-16">
                     {/* Mouse and Scroll Parallax wrapper on Text */}
                     <motion.div
                         style={reduceMotion ? undefined : { x: textParallaxX, y: textParallaxY }}
@@ -515,10 +517,10 @@ export default function Hero() {
                                     transition={{ delay: 1.0, duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
                                 >
                                     <Link
-                                        href="#lookbook"
+                                        href="/shop"
                                         className="group inline-flex w-full sm:w-auto h-12 items-center justify-center rounded-sm border border-white/20 px-6 text-[10px] font-bold uppercase tracking-[0.18em] text-white transition-all duration-[250ms] cubic-bezier(0.16,1,0.3,1) hover:-translate-y-[3px] hover:scale-[1.02] hover:border-white/55 hover:bg-white/5 hover:shadow-[0_20px_45px_rgba(255,255,255,0.06)]"
                                     >
-                                        Explore Lookbook
+                                        Explore Collection
                                     </Link>
                                 </motion.div>
                             </div>
@@ -575,9 +577,9 @@ export default function Hero() {
                             </button>
                             <iframe
                                 className="h-full w-full"
-                                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&controls=0"
+                                src="https://www.youtube.com/embed/D7Q6f_oF72g?autoplay=1&mute=0&controls=1"
                                 title="NINE77 Brand Film"
-                                allow="autoplay; encrypted-media"
+                                allow="autoplay; encrypted-media; picture-in-picture"
                                 allowFullScreen
                             />
                         </div>

@@ -1,7 +1,7 @@
 /** @type {import('next-sitemap').IConfig} */
 import { products } from '@/data/products';
 
-const baseUrl = 'https://nine77.example';
+const baseUrl = 'https://nine77-store.vercel.app';
 
 export default function sitemap() {
     const productUrls = products.map((product) => ({

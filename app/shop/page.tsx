@@ -41,7 +41,6 @@ export default function ShopPage() {
     const [category, setCategory] = useState<(typeof categories)[number]>('All');
     const [sort, setSort] = useState<(typeof sortOptions)[number]>('Price High to Low');
     const [search, setSearch] = useState('');
-    const [mobilePanel, setMobilePanel] = useState<'filter' | 'sort' | null>(null);
 
     // Load category from query param on mount if present
     useEffect(() => {
@@ -89,12 +88,6 @@ export default function ShopPage() {
         });
     }, [category, sort, search]);
 
-    useEffect(() => {
-        if (!mobilePanel) return;
-        const prev = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
-        return () => { document.body.style.overflow = prev; };
-    }, [mobilePanel]);
 
     const activeCampaign = campaignData[category] || campaignData.All;
 
@@ -129,7 +122,8 @@ export default function ShopPage() {
             <div className="mx-auto max-w-[1440px] px-6 lg:px-8 mt-10">
                 
                 {/* ── 2. Filters & Options Sticky Header Bar ── */}
-                <div className="sticky top-[64px] z-30 mb-8 border-b border-white/[0.08] bg-[#070707]/90 py-4 backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                {/* top-[92px] = 32px announcement bar + 60px navbar on mobile; top-[72px] on md */}
+                <div className="sticky top-[92px] md:top-[72px] z-30 mb-8 -mx-6 px-6 md:mx-0 md:px-0 border-b border-white/[0.08] bg-[#070707]/92 py-4 backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     {/* Category list chips */}
                     <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1 sm:pb-0" style={{ scrollSnapType: 'x mandatory' }}>
                         {categories.map((cat) => (

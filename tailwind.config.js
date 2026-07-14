@@ -23,9 +23,16 @@ module.exports = {
                 border: 'rgba(255,255,255,0.08)',
                 'border-subtle': 'rgba(255,255,255,0.05)',
             },
+            spacing: {
+                // Bottom nav clearance: 80px nav pill + 20px gap + safe area
+                'mobile-nav': 'calc(100px + env(safe-area-inset-bottom))',
+                'mobile-nav-sm': 'calc(80px + env(safe-area-inset-bottom))',
+                'safe-bottom': 'env(safe-area-inset-bottom)',
+            },
             boxShadow: {
                 glow: '0 0 40px rgba(212,175,55,0.15)',
                 'glow-sm': '0 0 20px rgba(212,175,55,0.1)',
+                'glow-lg': '0 0 60px rgba(212,175,55,0.25)',
                 soft: '0 0 50px rgba(255,255,255,0.02)',
                 card: '0 8px 30px rgba(0,0,0,0.5)',
             },
@@ -36,6 +43,8 @@ module.exports = {
                 shimmer: 'shimmer 2.8s infinite',
                 'fade-in': 'fadeIn 0.5s ease both',
                 'reveal-up': 'revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+                'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
+                'float': 'float 6s ease-in-out infinite',
             },
             keyframes: {
                 shimmer: {
@@ -50,6 +59,14 @@ module.exports = {
                     from: { opacity: '0' },
                     to: { opacity: '1' },
                 },
+                pulseSubtle: {
+                    '0%, 100%': { opacity: '1' },
+                    '50%': { opacity: '0.7' },
+                },
+                float: {
+                    '0%, 100%': { transform: 'translateY(0)' },
+                    '50%': { transform: 'translateY(-8px)' },
+                },
             },
             letterSpacing: {
                 'ultra': '0.4em',
@@ -58,6 +75,21 @@ module.exports = {
             },
             transitionTimingFunction: {
                 'luxury': 'cubic-bezier(0.16, 1, 0.3, 1)',
+            },
+            transitionDuration: {
+                '250': '250ms',
+                '350': '350ms',
+                '400': '400ms',
+                '550': '550ms',
+                '650': '650ms',
+                '750': '750ms',
+                '850': '850ms',
+            },
+            borderRadius: {
+                'xl2': '20px',
+                'xl3': '24px',
+                'xl4': '28px',
+                'xl5': '32px',
             },
         }
     },

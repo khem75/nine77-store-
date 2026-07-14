@@ -1,19 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
-import { ChevronDown, Instagram, Facebook, Music2 } from 'lucide-react';
+import { Instagram, Facebook, Music2 } from 'lucide-react';
 
 export default function Footer() {
-    const [openSection, setOpenSection] = useState<string | null>(null);
-
-    const toggleSection = (section: string) => {
-        setOpenSection(openSection === section ? null : section);
-    };
-
     return (
         <footer className="border-t border-white/[0.08] bg-[#070707]">
-            <div className="mx-auto max-w-[1440px] px-6 pt-12 pb-28 md:pb-12 lg:px-8">
+            <div className="mx-auto max-w-[1440px] px-6 pt-12 pb-[calc(120px+env(safe-area-inset-bottom))] md:pb-12 lg:px-8">
                 {/* Desktop layout: multi-column. Mobile: accordion */}
                 <div className="grid gap-8 md:grid-cols-4">
                     {/* Brand */}
@@ -26,27 +19,14 @@ export default function Footer() {
                         </p>
                     </div>
 
-                    {/* Navigation Accordion/Column */}
-                    <div className="border-b border-white/[0.08] pb-4 md:border-none md:pb-0">
-                        <button
-                            onClick={() => toggleSection('nav')}
-                            className="flex w-full items-center justify-between py-2 text-left md:pointer-events-none md:block md:p-0"
-                        >
+                    {/* Navigation Column */}
+                    <div className="border-b border-white/[0.08] pb-5 md:border-none md:pb-0">
+                        <div className="py-2 md:p-0">
                             <h4 className="text-[10px] font-bold uppercase tracking-[0.25em] text-white">
                                 Navigation
                             </h4>
-                            <ChevronDown
-                                size={14}
-                                className={`text-white/60 transition-transform duration-300 md:hidden ${
-                                    openSection === 'nav' ? 'rotate-180' : ''
-                                }`}
-                            />
-                        </button>
-                        <div
-                            className={`mt-3 space-y-2 md:block ${
-                                openSection === 'nav' ? 'block' : 'hidden'
-                            }`}
-                        >
+                        </div>
+                        <div className="mt-3 space-y-2 block">
                             {[
                                 { label: 'Home', href: '/' },
                                 { label: 'Shop', href: '/shop' },
@@ -64,27 +44,14 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* Contact Accordion/Column */}
-                    <div className="border-b border-white/[0.08] pb-4 md:border-none md:pb-0">
-                        <button
-                            onClick={() => toggleSection('contact')}
-                            className="flex w-full items-center justify-between py-2 text-left md:pointer-events-none md:block md:p-0"
-                        >
+                    {/* Contact Column */}
+                    <div className="border-b border-white/[0.08] pb-5 md:border-none md:pb-0">
+                        <div className="py-2 md:p-0">
                             <h4 className="text-[10px] font-bold uppercase tracking-[0.25em] text-white">
                                 Contact
                             </h4>
-                            <ChevronDown
-                                size={14}
-                                className={`text-white/60 transition-transform duration-300 md:hidden ${
-                                    openSection === 'contact' ? 'rotate-180' : ''
-                                }`}
-                            />
-                        </button>
-                        <div
-                            className={`mt-3 space-y-2 md:block ${
-                                openSection === 'contact' ? 'block' : 'hidden'
-                            }`}
-                        >
+                        </div>
+                        <div className="mt-3 space-y-2 block">
                             <p className="text-[13px] text-white/45">WhatsApp Orders Only</p>
                             <a
                                 href="https://wa.me/9779810605409"
@@ -97,27 +64,14 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    {/* Socials Accordion/Column */}
-                    <div className="border-b border-white/[0.08] pb-4 md:border-none md:pb-0">
-                        <button
-                            onClick={() => toggleSection('social')}
-                            className="flex w-full items-center justify-between py-2 text-left md:pointer-events-none md:block md:p-0"
-                        >
+                    {/* Socials Column */}
+                    <div className="border-b border-white/[0.08] pb-5 md:border-none md:pb-0">
+                        <div className="py-2 md:p-0">
                             <h4 className="text-[10px] font-bold uppercase tracking-[0.25em] text-white">
                                 Social
                             </h4>
-                            <ChevronDown
-                                size={14}
-                                className={`text-white/60 transition-transform duration-300 md:hidden ${
-                                    openSection === 'social' ? 'rotate-180' : ''
-                                }`}
-                            />
-                        </button>
-                        <div
-                            className={`mt-3 space-y-2 md:block ${
-                                openSection === 'social' ? 'block' : 'hidden'
-                            }`}
-                        >
+                        </div>
+                        <div className="mt-3 space-y-2 block">
                             {[
                                 { label: 'Instagram', icon: Instagram, href: 'https://www.instagram.com/nine.77___/' },
                                 { label: 'TikTok', icon: Music2, href: 'https://www.tiktok.com/@nine.77__' },

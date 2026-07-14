@@ -80,7 +80,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
     return (
         <>
-            <section className="relative min-h-screen bg-[#070707] py-6 md:py-16 px-6 lg:px-8">
+            <section className="relative min-h-screen bg-[#070707] pt-[96px] pb-6 md:pt-[88px] md:pb-16 px-4 md:px-6 lg:px-8">
                 <div className="relative mx-auto max-w-[1440px]">
                     {/* Back link */}
                     <Link
@@ -239,6 +239,34 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                     </div>
                                 </div>
 
+                                {/* Quantity block */}
+                                <div className="space-y-2.5">
+                                    <span className="text-[10px] uppercase tracking-[0.3em] text-white/50 block">Select Quantity</span>
+                                    <div className="flex items-center gap-3">
+                                        <div className="flex items-center rounded-[8px] border border-white/[0.08] bg-white/[0.02] p-1">
+                                            <button
+                                                type="button"
+                                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                                className="flex h-9 w-9 items-center justify-center text-white/60 hover:text-white transition-colors"
+                                                aria-label="Decrease quantity"
+                                            >
+                                                -
+                                            </button>
+                                            <span className="w-10 text-center text-sm font-semibold select-none">
+                                                {quantity}
+                                            </span>
+                                            <button
+                                                type="button"
+                                                onClick={() => setQuantity(quantity + 1)}
+                                                className="flex h-9 w-9 items-center justify-center text-white/60 hover:text-white transition-colors"
+                                                aria-label="Increase quantity"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 {/* Product Specifications Tabs */}
                                 <div className="space-y-3">
                                     <div className="flex border-b border-white/[0.06] text-xs font-semibold uppercase tracking-wider">
@@ -291,17 +319,18 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                 </div>
             </section>
 
-            {/* Sticky mobile checkout button block */}
-            <div className="fixed bottom-0 left-0 right-0 z-40 bg-[#070707]/90 border-t border-white/[0.08] p-4 md:hidden mobile-nav-safe">
+            {/* Sticky mobile checkout button — above the floating bottom nav */}
+            <div className="fixed bottom-0 left-0 right-0 z-30 bg-[#070707]/95 border-t border-white/[0.08] px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] md:hidden backdrop-blur-md">
                 <a
                     href={orderUrl}
                     target="_blank"
                     rel="noreferrer"
                     onClick={handleOrder}
-                    className="flex w-full h-11 items-center justify-center gap-2 rounded-full bg-gold text-[11px] font-bold uppercase tracking-[0.2em] text-black shadow-lg"
+                    className="flex w-full h-12 items-center justify-center gap-2 rounded-full bg-gold text-[11px] font-black uppercase tracking-[0.2em] text-black shadow-[0_4px_20px_rgba(212,175,55,0.25)] transition-all hover:bg-gold-light active:scale-[0.98]"
+                    aria-label={`Order ${product.name} via WhatsApp`}
                 >
-                    <MessageCircle size={13} strokeWidth={2.5} />
-                    Instant Order ({formatPrice(product.price)})
+                    <MessageCircle size={14} strokeWidth={2.5} aria-hidden="true" />
+                    Order Now — {formatPrice(product.price)}
                 </a>
             </div>
 

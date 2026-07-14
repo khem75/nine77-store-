@@ -6,6 +6,6 @@ export default function Robots() {
                 allow: '/'
             }
         ],
-        sitemap: 'https://nine77.example/sitemap.xml'
+        sitemap: 'https://nine77-store.vercel.app/sitemap.xml'
     };
 }
