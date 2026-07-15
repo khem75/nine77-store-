@@ -6,21 +6,8 @@ import type { HomepageSettings, StoreSettings } from '@/types/admin';
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
 
 async function getSupabaseClient() {
-  const { cookies } = await import('next/headers');
-  const { createClient } = await import('@supabase/supabase-js');
-  const cookieStore = await cookies();
-  const token = cookieStore.get('nine77-admin-token')?.value;
-  const refresh = cookieStore.get('nine77-admin-refresh')?.value;
-
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } }
-  );
-  if (token && refresh) {
-    await supabase.auth.setSession({ access_token: token, refresh_token: refresh });
-  }
-  return supabase;
+  const { createClient } = await import('@/lib/supabase');
+  return createClient();
 }
 
 // ── Homepage ────────────────────────────────────────────────────

@@ -2,7 +2,7 @@
 
 import { Suspense, useMemo, useRef, useState, useEffect } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
-import { ContactShadows, Environment } from '@react-three/drei';
+import { ContactShadows, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
 /* ── Deterministic seed randomizer ── */
@@ -67,257 +67,157 @@ function useNeroMarquina() {
     }, []);
 }
 
-/* ── Safely Load Textures with Failures & Fallback ── */
-function usePortalTextures(urls: string[], fallbackUrl: string) {
-    const [textures, setTextures] = useState<THREE.Texture[]>([]);
+/* ── Floating Gold Particles Sparkle Field ── */
+function FloatingParticles() {
+    const pointsRef = useRef<THREE.Points>(null!);
 
-    useEffect(() => {
-        const loader = new THREE.TextureLoader();
-        const loadedList: THREE.Texture[] = [];
-
-        urls.forEach((url, index) => {
-            loader.load(
-                url,
-                (texture) => {
-                    texture.colorSpace = THREE.SRGBColorSpace;
-                    texture.minFilter = THREE.LinearFilter;
-                    texture.generateMipmaps = false;
-                    loadedList[index] = texture;
-                    setTextures(loadedList.filter(Boolean));
-                },
-                undefined,
-                () => {
-                    loader.load(
-                        fallbackUrl,
-                        (fallbackTex) => {
-                            fallbackTex.colorSpace = THREE.SRGBColorSpace;
-                            fallbackTex.minFilter = THREE.LinearFilter;
-                            fallbackTex.generateMipmaps = false;
-                            loadedList[index] = fallbackTex;
-                            setTextures(loadedList.filter(Boolean));
-                        }
-                    );
-                }
-            );
-        });
-
-        return () => {
-            loadedList.forEach(t => t.dispose());
-        };
-    }, [urls, fallbackUrl]);
-
-    return textures;
-}
-
-/* ── Crossfading Product Portal inside Monolith ── */
-function ProductPortal({ urls, fallbackUrl }: { urls: string[]; fallbackUrl: string }) {
-    const textures = usePortalTextures(urls, fallbackUrl);
-    const textureIndexRef = useRef(0);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [nextIndex, setNextIndex] = useState(0);
-    const fadeProgressRef = useRef(0);
-    const isTransitioningRef = useRef(false);
-
-    const baseMaterialRef = useRef<THREE.MeshBasicMaterial>(null!);
-    const overlayMaterialRef = useRef<THREE.MeshBasicMaterial>(null!);
-    const portalGroupRef = useRef<THREE.Group>(null!);
-
-    useEffect(() => {
-        if (textures.length <= 1) return;
-
-        const interval = setInterval(() => {
-            const nextIdx = (textureIndexRef.current + 1) % textures.length;
-            setNextIndex(nextIdx);
-            fadeProgressRef.current = 0;
-            isTransitioningRef.current = true;
-        }, 8000);
-
-        return () => clearInterval(interval);
-    }, [textures]);
-
-    useFrame((state, delta) => {
-        const t = state.clock.getElapsedTime();
-
-        if (portalGroupRef.current) {
-            portalGroupRef.current.position.y = Math.sin(t * 0.45) * 0.02;
-            portalGroupRef.current.position.z = Math.cos(t * 0.35) * 0.005;
+    const [positions, speeds] = useMemo(() => {
+        const count = 50;
+        const pos = new Float32Array(count * 3);
+        const spd = new Float32Array(count);
+        for (let i = 0; i < count; i++) {
+            // Distribute randomly in a sphere around the center
+            const r = 0.3 + seededRandom(i * 3) * 0.55;
+            const theta = seededRandom(i * 7) * Math.PI * 2;
+            const phi = Math.acos(seededRandom(i * 11) * 2 - 1);
+            
+            pos[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+            pos[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+            pos[i * 3 + 2] = r * Math.cos(phi);
+            
+            spd[i] = 0.15 + seededRandom(i * 13) * 0.3;
         }
-
-        if (isTransitioningRef.current && textures.length > 0) {
-            fadeProgressRef.current += delta * 1.25;
-            if (fadeProgressRef.current >= 1) {
-                fadeProgressRef.current = 1;
-                isTransitioningRef.current = false;
-                setCurrentIndex(nextIndex);
-                textureIndexRef.current = nextIndex;
-                fadeProgressRef.current = 0;
-            }
-        }
-
-        if (baseMaterialRef.current && overlayMaterialRef.current) {
-            if (isTransitioningRef.current) {
-                baseMaterialRef.current.opacity = 1 - fadeProgressRef.current;
-                overlayMaterialRef.current.opacity = fadeProgressRef.current;
-                overlayMaterialRef.current.visible = true;
-            } else {
-                baseMaterialRef.current.opacity = 1;
-                overlayMaterialRef.current.opacity = 0;
-                overlayMaterialRef.current.visible = false;
-            }
-        }
-    });
-
-    return (
-        <group ref={portalGroupRef} position={[0, 0, 0.015]}>
-            {/* Base Product Layer */}
-            <mesh position={[0, 0, 0]}>
-                <planeGeometry args={[0.85, 1.25]} />
-                <meshBasicMaterial
-                    ref={baseMaterialRef}
-                    map={textures[currentIndex] || null}
-                    transparent
-                    side={THREE.DoubleSide}
-                />
-            </mesh>
-
-            {/* Overlap Fade Layer */}
-            <mesh position={[0, 0, 0.001]}>
-                <planeGeometry args={[0.85, 1.25]} />
-                <meshBasicMaterial
-                    ref={overlayMaterialRef}
-                    map={textures[nextIndex] || null}
-                    transparent
-                    side={THREE.DoubleSide}
-                    depthWrite={false}
-                />
-            </mesh>
-        </group>
-    );
-}
-
-/* ── Main Monolith case ── */
-function Monolith() {
-    const groupRef = useRef<THREE.Group>(null!);
-    const { texture, roughnessMap } = useNeroMarquina();
-
-    const productUrls = useMemo(() => [
-        '/luxury-streetwear-garment.png',
-        '/products/windcheater-1.jpg',
-        '/products/vintage-t-shirt-1.jpg',
-        '/products/linen-shirt-1.jpg'
-    ], []);
-    const fallbackUrl = '/luxury-streetwear-garment.png';
+        return [pos, spd];
+    }, []);
 
     useFrame((state) => {
-        if (!groupRef.current) return;
+        if (!pointsRef.current) return;
         const t = state.clock.getElapsedTime();
-        groupRef.current.position.y = Math.sin(t * 0.35) * 0.06;
-        groupRef.current.rotation.y = Math.sin(t * 0.15) * 0.08;
+        const posArray = pointsRef.current.geometry.attributes.position.array as Float32Array;
+        
+        for (let i = 0; i < 50; i++) {
+            const x = posArray[i * 3];
+            const z = posArray[i * 3 + 2];
+            const speed = speeds[i];
+            
+            // Apply slow orbital rotation
+            posArray[i * 3] = x * Math.cos(speed * 0.015) - z * Math.sin(speed * 0.015);
+            posArray[i * 3 + 2] = x * Math.sin(speed * 0.015) + z * Math.cos(speed * 0.015);
+            
+            // Add slight vertical wave bobbing
+            posArray[i * 3 + 1] += Math.sin(t * speed + i) * 0.0003;
+        }
+        pointsRef.current.geometry.attributes.position.needsUpdate = true;
     });
 
     return (
-        <group ref={groupRef}>
-            {/* 1. Monolith Marble Backing Plate */}
-            <mesh position={[0, 0, -0.04]} castShadow receiveShadow>
-                <boxGeometry args={[1.3, 1.8, 0.04]} />
-                <meshPhysicalMaterial
-                    map={texture || undefined}
-                    roughnessMap={roughnessMap || undefined}
-                    color="#0f0f0f"
-                    metalness={0.06}
-                    roughness={0.5}
-                    clearcoat={0.2}
-                    clearcoatRoughness={0.35}
-                    reflectivity={0.35}
+        <points ref={pointsRef} position={[0, 0, 0.01]}>
+            <bufferGeometry>
+                <bufferAttribute
+                    attach="attributes-position"
+                    args={[positions, 3]}
                 />
-            </mesh>
-
-            {/* 2. Outer Marble Frame Bars */}
-            <mesh position={[0, 0.825, 0.02]} castShadow receiveShadow>
-                <boxGeometry args={[1.3, 0.15, 0.08]} />
-                <meshPhysicalMaterial
-                    map={texture || undefined}
-                    roughnessMap={roughnessMap || undefined}
-                    color="#0f0f0f"
-                    metalness={0.06}
-                    roughness={0.5}
-                />
-            </mesh>
-            <mesh position={[0, -0.825, 0.02]} castShadow receiveShadow>
-                <boxGeometry args={[1.3, 0.15, 0.08]} />
-                <meshPhysicalMaterial
-                    map={texture || undefined}
-                    roughnessMap={roughnessMap || undefined}
-                    color="#0f0f0f"
-                    metalness={0.06}
-                    roughness={0.5}
-                />
-            </mesh>
-            <mesh position={[-0.575, 0, 0.02]} castShadow receiveShadow>
-                <boxGeometry args={[0.15, 1.5, 0.08]} />
-                <meshPhysicalMaterial
-                    map={texture || undefined}
-                    roughnessMap={roughnessMap || undefined}
-                    color="#0f0f0f"
-                    metalness={0.06}
-                    roughness={0.5}
-                />
-            </mesh>
-            <mesh position={[0.575, 0, 0.02]} castShadow receiveShadow>
-                <boxGeometry args={[0.15, 1.5, 0.08]} />
-                <meshPhysicalMaterial
-                    map={texture || undefined}
-                    roughnessMap={roughnessMap || undefined}
-                    color="#0f0f0f"
-                    metalness={0.06}
-                    roughness={0.5}
-                />
-            </mesh>
-
-            {/* 3. Champagne Gold Chamfer Edges */}
-            <mesh position={[0, 0.91, 0.065]}>
-                <boxGeometry args={[1.32, 0.02, 0.01]} />
-                <meshStandardMaterial color="#B7864A" metalness={0.85} roughness={0.2} />
-            </mesh>
-            <mesh position={[0, -0.91, 0.065]}>
-                <boxGeometry args={[1.32, 0.02, 0.01]} />
-                <meshStandardMaterial color="#B7864A" metalness={0.85} roughness={0.2} />
-            </mesh>
-            <mesh position={[-0.66, 0, 0.065]}>
-                <boxGeometry args={[0.02, 1.82, 0.01]} />
-                <meshStandardMaterial color="#B7864A" metalness={0.85} roughness={0.2} />
-            </mesh>
-            <mesh position={[0.66, 0, 0.065]}>
-                <boxGeometry args={[0.02, 1.82, 0.01]} />
-                <meshStandardMaterial color="#B7864A" metalness={0.85} roughness={0.2} />
-            </mesh>
-
-            {/* 4. Inside: Product Portal displaying dynamic products */}
-            <ProductPortal urls={productUrls} fallbackUrl={fallbackUrl} />
-
-            {/* 5. Inset Glow Backing Plate behind portal */}
-            <mesh position={[0, 0, -0.018]}>
-                <planeGeometry args={[1.0, 1.5]} />
-                <meshBasicMaterial color="#0b0907" />
-            </mesh>
-
-            {/* 6. Front Glass Screen Case (standard material with depthWrite=false to prevent depth-buffer clipping of portal) */}
-            <mesh position={[0, 0, 0.055]}>
-                <planeGeometry args={[1.0, 1.5]} />
-                <meshStandardMaterial
-                    color="#ffffff"
-                    transparent
-                    opacity={0.15}
-                    roughness={0.1}
-                    metalness={0.9}
-                    depthWrite={false}
-                />
-            </mesh>
-        </group>
+            </bufferGeometry>
+            <pointsMaterial
+                color="#D4AF37"
+                size={0.018}
+                transparent
+                opacity={0.7}
+                sizeAttenuation
+            />
+        </points>
     );
 }
 
-/* ── Orbiting Marble Fragments ── */
+/* ── 3D Brand Emblem Component ── */
+function BrandEmblem3D() {
+    const emblemRef = useRef<THREE.Group>(null!);
+    const innerRingRef = useRef<THREE.Mesh>(null!);
+    const coreRef = useRef<THREE.Group>(null!);
+
+    useFrame((state) => {
+        const t = state.clock.getElapsedTime();
+
+        // Gentle floating
+        if (emblemRef.current) {
+            emblemRef.current.position.y = Math.sin(t * 0.45) * 0.04;
+        }
+
+        // Inner core rotation
+        if (coreRef.current) {
+            coreRef.current.rotation.y = t * 0.25;
+        }
+
+        // Gyroscope ring rotation
+        if (innerRingRef.current) {
+            innerRingRef.current.rotation.x = t * 0.3;
+            innerRingRef.current.rotation.y = t * 0.15;
+        }
+    });
+
+    return (
+        <group ref={emblemRef} position={[0, 0, 0.015]}>
+            {/* Core Golden Light Projection */}
+            <pointLight position={[0, 0, 0.05]} intensity={3.5} distance={1.8} color="#D4AF37" decay={1.5} />
+
+            {/* 1. Core Rotating Text Logo with Gold Bezel & Glass Backing */}
+            <group ref={coreRef} scale={[0.7, 0.7, 0.7]}>
+                {/* Thin gold bezel ring around the text */}
+                <mesh rotation={[Math.PI / 2, 0, 0]}>
+                    <torusGeometry args={[0.36, 0.004, 8, 48]} />
+                    <meshStandardMaterial color="#D4AF37" metalness={0.9} roughness={0.15} />
+                </mesh>
+                
+                {/* Small dark circular glass backing disc to improve text readability */}
+                <mesh position={[0, 0, 0]} rotation={[Math.PI / 2, 0, 0]}>
+                    <cylinderGeometry args={[0.35, 0.35, 0.002, 32]} />
+                    <meshStandardMaterial color="#050505" transparent opacity={0.7} roughness={0.2} metalness={0.8} />
+                </mesh>
+
+                {/* Front facing text */}
+                <Text
+                    position={[0, 0, 0.015]}
+                    fontSize={0.095}
+                    anchorX="center"
+                    anchorY="middle"
+                    letterSpacing={0.18}
+                    color="#D4AF37"
+                >
+                    NINE77
+                </Text>
+                
+                {/* Back facing text */}
+                <Text
+                    position={[0, 0, -0.015]}
+                    fontSize={0.095}
+                    anchorX="center"
+                    anchorY="middle"
+                    letterSpacing={0.18}
+                    color="#D4AF37"
+                    rotation={[0, Math.PI, 0]}
+                >
+                    NINE77
+                </Text>
+            </group>
+
+            {/* 2. Single Elegant Gold Ring */}
+            <mesh ref={innerRingRef}>
+                <torusGeometry args={[0.54, 0.004, 16, 80]} />
+                <meshStandardMaterial color="#D4AF37" metalness={0.95} roughness={0.1} />
+            </mesh>
+
+            {/* 5. Tiny central glowing core */}
+            <mesh position={[0, 0, 0]}>
+                <sphereGeometry args={[0.02, 16, 16]} />
+                <meshBasicMaterial color="#C9A227" />
+            </mesh>
+
+            {/* 6. Orbiting Gold Sparks */}
+            <FloatingParticles />
+        </group>
+    );
+}
+/* ── Orbiting Marble/Gold Fragments ── */
 function OrbitingRocks() {
     const groupRef = useRef<THREE.Group>(null!);
     const { texture, roughnessMap } = useNeroMarquina();
@@ -354,26 +254,16 @@ function OrbitingRocks() {
                 <mesh key={i} castShadow>
                     <dodecahedronGeometry args={[rock.size, 0]} />
                     <meshPhysicalMaterial
-                        map={texture || undefined}
-                        roughnessMap={roughnessMap || undefined}
-                        color="#0f0f0f"
-                        metalness={0.05}
-                        roughness={0.55}
-                        clearcoat={0.15}
+                        map={i % 3 === 0 ? undefined : texture || undefined}
+                        roughnessMap={i % 3 === 0 ? undefined : roughnessMap || undefined}
+                        color={i % 3 === 0 ? "#D4AF37" : "#0f0f0f"}
+                        metalness={i % 3 === 0 ? 0.95 : 0.05}
+                        roughness={i % 3 === 0 ? 0.1 : 0.55}
+                        clearcoat={0.2}
                     />
                 </mesh>
             ))}
         </group>
-    );
-}
-
-/* ── Metallic Pedestal ── */
-function Pedestal() {
-    return (
-        <mesh position={[0, -1.15, 0]} receiveShadow>
-            <cylinderGeometry args={[0.9, 1.0, 0.06, 64]} />
-            <meshStandardMaterial color="#1A1816" metalness={0.7} roughness={0.3} />
-        </mesh>
     );
 }
 
@@ -403,29 +293,31 @@ function StudioLights() {
 }
 
 /* ── Scene Content ── */
-function SceneContent({ scrollProgressRef, onLoaded }: {
+function SceneContent({ scrollProgressRef }: {
     scrollProgressRef: React.RefObject<number>;
-    onLoaded: () => void;
 }) {
-    useFrame(() => {
-        onLoaded();
-    });
+    const { width } = useThree().viewport;
+    const isMobile = width < 2.5;
+
+    // Centered composition scaled up to fill the background space beautifully
+    const scale = isMobile ? 0.8 : 1.65;
+    const posY = isMobile ? -0.05 : 0.0;
 
     return (
         <>
             <StudioLights />
-            <Monolith />
-            <OrbitingRocks />
-            <Pedestal />
-            <ContactShadows
-                position={[0, -1.12, 0]}
-                opacity={0.35}
-                scale={6}
-                blur={2.5}
-                far={3}
-                color="#0C0A08"
-            />
-            <Environment preset="studio" environmentIntensity={0.15} />
+            <group position={[0, posY, 0]} scale={[scale, scale, scale]}>
+                <BrandEmblem3D />
+                <OrbitingRocks />
+                <ContactShadows
+                    position={[0, -1.12, 0]}
+                    opacity={0.25}
+                    scale={6}
+                    blur={2.5}
+                    far={3}
+                    color="#0C0A08"
+                />
+            </group>
         </>
     );
 }
@@ -438,6 +330,12 @@ export default function HeroScene({
     scrollProgressRef: React.RefObject<number>;
     onLoaded: () => void;
 }) {
+    useEffect(() => {
+        // Trigger loaded state to ensure preloader exits safely after mount
+        const timer = setTimeout(onLoaded, 500);
+        return () => clearTimeout(timer);
+    }, [onLoaded]);
+
     return (
         <Canvas
             className="r3f-canvas"
@@ -453,7 +351,7 @@ export default function HeroScene({
             shadows
         >
             <Suspense fallback={null}>
-                <SceneContent scrollProgressRef={scrollProgressRef} onLoaded={onLoaded} />
+                <SceneContent scrollProgressRef={scrollProgressRef} />
             </Suspense>
         </Canvas>
     );

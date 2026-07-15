@@ -27,49 +27,37 @@ export async function adminLogin(email: string, password: string) {
   }
 
   // ── REAL MODE ──────────────────────────────────────────────
-  const { createClient } = await import('@supabase/supabase-js');
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } }
-  );
+  const { createClient } = await import('@/lib/supabase');
+  const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { success: false, error: error.message };
-
-  const cookieStore = await cookies();
-  cookieStore.set('nine77-admin-token', data.session?.access_token ?? '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24,
-  });
-  cookieStore.set('nine77-admin-refresh', data.session?.refresh_token ?? '', {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 24 * 7,
-  });
 
   return { success: true };
 }
 
 export async function adminLogout() {
   const cookieStore = await cookies();
-  cookieStore.delete('nine77-admin-token');
-  cookieStore.delete('nine77-admin-refresh');
+  
+  if (IS_MOCK) {
+    cookieStore.delete('nine77-admin-token');
+    redirect('/admin/login');
+  }
+
+  // ── REAL MODE ──────────────────────────────────────────────
+  const { createClient } = await import('@/lib/supabase');
+  const supabase = await createClient();
+  await supabase.auth.signOut();
   redirect('/admin/login');
 }
 
 export async function getAdminSession() {
   const cookieStore = await cookies();
-  const token = cookieStore.get('nine77-admin-token')?.value;
-  if (!token) return null;
 
   // ── MOCK MODE ──────────────────────────────────────────────
   if (IS_MOCK) {
+    const token = cookieStore.get('nine77-admin-token')?.value;
+    if (!token) return null;
     if (token === MOCK_TOKEN) {
       return {
         id: 'mock-admin-001',
@@ -81,15 +69,16 @@ export async function getAdminSession() {
   }
 
   // ── REAL MODE ──────────────────────────────────────────────
-  const { createClient } = await import('@supabase/supabase-js');
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } }
-  );
-  const { data, error } = await supabase.auth.getUser(token);
+  const { createClient } = await import('@/lib/supabase');
+  const supabase = await createClient();
+  const { data, error } = await supabase.auth.getUser();
   if (error || !data.user) return null;
-  return data.user;
+  
+  return {
+    id: data.user.id,
+    email: data.user.email ?? '',
+    user_metadata: data.user.user_metadata,
+  };
 }
 
 export async function changeAdminPassword(newPassword: string) {
@@ -98,20 +87,10 @@ export async function changeAdminPassword(newPassword: string) {
     return { success: true };
   }
 
-  const session = await getAdminSession();
-  if (!session) return { success: false, error: 'Not authenticated' };
-
-  const cookieStore = await cookies();
-  const token = cookieStore.get('nine77-admin-token')?.value;
-  const refresh = cookieStore.get('nine77-admin-refresh')?.value;
-
-  const { createClient } = await import('@supabase/supabase-js');
-  const supabase = createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    { auth: { persistSession: false } }
-  );
-  await supabase.auth.setSession({ access_token: token!, refresh_token: refresh ?? '' });
+  // ── REAL MODE ──────────────────────────────────────────────
+  const { createClient } = await import('@/lib/supabase');
+  const supabase = await createClient();
+  
   const { error } = await supabase.auth.updateUser({ password: newPassword });
   if (error) return { success: false, error: error.message };
   return { success: true };

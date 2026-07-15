@@ -34,6 +34,7 @@ export default function ImageUploader({
         return;
       }
       const filesToUpload = acceptedFiles.slice(0, remaining);
+      if (filesToUpload.length === 0) return;
 
       setUploading(true);
       try {
@@ -71,9 +72,22 @@ export default function ImageUploader({
     [value, onChange, bucket, folder, maxFiles]
   );
 
+  const onDropRejected = useCallback((rejections: any[]) => {
+    rejections.forEach((rej) => {
+      const errorMsgs = rej.errors.map((e: any) => e.message).join(', ');
+      toast.error(`Rejected "${rej.file.name}": ${errorMsgs}`);
+    });
+  }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { 'image/*': ['.jpg', '.jpeg', '.png', '.webp', '.avif'] },
+    onDropRejected,
+    accept: {
+      'image/jpeg': ['.jpeg', '.jpg'],
+      'image/png': ['.png'],
+      'image/webp': ['.webp'],
+      'image/avif': ['.avif']
+    },
     multiple: true,
     disabled: uploading || value.length >= maxFiles,
   });

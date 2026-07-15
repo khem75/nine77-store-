@@ -6,7 +6,8 @@ import Image from 'next/image';
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight, Truck, Shield, Lock, MessageCircle, ChevronDown, Plus } from 'lucide-react';
-import type { HomepageSettings } from '@/types/admin';
+import type { HomepageSettings, AdminProduct } from '@/types/admin';
+import { slugify } from '@/utils';
 
 const HeroScene = dynamic(() => import('./hero-scene'), { ssr: false });
 
@@ -48,9 +49,10 @@ const luxuryEase = [0.16, 1, 0.3, 1] as const;
 
 interface HeroProps {
     settings: HomepageSettings | null;
+    products?: AdminProduct[];
 }
 
-export default function Hero({ settings }: HeroProps) {
+export default function Hero({ settings, products = [] }: HeroProps) {
     const heroRef = useRef<HTMLElement>(null);
     const [threeReady, setThreeReady] = useState(false);
     const [introStage, setIntroStage] = useState(0);
@@ -61,6 +63,25 @@ export default function Hero({ settings }: HeroProps) {
     const heroImage = settings?.hero_image || null;
     const buttonText = settings?.hero_button || 'SHOP NEW DROP';
     const buttonLink = settings?.hero_button_link || '/shop';
+    const heroTitle = settings?.hero_title || 'OWN THE STREET.';
+    const heroSubtitle = settings?.hero_subtitle || 'Premium streetwear engineered for those who refuse to blend in.';
+    const titleWords = heroTitle.split(' ');
+
+    // Build dynamic featured products list
+    const featuredList = (settings?.featured_products || [])
+        .map((id) => products.find((p) => p.id === id))
+        .filter((p): p is AdminProduct => !!p)
+        .slice(0, 3);
+
+    const displayProducts = featuredList.length > 0
+        ? featuredList.map((p) => ({
+            tag: p.featured ? 'FEATURED' : 'NEW DROP',
+            name: p.name,
+            price: `Rs. ${p.price.toLocaleString()}`,
+            image: p.images[0] || '/luxury-streetwear-garment.png',
+            href: `/product/${slugify(p.name)}`,
+          }))
+        : heroProducts;
 
     // Skip 3D loading if hero image is set
     useEffect(() => {
@@ -155,7 +176,7 @@ export default function Hero({ settings }: HeroProps) {
                 <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:gap-8 xl:gap-12">
 
                     {/* ═══ LEFT COLUMN — Editorial Typography ═══ */}
-                    <div className="flex-shrink-0 lg:w-[30%] xl:w-[28%] pt-4 md:pt-8 lg:pt-0">
+                    <div className="flex-shrink-0 lg:w-[42%] xl:w-[38%] pt-4 md:pt-8 lg:pt-0">
 
                         {/* Since Label */}
                         <motion.div
@@ -170,10 +191,10 @@ export default function Hero({ settings }: HeroProps) {
                             <div className="h-[1px] w-8 md:w-12 bg-gold/40" />
                         </motion.div>
 
-                        {/* Main Headline — Line by Line Reveal */}
+                        {/* Main Headline — Word by Word Reveal */}
                         <div className="space-y-0 mb-6 md:mb-8">
-                            {['OWN', 'THE', 'STREET.'].map((word, i) => (
-                                <div key={word} className="overflow-hidden">
+                            {titleWords.map((word, i) => (
+                                <div key={word + i} className="overflow-hidden w-max max-w-full pr-4">
                                     <motion.h1
                                         initial={{ y: '110%' }}
                                         animate={introStage >= 2 ? { y: 0 } : {}}
@@ -182,7 +203,7 @@ export default function Hero({ settings }: HeroProps) {
                                             delay: i * 0.12,
                                             ease: luxuryEase,
                                         }}
-                                        className="text-[clamp(3.2rem,12vw,7rem)] md:text-[clamp(4rem,6vw,5.5rem)] lg:text-[clamp(3.5rem,5vw,5rem)] xl:text-[5.5rem] font-black uppercase leading-[0.9] tracking-[-0.02em] text-white select-none"
+                                        className="text-[clamp(3.5rem,10vw,8.5rem)] md:text-[clamp(4.5rem,7vw,6.5rem)] lg:text-[clamp(4.2rem,6vw,6rem)] xl:text-[6.8rem] font-black uppercase leading-[0.85] tracking-[-0.03em] text-white select-none"
                                     >
                                         {word}
                                     </motion.h1>
@@ -195,10 +216,9 @@ export default function Hero({ settings }: HeroProps) {
                             initial={{ opacity: 0, y: 16 }}
                             animate={introStage >= 2 ? { opacity: 1, y: 0 } : {}}
                             transition={{ duration: 1.0, delay: 0.5, ease: luxuryEase }}
-                            className="text-[13px] md:text-[14px] leading-relaxed text-white/50 font-light max-w-[280px] mb-8 md:mb-10"
+                            className="text-[13px] md:text-[15px] leading-relaxed text-white/45 font-light max-w-[420px] mb-8 md:mb-10"
                         >
-                            Premium streetwear engineered<br />
-                            for those who refuse to blend in.
+                            {heroSubtitle}
                         </motion.p>
 
                         {/* CTA Buttons */}
@@ -242,9 +262,9 @@ export default function Hero({ settings }: HeroProps) {
                     >
                         {/* Mobile: horizontal scroll strip. Desktop: vertical stack */}
                         <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 lg:flex-col lg:gap-4 lg:overflow-visible lg:pb-0">
-                            {heroProducts.map((product, i) => (
+                            {displayProducts.map((product, i) => (
                                 <Link
-                                    key={product.name}
+                                    key={product.name + i}
                                     href={product.href}
                                     className={`
                                         group flex-shrink-0 w-[260px] lg:w-full
@@ -290,9 +310,9 @@ export default function Hero({ settings }: HeroProps) {
 
                         {/* Card Numbering (desktop) */}
                         <div className="hidden lg:flex flex-col gap-[52px] absolute right-4 top-1/2 -translate-y-1/2 items-end">
-                            {['01', '02', '03'].map((num, i) => (
-                                <span key={num} className="text-[11px] font-light tracking-[0.15em] text-white/25">
-                                    {num}
+                            {displayProducts.map((_, i) => (
+                                <span key={i} className="text-[11px] font-light tracking-[0.15em] text-white/25">
+                                    {`0${i + 1}`}
                                 </span>
                             ))}
                         </div>

@@ -39,7 +39,7 @@ export default function HomeClient({ initialProducts, initialSettings }: HomeCli
     return (
         <>
             {/* ═══ 1. HERO — Dark ambient, cinematic ═══ */}
-            <Hero settings={initialSettings} />
+            <Hero settings={initialSettings} products={initialProducts} />
 
             {/* ═══ 2. NIGHTFALL COLLECTION — Dark editorial banner ═══ */}
             <section className="relative dark-section border-b border-white/[0.06] overflow-hidden">
