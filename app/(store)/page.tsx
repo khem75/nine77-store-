@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import HomeClient from './home-client';
 import { getProducts } from '@/lib/product-actions';
+import { getHomepageSettings } from '@/lib/homepage-actions';
 
 export const metadata: Metadata = {
     title: 'NINE77 | Premium Streetwear Kathmandu',
@@ -19,8 +20,11 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-    const products = await getProducts();
+    const [products, settings] = await Promise.all([
+        getProducts(),
+        getHomepageSettings(),
+    ]);
     const activeProducts = products.filter((p) => p.status === 'active');
 
-    return <HomeClient initialProducts={activeProducts} />;
+    return <HomeClient initialProducts={activeProducts} initialSettings={settings} />;
 }

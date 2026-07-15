@@ -14,13 +14,14 @@ import LookbookHorizontal from '@/components/lookbook-horizontal';
 import ProductCard from '@/components/product-card';
 import WhatsappButton from '@/components/whatsapp-button';
 import { products as staticProducts } from '@/data/products';
-import type { AdminProduct } from '@/types/admin';
+import type { AdminProduct, HomepageSettings } from '@/types/admin';
 
 interface HomeClientProps {
     initialProducts: AdminProduct[];
+    initialSettings: HomepageSettings | null;
 }
 
-export default function HomeClient({ initialProducts }: HomeClientProps) {
+export default function HomeClient({ initialProducts, initialSettings }: HomeClientProps) {
     const brandRef = useRef<HTMLDivElement>(null);
     const brandInView = useInView(brandRef, { once: true, amount: 0.3 });
 
@@ -38,7 +39,7 @@ export default function HomeClient({ initialProducts }: HomeClientProps) {
     return (
         <>
             {/* 1. Immersive Hero Art Installation */}
-            <Hero />
+            <Hero settings={initialSettings} />
             <TrustStrip />
 
             {/* 2. Shop by Collection (Homepage Focus: Campaigns) */}

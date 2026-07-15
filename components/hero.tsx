@@ -2,18 +2,37 @@
 
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion, useScroll } from 'framer-motion';
+import type { HomepageSettings } from '@/types/admin';
 
 const HeroScene = dynamic(() => import('./hero-scene'), { ssr: false });
 
-export default function Hero() {
+interface HeroProps {
+    settings: HomepageSettings | null;
+}
+
+export default function Hero({ settings }: HeroProps) {
     const heroRef = useRef<HTMLElement>(null);
     const [audioActive, setAudioActive] = useState(false);
     const [threeReady, setThreeReady] = useState(false);
     const [introComplete, setIntroComplete] = useState(false);
     const [ambientOsc, setAmbientOsc] = useState<any>(null);
     const scrollProgressRef = useRef(0);
+
+    const title = settings?.hero_title || 'NINE77';
+    const subtitle = settings?.hero_subtitle || 'Fusing architectural obsidian geometry with premium streetwear direction. Kathmandu, Nepal.';
+    const buttonText = settings?.hero_button || 'Shop Collection';
+    const buttonLink = settings?.hero_button_link || '/shop';
+    const heroImage = settings?.hero_image || null;
+    const tagline = title.toLowerCase().includes('different') ? 'NINE77' : 'Built Different.';
+
+    useEffect(() => {
+        if (heroImage) {
+            setThreeReady(true);
+        }
+    }, [heroImage]);
 
     // Track scroll progress of the hero section container
     const { scrollYProgress } = useScroll({
@@ -102,14 +121,30 @@ export default function Hero() {
             {/* Sticky viewport frame to project the cinematic story */}
             <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between">
                 
-                {/* ── 3D Visual Engine Container ── */}
+                {/* ── Background Image / 3D Visual Engine Container ── */}
                 <div className="absolute inset-0 z-0">
-                    <HeroScene
-                        scrollProgressRef={scrollProgressRef}
-                        onLoaded={() => setThreeReady(true)}
-                    />
+                    {heroImage ? (
+                        <div className="relative w-full h-full">
+                            <Image
+                                src={heroImage}
+                                alt={title}
+                                fill
+                                priority
+                                className="object-cover opacity-60"
+                            />
+                            {/* Vignette overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
+                        </div>
+                    ) : (
+                        <>
+                            <HeroScene
+                                scrollProgressRef={scrollProgressRef}
+                                onLoaded={() => setThreeReady(true)}
+                            />
+                        </>
+                    )}
                     
-                    {/* Shadow overlay to fade the 3D scene into the bottom products table */}
+                    {/* Shadow overlay to fade the background into the bottom products table */}
                     <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
                 </div>
 
@@ -121,7 +156,7 @@ export default function Hero() {
                         transition={{ duration: 1.0, ease: 'easeOut' }}
                         className="text-[9px] uppercase tracking-[0.45em] text-white/50"
                     >
-                        NINE77 COLLECTION DROP '26
+                        {settings?.announcement ? settings.announcement.toUpperCase() : "NINE77 COLLECTION DROP '26"}
                     </motion.div>
 
                     {/* Sound Controller Button (User-action required by modern browsers) */}
@@ -149,7 +184,7 @@ export default function Hero() {
                                 transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
                                 className="text-[clamp(3.5rem,10vw,8.5rem)] font-black uppercase leading-none tracking-tight text-white"
                             >
-                                NINE77
+                                {title}
                             </motion.h1>
                         </div>
 
@@ -160,7 +195,7 @@ export default function Hero() {
                                 transition={{ duration: 1.4, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
                                 className="text-sm font-semibold uppercase tracking-[0.35em] text-gold"
                             >
-                                Built Different.
+                                {tagline}
                             </motion.p>
                         </div>
 
@@ -171,7 +206,7 @@ export default function Hero() {
                                 transition={{ duration: 2.0, delay: 0.35 }}
                                 className="text-xs text-white leading-relaxed font-light tracking-wide pt-2"
                             >
-                                Fusing architectural obsidian geometry with premium streetwear direction. Kathmandu, Nepal.
+                                {subtitle}
                             </motion.p>
                         </div>
                     </div>
@@ -186,11 +221,11 @@ export default function Hero() {
                             transition={{ duration: 1.2, delay: 0.45, ease: 'easeOut' }}
                         >
                             <Link
-                                href="/shop"
+                                href={buttonLink}
                                 data-cursor="magnetic"
                                 className="group relative overflow-hidden inline-flex items-center justify-center rounded-full bg-gold px-8 py-3.5 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-lg hover:bg-gold-light transition-all"
                             >
-                                Shop Collection
+                                {buttonText}
                                 <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
                             </Link>
                         </motion.div>
