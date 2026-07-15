@@ -1,13 +1,9 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { AnimatePresence, motion, useInView } from 'framer-motion';
-import { Search, SlidersHorizontal, X, ArrowRight } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Search, SlidersHorizontal, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
-
 import ProductCard from '@/components/product-card';
-import MobileShopCard from '@/components/mobile-shop-card';
 import { products } from '@/data/products';
 
 const categories = ['All', 'Tops', 'Pants', 'Outerwear'] as const;
@@ -37,7 +33,7 @@ const campaignData: Record<string, { title: string; description: string; image: 
     },
 };
 
-export default function ShopPage() {
+export default function ShopClient() {
     const [category, setCategory] = useState<(typeof categories)[number]>('All');
     const [sort, setSort] = useState<(typeof sortOptions)[number]>('Price High to Low');
     const [search, setSearch] = useState('');
@@ -87,7 +83,6 @@ export default function ShopPage() {
             return (b.newArrival ? 1 : 0) - (a.newArrival ? 1 : 0);
         });
     }, [category, sort, search]);
-
 
     const activeCampaign = campaignData[category] || campaignData.All;
 
@@ -160,7 +155,7 @@ export default function ShopPage() {
                             <SlidersHorizontal size={12} className="text-white/35" />
                             <select
                                 value={sort}
-                                onChange={(e) => setSort(e.target.value as typeof sort)}
+                                onChange={(e) => setSort(e.target.value as any)}
                                 className="appearance-none bg-transparent text-[10px] uppercase tracking-[0.18em] text-white/60 outline-none cursor-pointer"
                             >
                                 {sortOptions.map((opt) => (

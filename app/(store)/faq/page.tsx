@@ -1,9 +1,23 @@
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'FAQ',
+    description:
+        'Frequently Asked Questions about NINE77 streetwear. Sizes, returns, delivery times in Kathmandu and Nepal, and how to order.',
+    openGraph: {
+        title: 'FAQ | NINE77',
+        description: 'Have questions about sizing, delivery, or returns? We have answers.',
+    },
+};
+
 export default function FAQPage() {
     return (
-        <section className="px-6 py-16 lg:px-8">
-            <div className="mx-auto max-w-5xl">
-                <p className="text-sm uppercase tracking-[0.35em] text-gold">FAQ</p>
-                <h1 className="mt-4 text-4xl font-black uppercase tracking-[0.04em] text-white sm:text-5xl">Need help? We have answers.</h1>
+        <section className="px-6 py-20 lg:px-8 bg-[#070707] min-h-[70vh] flex items-center justify-center">
+            <div className="mx-auto max-w-5xl w-full">
+                <p className="text-[10px] uppercase tracking-[0.45em] text-gold font-black">FAQ</p>
+                <h1 className="mt-4 text-4xl font-black uppercase tracking-[0.04em] text-white sm:text-5xl">
+                    Need help?<br /> We have answers.
+                </h1>
                 <div className="mt-10 space-y-6 rounded-[32px] border border-white/10 bg-white/5 p-8">
                     <div>
                         <h2 className="text-lg font-semibold uppercase tracking-[0.05em] text-white">How can I place an order?</h2>

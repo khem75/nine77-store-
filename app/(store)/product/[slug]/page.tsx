@@ -1,5 +1,4 @@
 import { products } from '@/data/products';
-import type { Product } from '@/types/product';
 import ProductDetail from '@/components/product-detail';
 import type { Metadata } from 'next';
 
@@ -39,9 +38,9 @@ export default async function ProductPage({ params }: Props) {
 
     if (!product) {
         return (
-            <section className="px-6 py-20 text-center text-white">
+            <section className="px-6 py-20 text-center text-white bg-[#070707] min-h-[60vh] flex flex-col items-center justify-center">
                 <h1 className="text-3xl font-black uppercase tracking-[0.09em]">Product not found</h1>
-                <a href="/shop" className="mt-8 inline-flex rounded-full bg-gold px-6 py-3 text-sm uppercase tracking-[0.18em] text-black">
+                <a href="/shop" className="mt-8 inline-flex rounded-full bg-gold px-6 py-3 text-sm uppercase tracking-[0.18em] text-black hover:bg-gold-light transition-colors">
                     Return to shop
                 </a>
             </section>

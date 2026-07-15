@@ -2,7 +2,10 @@
 module.exports = {
     content: [
         './app/**/*.{js,ts,jsx,tsx}',
-        './components/**/*.{js,ts,jsx,tsx}'
+        './components/**/*.{js,ts,jsx,tsx}',
+        './app/(admin)/**/*.{js,ts,jsx,tsx}',
+        './app/(store)/**/*.{js,ts,jsx,tsx}',
+        './components/admin/**/*.{js,ts,jsx,tsx}'
     ],
     theme: {
         extend: {
@@ -12,14 +15,14 @@ module.exports = {
                 mono: ['var(--font-sans)', 'monospace'],
             },
             colors: {
-                background: '#070707',
-                'background-2': '#0F0F10',
-                surface: '#111111',
-                card: '#161616',
-                gold: '#D4AF37',
-                'gold-light': '#E8C95A',
-                'gold-dark': '#B8960A',
-                muted: '#A5A5A5',
+                background: '#0B0B0B',
+                'background-2': '#171717',
+                surface: '#1E1E1E',
+                card: '#1A1A1A',
+                gold: '#C7A46A',
+                'gold-light': '#D8BE8E',
+                'gold-dark': '#B08B4E',
+                muted: '#9E9E9E',
                 border: 'rgba(255,255,255,0.08)',
                 'border-subtle': 'rgba(255,255,255,0.05)',
             },

@@ -36,7 +36,7 @@ export default function ProductCard({
             transition={{ duration: 0.6, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
             className="w-full"
         >
-            <Link href={`/product/${product.slug}`} className="block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-[20px]">
+            <Link href={`/product/${product.slug}`} data-cursor="view" className="block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-[20px]">
                 <article
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}

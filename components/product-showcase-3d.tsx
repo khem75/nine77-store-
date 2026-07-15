@@ -5,6 +5,10 @@ import { motion, useInView, useScroll, useTransform } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
+import dynamic from 'next/dynamic';
+
+const ShowcaseCanvas = dynamic(() => import('./showcase-canvas'), { ssr: false });
+
 export default function ProductShowcase3D() {
     const sectionRef = useRef<HTMLElement>(null);
     const isInView = useInView(sectionRef, { once: true, amount: 0.3 });
@@ -105,9 +109,12 @@ export default function ProductShowcase3D() {
                         className="relative"
                     >
                         {/* Canvas container replaced with Image container */}
-                        <div className="relative mx-auto aspect-square max-w-[400px] overflow-hidden rounded-[40px] border border-white/8 bg-background-2 shadow-cinematic lg:max-w-none">
-                            <div className="relative h-full w-full transition-transform duration-700 hover:scale-105">
-                                {/* Keeping container empty as requested */}
+                        <div 
+                            className="relative mx-auto aspect-square max-w-[400px] overflow-hidden rounded-[40px] border border-white/8 bg-background-2 shadow-cinematic lg:max-w-none cursor-grab active:cursor-grabbing"
+                            data-cursor="pointer"
+                        >
+                            <div className="relative h-full w-full">
+                                <ShowcaseCanvas />
                             </div>
 
                             {/* Scan line effect */}

@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useEffect, useRef, useState, useCallback } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Menu, X, Search, Instagram, MessageCircle, ArrowUpRight } from 'lucide-react';
 import { products } from '@/data/products';
@@ -72,6 +72,7 @@ const cardStagger = {
 /* ─── Component ──────────────────────────────────────── */
 export default function Navbar() {
     const pathname = usePathname();
+    const router = useRouter();
     const reduceMotion = useReducedMotion();
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
@@ -141,7 +142,7 @@ export default function Navbar() {
         e.preventDefault();
         if (searchQuery.trim()) {
             closeDrawer();
-            window.location.href = `/shop?search=${encodeURIComponent(searchQuery.trim())}`;
+            router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
         }
     };
 
@@ -189,6 +190,7 @@ export default function Navbar() {
                                     <Link
                                         key={item.href}
                                         href={item.href}
+                                        data-cursor="magnetic"
                                         className={`relative px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] transition-colors duration-300 rounded-sm group ${
                                             isActive ? 'text-white' : 'text-white/45 hover:text-white'
                                         }`}
@@ -215,6 +217,7 @@ export default function Navbar() {
                         >
                             <Link
                                 href="/"
+                                data-cursor="magnetic"
                                 className="flex flex-col items-center justify-center text-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded-sm"
                                 aria-label="NINE77 — Home"
                             >
@@ -233,6 +236,7 @@ export default function Navbar() {
                         {/* Search — desktop only inline, mobile in drawer */}
                         <Link
                             href="/shop"
+                            data-cursor="magnetic"
                             className="hidden md:flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.01] text-white/60 transition-all duration-300 hover:border-white/20 hover:text-white hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                             aria-label="Browse shop"
                         >
@@ -244,6 +248,7 @@ export default function Navbar() {
                             href={WHATSAPP}
                             target="_blank"
                             rel="noreferrer"
+                            data-cursor="magnetic"
                             className="hidden md:flex h-10 w-10 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.01] text-white/60 transition-all duration-300 hover:border-[#25D366]/40 hover:text-[#25D366] hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/40"
                             aria-label="WhatsApp Support"
                         >
@@ -255,6 +260,7 @@ export default function Navbar() {
                         {/* Mobile: Shop icon */}
                         <Link
                             href="/shop"
+                            data-cursor="magnetic"
                             className="flex md:hidden h-10 w-10 items-center justify-center rounded-full border border-white/[0.07] bg-white/[0.01] text-white/60 transition-all duration-300 hover:border-white/20 hover:text-white active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60"
                             aria-label="Browse shop"
                         >

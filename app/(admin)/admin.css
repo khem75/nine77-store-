@@ -1,0 +1,396 @@
+/* ============================================================
+   NINE77 Admin Panel — Design System
+   Clean, minimal, premium admin interface
+   ============================================================ */
+
+/* Admin color scheme override — light interface */
+.admin-panel {
+  color-scheme: light;
+  --admin-bg: #F7F7F8;
+  --admin-surface: #FFFFFF;
+  --admin-surface-2: #F4F4F6;
+  --admin-border: rgba(0, 0, 0, 0.08);
+  --admin-border-focus: rgba(201, 162, 39, 0.6);
+  --admin-text: #111111;
+  --admin-text-secondary: #6B6B70;
+  --admin-text-muted: #9B9BA4;
+  --admin-gold: #C9A227;
+  --admin-gold-light: #D4AF37;
+  --admin-gold-muted: rgba(201, 162, 39, 0.12);
+  --admin-success: #16a34a;
+  --admin-success-bg: #f0fdf4;
+  --admin-error: #dc2626;
+  --admin-error-bg: #fef2f2;
+  --admin-warning: #d97706;
+  --admin-warning-bg: #fffbeb;
+  --sidebar-width: 240px;
+  --topbar-height: 60px;
+}
+
+/* Admin reset */
+.admin-panel * {
+  box-sizing: border-box;
+}
+
+/* Admin body background */
+.admin-panel {
+  background: var(--admin-bg);
+  color: var(--admin-text);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+/* ── Scrollbar for admin ── */
+.admin-panel ::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.admin-panel ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.admin-panel ::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 2px;
+}
+
+.admin-panel ::-webkit-scrollbar-thumb:hover {
+  background: var(--admin-gold);
+}
+
+/* ── Selection in admin ── */
+.admin-panel ::selection {
+  background: rgba(201, 162, 39, 0.15);
+  color: #111111;
+}
+
+/* ── Focus ring in admin ── */
+.admin-panel :focus-visible {
+  outline: 2px solid var(--admin-gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* ── Admin card ── */
+.admin-card {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 16px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.admin-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+/* ── Admin input ── */
+.admin-input {
+  background: var(--admin-surface);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  color: var(--admin-text);
+  font-size: 14px;
+  padding: 10px 14px;
+  width: 100%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-input:focus {
+  outline: none;
+  border-color: var(--admin-gold);
+  box-shadow: 0 0 0 3px var(--admin-gold-muted);
+}
+
+.admin-input::placeholder {
+  color: var(--admin-text-muted);
+}
+
+/* ── Admin button primary ── */
+.admin-btn-primary {
+  background: #111111;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-btn-primary:hover {
+  background: #222222;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.admin-btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ── Admin button gold ── */
+.admin-btn-gold {
+  background: var(--admin-gold);
+  color: #111111;
+  border: none;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease, box-shadow 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-btn-gold:hover {
+  background: var(--admin-gold-light);
+  box-shadow: 0 4px 16px rgba(201, 162, 39, 0.3);
+}
+
+.admin-btn-gold:active {
+  transform: scale(0.98);
+}
+
+/* ── Admin button secondary ── */
+.admin-btn-secondary {
+  background: var(--admin-surface);
+  color: var(--admin-text);
+  border: 1px solid var(--admin-border);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-btn-secondary:hover {
+  background: var(--admin-surface-2);
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+.admin-btn-secondary:active {
+  transform: scale(0.98);
+}
+
+/* ── Admin button danger ── */
+.admin-btn-danger {
+  background: var(--admin-error-bg);
+  color: var(--admin-error);
+  border: 1px solid rgba(220, 38, 38, 0.15);
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-btn-danger:hover {
+  background: rgba(220, 38, 38, 0.12);
+}
+
+.admin-btn-danger:active {
+  transform: scale(0.98);
+}
+
+/* ── Status badges ── */
+.admin-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  letter-spacing: 0.02em;
+}
+
+.admin-badge-active {
+  background: var(--admin-success-bg);
+  color: var(--admin-success);
+}
+
+.admin-badge-draft {
+  background: var(--admin-warning-bg);
+  color: var(--admin-warning);
+}
+
+.admin-badge-hidden {
+  background: var(--admin-surface-2);
+  color: var(--admin-text-muted);
+}
+
+/* ── Sidebar nav item ── */
+.admin-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--admin-text-secondary);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+  text-decoration: none;
+}
+
+.admin-nav-item:hover {
+  background: var(--admin-surface-2);
+  color: var(--admin-text);
+}
+
+.admin-nav-item.active {
+  background: var(--admin-gold-muted);
+  color: #8a6e1a;
+  font-weight: 600;
+}
+
+/* ── Loading skeleton ── */
+@keyframes admin-shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+
+.admin-skeleton {
+  background: linear-gradient(
+    90deg,
+    #f0f0f2 25%,
+    #e8e8ec 50%,
+    #f0f0f2 75%
+  );
+  background-size: 800px 100%;
+  animation: admin-shimmer 1.8s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ── Drag & drop zone ── */
+.admin-dropzone {
+  border: 2px dashed var(--admin-border);
+  border-radius: 14px;
+  background: var(--admin-surface-2);
+  transition: border-color 0.2s ease, background 0.2s ease;
+  cursor: pointer;
+}
+
+.admin-dropzone:hover,
+.admin-dropzone.active {
+  border-color: var(--admin-gold);
+  background: var(--admin-gold-muted);
+}
+
+/* ── Table ── */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--admin-text-muted);
+  padding: 10px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--admin-border);
+  white-space: nowrap;
+}
+
+.admin-table td {
+  padding: 14px 16px;
+  font-size: 13.5px;
+  color: var(--admin-text);
+  border-bottom: 1px solid var(--admin-border);
+  vertical-align: middle;
+}
+
+.admin-table tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-table tbody tr {
+  transition: background 0.1s ease;
+}
+
+.admin-table tbody tr:hover {
+  background: var(--admin-surface-2);
+}
+
+/* ── Toggle switch ── */
+.admin-toggle {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.admin-toggle.on {
+  background: var(--admin-gold);
+}
+
+.admin-toggle::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  background: white;
+  border-radius: 8px;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.admin-toggle.on::after {
+  transform: translateX(16px);
+}
+
+/* ── Overlay / Modal backdrop ── */
+.admin-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(4px);
+  z-index: 50;
+}
+
+/* ── Empty state ── */
+.admin-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 64px 24px;
+  text-align: center;
+  color: var(--admin-text-muted);
+}
+
+/* Page transition */
+@keyframes admin-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.admin-page-enter {
+  animation: admin-fade-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}

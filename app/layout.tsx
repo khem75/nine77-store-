@@ -2,12 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
-
-import Navbar from '@/components/navbar';
-import AnnouncementBar from '@/components/announcement-bar';
-import Footer from '@/components/footer';
-import MobileBottomNav from '@/components/mobile-bottom-nav';
-import SmoothScrollProvider from '@/components/smooth-scroll-provider';
+import { Toaster } from 'sonner';
 
 const inter = Inter({
     subsets: ['latin'],
@@ -19,8 +14,8 @@ const inter = Inter({
 export const viewport: Viewport = {
     width: 'device-width',
     initialScale: 1,
-    maximumScale: 5,          // Allow pinch-zoom for accessibility
-    userScalable: true,       // Never block user scaling — accessibility requirement
+    maximumScale: 5,
+    userScalable: true,
     themeColor: '#080808',
     colorScheme: 'dark',
 };
@@ -94,37 +89,18 @@ export default function RootLayout({
             className={`${inter.variable}`}
             suppressHydrationWarning
         >
-            <body
-                className="bg-background font-sans text-white antialiased"
-                suppressHydrationWarning
-            >
-                <SmoothScrollProvider>
-                    {/* Skip to main content — accessibility */}
-                    <a
-                        href="#main-content"
-                        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:rounded-lg focus:bg-gold focus:px-4 focus:py-2 focus:text-[11px] focus:font-bold focus:uppercase focus:tracking-widest focus:text-black"
-                    >
-                        Skip to content
-                    </a>
-
-                    <div
-                        className="relative min-h-screen bg-background text-white"
-                        style={{ overflowX: 'hidden', maxWidth: '100vw' }}
-                    >
-                        <AnnouncementBar />
-                        <Navbar />
-                        <main
-                            id="main-content"
-                            className="relative pb-mobile-nav md:pb-0"
-                            tabIndex={-1}
-                        >
-                            {children}
-                        </main>
-                        <Footer />
-                        <MobileBottomNav />
-                    </div>
-                </SmoothScrollProvider>
-
+            <body suppressHydrationWarning>
+                {children}
+                <Toaster
+                    position="top-right"
+                    expand={false}
+                    richColors
+                    toastOptions={{
+                        style: {
+                            fontFamily: 'var(--font-sans), system-ui, sans-serif',
+                        },
+                    }}
+                />
                 <Analytics />
             </body>
         </html>

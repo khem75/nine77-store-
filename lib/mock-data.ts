@@ -1,0 +1,237 @@
+// ============================================================
+// NINE77 Admin — Mock Data Layer (for UI testing without Supabase)
+// ============================================================
+
+import type { AdminProduct, HomepageSettings, StoreSettings } from '@/types/admin';
+
+// In-memory store (resets on server restart — that's fine for mock mode)
+let mockProducts: AdminProduct[] = [
+  {
+    id: 'prod-001',
+    name: 'Henley',
+    description: 'Signature luxury Henley crafted for elevated streetwear. A sculpted silhouette with premium weight and refined minimal detail.',
+    category: 'Tops',
+    price: 1350,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4F0E8', '#1B1B1B', '#D4AF37'],
+    images: ['/products/vintage-t-shirt-1.jpg', '/products/vintage-t-shirt-2.jpg'],
+    featured: true,
+    status: 'active',
+    created_at: '2025-01-10T10:00:00Z',
+    updated_at: '2025-07-10T14:23:00Z',
+  },
+  {
+    id: 'prod-002',
+    name: 'Vintage T-Shirt',
+    description: 'Soft premium cotton with understated branding and vintage-inspired construction for refined layering and everyday luxury.',
+    category: 'Tops',
+    price: 1350,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4F0E8', '#1A1A1A', '#8A6A4D'],
+    images: ['/products/vintage-t-shirt-1.jpg', '/products/vintage-t-shirt-2.jpg'],
+    featured: true,
+    status: 'active',
+    created_at: '2025-01-12T10:00:00Z',
+    updated_at: '2025-07-11T09:15:00Z',
+  },
+  {
+    id: 'prod-003',
+    name: 'Old Money Tee',
+    description: 'A luxury wardrobe essential with a clean editorial edge. Elevated tee styling designed for quiet statement dressing.',
+    category: 'Tops',
+    price: 1450,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F7F1E3', '#1B1B1B', '#D4AF37'],
+    images: ['/products/vintage-t-shirt-3.jpg', '/products/vintage-t-shirt-2.jpg'],
+    featured: false,
+    status: 'active',
+    created_at: '2025-02-01T10:00:00Z',
+    updated_at: '2025-07-09T16:45:00Z',
+  },
+  {
+    id: 'prod-004',
+    name: 'Barrel Pants',
+    description: 'Modern barrel silhouette crafted from premium suiting fabric, offering a relaxed fit with structured luxury detail.',
+    category: 'Pants',
+    price: 1800,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#1A1A1A', '#3A2F2A', '#D4AF37'],
+    images: ['/products/barrel-pants-1.jpg', '/products/barrel-pants-2.jpg'],
+    featured: true,
+    status: 'active',
+    created_at: '2025-02-15T10:00:00Z',
+    updated_at: '2025-07-08T11:30:00Z',
+  },
+  {
+    id: 'prod-005',
+    name: 'AMD Pants',
+    description: 'Engineered streetwear pants with technical tailoring and premium texture for refined urban dressing.',
+    category: 'Pants',
+    price: 1800,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#111111', '#474747', '#D4AF37'],
+    images: ['/products/barrel-pants-3.jpg', '/products/barrel-pants-4.jpg'],
+    featured: false,
+    status: 'draft',
+    created_at: '2025-03-01T10:00:00Z',
+    updated_at: '2025-07-07T08:20:00Z',
+  },
+  {
+    id: 'prod-006',
+    name: 'Linen Trousers',
+    description: 'Lightweight luxury linen trousers with tailored ease. A refined silhouette for elevated warm-weather dressing.',
+    category: 'Pants',
+    price: 1450,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4E8D2', '#222222', '#D4AF37'],
+    images: ['/products/linen-trousers-1.jpg', '/products/linen-trousers-2.jpg'],
+    featured: false,
+    status: 'active',
+    created_at: '2025-03-10T10:00:00Z',
+    updated_at: '2025-07-06T13:10:00Z',
+  },
+  {
+    id: 'prod-007',
+    name: 'Muscle Tee',
+    description: 'Structured luxury muscle tee with premium finishes and a sculpted fit designed for modern layering.',
+    category: 'Tops',
+    price: 1350,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F4F0E8', '#1B1B1B', '#B8860B'],
+    images: ['/products/vintage-t-shirt-1.jpg', '/products/vintage-t-shirt-2.jpg'],
+    featured: true,
+    status: 'active',
+    created_at: '2025-04-01T10:00:00Z',
+    updated_at: '2025-07-05T15:55:00Z',
+  },
+  {
+    id: 'prod-008',
+    name: 'Linen Shirt',
+    description: 'Premium linen shirt crafted for effortless luxury. Lightweight, breathable, with a relaxed silhouette for elevated everyday wear.',
+    category: 'Tops',
+    price: 1650,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#F3E8D8', '#1C1C1C', '#D4AF37'],
+    images: ['/products/linen-shirt-1.jpg', '/products/linen-shirt-2.jpg'],
+    featured: true,
+    status: 'active',
+    created_at: '2025-04-15T10:00:00Z',
+    updated_at: '2025-07-04T10:00:00Z',
+  },
+  {
+    id: 'prod-009',
+    name: 'Windcheater',
+    description: 'Bold luxury outerwear with premium windproof construction and an elevated street-ready silhouette.',
+    category: 'Outerwear',
+    price: 2750,
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['#1A1A1A', '#5A554E', '#D4AF37'],
+    images: ['/products/windcheater-1.jpg', '/products/windcheater-2.jpg'],
+    featured: false,
+    status: 'hidden',
+    created_at: '2025-05-01T10:00:00Z',
+    updated_at: '2025-07-03T09:00:00Z',
+  },
+  {
+    id: 'prod-010',
+    name: 'Crop Tee',
+    description: 'Cropped luxury tee with effortless styling and minimalist identity. A standout addition to elevated streetwear edits.',
+    category: 'Tops',
+    price: 1250,
+    sizes: ['XS', 'S', 'M', 'L'],
+    colors: ['#F4F0E8', '#E1D4C4', '#D4AF37'],
+    images: ['/products/vintage-t-shirt-3.jpg', '/products/vintage-t-shirt-2.jpg'],
+    featured: false,
+    status: 'draft',
+    created_at: '2025-06-01T10:00:00Z',
+    updated_at: '2025-07-01T12:00:00Z',
+  },
+];
+
+let mockHomepage: HomepageSettings = {
+  id: 1,
+  hero_title: 'BUILD DIFFERENT.',
+  hero_subtitle: 'Premium streetwear engineered for those who refuse to blend in. Fusing architectural geometry with museum-grade craftsmanship.',
+  hero_button: 'Shop Now',
+  hero_button_link: '/shop',
+  hero_image: null,
+  announcement: '🔥 New Drop: Limited Edition Collection — WhatsApp to Order',
+  featured_products: ['prod-001', 'prod-002', 'prod-004', 'prod-007', 'prod-008'],
+  updated_at: new Date().toISOString(),
+};
+
+let mockSettings: StoreSettings = {
+  id: 1,
+  store_name: 'NINE77',
+  logo: null,
+  whatsapp: '9779812345678',
+  instagram: 'https://instagram.com/nine77store',
+  facebook: 'https://facebook.com/nine77store',
+  footer: '© 2025 NINE77. All rights reserved.',
+  updated_at: new Date().toISOString(),
+};
+
+// ── Helper ─────────────────────────────────────────────────────
+function generateId() {
+  return 'prod-' + Math.random().toString(36).slice(2, 9);
+}
+
+// ── Products ───────────────────────────────────────────────────
+export function mockGetProducts(): AdminProduct[] {
+  return [...mockProducts].sort(
+    (a, b) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()
+  );
+}
+
+export function mockGetProductById(id: string): AdminProduct | null {
+  return mockProducts.find((p) => p.id === id) ?? null;
+}
+
+export function mockCreateProduct(values: Omit<AdminProduct, 'id' | 'created_at' | 'updated_at'>): AdminProduct {
+  const now = new Date().toISOString();
+  const product: AdminProduct = { ...values, id: generateId(), created_at: now, updated_at: now };
+  mockProducts.unshift(product);
+  return product;
+}
+
+export function mockUpdateProduct(id: string, values: Partial<AdminProduct>): boolean {
+  const idx = mockProducts.findIndex((p) => p.id === id);
+  if (idx === -1) return false;
+  mockProducts[idx] = { ...mockProducts[idx], ...values, updated_at: new Date().toISOString() };
+  return true;
+}
+
+export function mockDeleteProduct(id: string): boolean {
+  const before = mockProducts.length;
+  mockProducts = mockProducts.filter((p) => p.id !== id);
+  return mockProducts.length < before;
+}
+
+// ── Homepage ───────────────────────────────────────────────────
+export function mockGetHomepage(): HomepageSettings {
+  return { ...mockHomepage };
+}
+
+export function mockUpdateHomepage(values: Partial<HomepageSettings>): void {
+  mockHomepage = { ...mockHomepage, ...values, updated_at: new Date().toISOString() };
+}
+
+// ── Settings ───────────────────────────────────────────────────
+export function mockGetSettings(): StoreSettings {
+  return { ...mockSettings };
+}
+
+export function mockUpdateSettings(values: Partial<StoreSettings>): void {
+  mockSettings = { ...mockSettings, ...values, updated_at: new Date().toISOString() };
+}
+
+// ── Dashboard Stats ────────────────────────────────────────────
+export function mockGetStats() {
+  const products = mockGetProducts();
+  return {
+    total: products.length,
+    active: products.filter((p) => p.status === 'active').length,
+    featured: products.filter((p) => p.featured).length,
+    draft: products.filter((p) => p.status === 'draft').length,
+  };
+}

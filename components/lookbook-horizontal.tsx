@@ -57,6 +57,7 @@ export default function LookbookHorizontal() {
                             key={camp.id}
                             initial={{ opacity: 0, y: 24 }}
                             animate={inView ? { opacity: 1, y: 0 } : {}}
+                            whileHover="hover"
                             transition={{ duration: 0.6, delay: idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
                             className="group relative flex flex-col justify-end overflow-hidden rounded-[24px] border border-white/[0.08] bg-[#161616] h-[320px] sm:h-[380px] md:h-[450px] lg:h-[500px]"
                         >
@@ -74,12 +75,17 @@ export default function LookbookHorizontal() {
 
                             {/* Interactive diagonal shine sweep on lookbook card hover */}
                             <motion.div
+                                variants={{
+                                    hover: {
+                                        x: '100%',
+                                        opacity: [0, 1, 0],
+                                        transition: { duration: 0.8, ease: 'easeInOut' }
+                                    }
+                                }}
                                 initial={{ x: '-100%', opacity: 0 }}
-                                whileHover={{ x: '100%', opacity: [0, 1, 0] }}
-                                transition={{ duration: 0.8, ease: 'easeInOut' }}
                                 className="absolute inset-0 pointer-events-none z-20"
                                 style={{
-                                    background: 'linear-gradient(110deg, transparent 35%, rgba(212,175,55,0.08) 48%, rgba(255,255,255,0.25) 50%, rgba(212,175,55,0.08) 52%, transparent 65%)'
+                                    background: 'linear-gradient(110deg, transparent 35%, rgba(212,175,55,0.08) 48%, rgba(255,255,255,0.35) 50%, rgba(212,175,55,0.08) 52%, transparent 65%)'
                                 }}
                             />
 
