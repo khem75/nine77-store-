@@ -1,16 +1,21 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { products } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
 
-const stats = [
-    { label: 'Happy Customers', value: '500+' },
-    { label: 'Exclusive Pieces', value: products.length.toString() },
-    { label: 'Premium Quality', value: '100%' },
-    { label: 'Vision', value: '1' }
-];
+interface StatsProps {
+    productsCount?: number;
+}
 
-export default function Stats() {
+export default function Stats({ productsCount }: StatsProps) {
+    const count = productsCount !== undefined ? productsCount : staticProducts.length;
+
+    const stats = [
+        { label: 'Happy Customers', value: '500+' },
+        { label: 'Exclusive Pieces', value: count.toString() },
+        { label: 'Premium Quality', value: '100%' },
+        { label: 'Vision', value: '1' }
+    ];
     return (
         <section className="border-t border-white/10 px-6 py-16 lg:px-8">
             <div className="mx-auto max-w-7xl">

@@ -2,6 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import type { AdminProduct, ProductFormValues } from '@/types/admin';
+import { slugify } from '@/utils';
 
 const IS_MOCK = process.env.NEXT_PUBLIC_MOCK_MODE === 'true';
 
@@ -129,3 +130,9 @@ export async function getDashboardStats() {
     draft: products.filter((p) => p.status === 'draft').length,
   };
 }
+
+export async function getProductBySlug(slug: string): Promise<AdminProduct | null> {
+  const products = await getProducts();
+  return products.find((p) => slugify(p.name) === slug) ?? null;
+}
+

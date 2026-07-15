@@ -1,9 +1,10 @@
 'use client';
 
 import type { Product } from '@/types/product';
+import type { AdminProduct } from '@/types/admin';
 import CompactProductCard from '@/components/compact-product-card';
 
-export default function RelatedProducts({ products }: { products: Product[] }) {
+export default function RelatedProducts({ products }: { products: Array<Product | AdminProduct> }) {
     if (!products.length) return null;
     return (
         <section className="border-t border-white/5 py-8">

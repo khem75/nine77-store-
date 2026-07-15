@@ -8,17 +8,18 @@ import { ArrowLeft, Check, ChevronLeft, ChevronRight, MessageCircle, Share2, Rul
 import { buildWhatsAppUrl } from '@/lib/whatsapp';
 import { formatPrice } from '@/utils';
 import type { Product } from '@/types/product';
+import type { AdminProduct } from '@/types/admin';
 import RelatedProducts from '@/components/related-products';
 import RecentlyViewed, { trackRecentlyViewed } from '@/components/recently-viewed-products';
 
 interface ProductDetailProps {
-    product: Product;
-    relatedProducts: Product[];
+    product: Product | AdminProduct;
+    relatedProducts: Array<Product | AdminProduct>;
 }
 
 export default function ProductDetail({ product, relatedProducts }: ProductDetailProps) {
     const [quantity, setQuantity] = useState(1);
-    const [size, setSize] = useState<'S' | 'M' | 'L' | 'XL'>('M');
+    const [size, setSize] = useState<string>(() => product.sizes[0] || 'M');
     const [currentImage, setCurrentImage] = useState(0);
     const [addedToOrder, setAddedToOrder] = useState(false);
     const [activeTab, setActiveTab] = useState<'details' | 'fit'>('details');

@@ -4,12 +4,16 @@ import Footer from '@/components/footer';
 import MobileBottomNav from '@/components/mobile-bottom-nav';
 import SmoothScrollProvider from '@/components/smooth-scroll-provider';
 import CustomCursor from '@/components/custom-cursor';
+import { getProducts } from '@/lib/product-actions';
 
-export default function StoreLayout({
+export default async function StoreLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const products = await getProducts();
+    const activeProducts = products.filter((p) => p.status === 'active');
+
     return (
         <SmoothScrollProvider>
             <CustomCursor />
@@ -26,7 +30,7 @@ export default function StoreLayout({
                 style={{ overflowX: 'hidden', maxWidth: '100vw' }}
             >
                 <AnnouncementBar />
-                <Navbar />
+                <Navbar products={activeProducts} />
                 <main
                     id="main-content"
                     className="relative pb-mobile-nav md:pb-0"
@@ -40,3 +44,4 @@ export default function StoreLayout({
         </SmoothScrollProvider>
     );
 }
+

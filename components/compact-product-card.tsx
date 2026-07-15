@@ -5,17 +5,20 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import type { Product } from '@/types/product';
-import { formatPrice } from '@/utils';
+import type { AdminProduct } from '@/types/admin';
+import { formatPrice, slugify } from '@/utils';
 
 export default function CompactProductCard({
     product,
     index = 0,
 }: {
-    product: Product;
+    product: Product | AdminProduct;
     index?: number;
 }) {
     const [imgSrc, setImgSrc] = useState(product.images[0] || '/luxury-streetwear-garment.png');
     const [fallback, setFallback] = useState(false);
+
+    const slug = 'slug' in product ? product.slug : slugify(product.name);
 
     return (
         <motion.div
@@ -25,7 +28,7 @@ export default function CompactProductCard({
             className="w-[148px]"
         >
             <Link
-                href={`/product/${product.slug}`}
+                href={`/product/${slug}`}
                 className="block w-full overflow-hidden rounded-[18px] border border-white/[0.08] bg-[#161616] transition-transform duration-300 hover:-translate-y-1 active:scale-[0.97]"
             >
                 <div className="relative w-full overflow-hidden bg-[#111111]" style={{ paddingBottom: '120%' }}>

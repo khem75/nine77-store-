@@ -5,10 +5,11 @@ import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import type { Product } from '@/types/product';
-import { formatPrice } from '@/utils';
+import { formatPrice, slugify } from '@/utils';
+import type { AdminProduct } from '@/types/admin';
 
 interface ProductCardProps {
-    product: Product;
+    product: Product | AdminProduct;
     index?: number;
     showPrice?: boolean;
     priority?: boolean;
@@ -28,6 +29,9 @@ export default function ProductCard({
     const [img2Src, setImg2Src] = useState(product.images[1] || '');
     const [fallback, setFallback] = useState(false);
 
+    const slug = 'slug' in product ? product.slug : slugify(product.name);
+    const isNewArrival = 'newArrival' in product ? product.newArrival : false;
+
     return (
         <motion.div
             ref={cardRef}
@@ -36,7 +40,7 @@ export default function ProductCard({
             transition={{ duration: 0.6, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
             className="w-full"
         >
-            <Link href={`/product/${product.slug}`} data-cursor="view" className="block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-[20px]">
+            <Link href={`/product/${slug}`} data-cursor="view" className="block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-[20px]">
                 <article
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
@@ -48,14 +52,14 @@ export default function ProductCard({
                         style={{ paddingBottom: '133.3%' }} // 3:4 aspect ratio
                     >
                         {/* Status Badge */}
-                        {(product.newArrival || product.featured) && (
+                        {(isNewArrival || product.featured) && (
                             <div className="absolute left-4 top-4 z-10 flex flex-col gap-1.5 pointer-events-none">
-                                {product.newArrival && (
+                                {isNewArrival && (
                                     <span className="rounded-sm bg-gold text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.16em] leading-none shadow-md">
                                         New Drop
                                     </span>
                                 )}
-                                {!product.newArrival && product.featured && (
+                                {!isNewArrival && product.featured && (
                                     <span className="rounded-sm bg-white/90 text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.16em] leading-none shadow-md">
                                         Featured
                                     </span>

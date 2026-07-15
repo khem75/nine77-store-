@@ -1,6 +1,10 @@
-import { products } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
 import ProductDetail from '@/components/product-detail';
 import type { Metadata } from 'next';
+import { getProductBySlug, getProducts } from '@/lib/product-actions';
+import { slugify } from '@/utils';
+import type { AdminProduct } from '@/types/admin';
+import type { Product } from '@/types/product';
 
 type Props = {
     params: Promise<{ slug: string }>;
@@ -8,7 +12,10 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
-    const product = products.find((item) => item.slug === resolvedParams.slug);
+    let product: AdminProduct | Product | null = await getProductBySlug(resolvedParams.slug);
+    if (!product) {
+        product = staticProducts.find((item) => item.slug === resolvedParams.slug) ?? null;
+    }
 
     if (!product) {
         return {
@@ -34,7 +41,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProductPage({ params }: Props) {
     const resolvedParams = await params;
-    const product = products.find((item) => item.slug === resolvedParams.slug);
+    let product: AdminProduct | Product | null = await getProductBySlug(resolvedParams.slug);
+    if (!product) {
+        product = staticProducts.find((item) => item.slug === resolvedParams.slug) ?? null;
+    }
 
     if (!product) {
         return (
@@ -47,20 +57,34 @@ export default async function ProductPage({ params }: Props) {
         );
     }
 
-    const relatedProducts = products.filter((item) => item.category === product.category && item.slug !== product.slug).slice(0, 4);
+    const allProducts = await getProducts();
+    const activeProducts = allProducts.filter((p) => p.status === 'active');
+    let relatedProducts: Array<any> = activeProducts
+        .filter((item) => item.category === product!.category && slugify(item.name) !== resolvedParams.slug)
+        .slice(0, 4);
+
+    if (relatedProducts.length === 0) {
+        relatedProducts = staticProducts
+            .filter((item) => item.category === product!.category && item.slug !== resolvedParams.slug)
+            .slice(0, 4);
+    }
+
+    const slug = 'slug' in product ? product.slug : slugify(product.name);
 
     const jsonLd = {
         '@context': 'https://schema.org',
         '@type': 'Product',
         name: product.name,
-        image: product.images.map(img => `https://nine77-store.vercel.app${img}`),
+        image: product.images.map((img) =>
+            img.startsWith('/') ? `https://nine77-store.vercel.app${img}` : img
+        ),
         description: product.description,
         offers: {
             '@type': 'Offer',
             price: product.price,
             priceCurrency: 'NPR',
             availability: 'https://schema.org/InStock',
-            url: `https://nine77-store.vercel.app/product/${product.slug}`,
+            url: `https://nine77-store.vercel.app/product/${slug}`,
         },
     };
 

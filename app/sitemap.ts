@@ -1,13 +1,21 @@
-/** @type {import('next-sitemap').IConfig} */
-import { products } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
+import { getProducts } from '@/lib/product-actions';
+import { slugify } from '@/utils';
 
 const baseUrl = 'https://nine77-store.vercel.app';
 
-export default function sitemap() {
-    const productUrls = products.map((product) => ({
-        url: `${baseUrl}/product/${product.slug}`,
-        lastModified: new Date().toISOString()
-    }));
+export default async function sitemap() {
+    const dbProducts = await getProducts();
+    const activeProducts = dbProducts.filter((p) => p.status === 'active');
+    const sourceProducts = activeProducts.length > 0 ? activeProducts : staticProducts;
+
+    const productUrls = sourceProducts.map((product) => {
+        const slug = 'slug' in product ? product.slug : slugify(product.name);
+        return {
+            url: `${baseUrl}/product/${slug}`,
+            lastModified: new Date().toISOString()
+        };
+    });
 
     return [
         {

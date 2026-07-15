@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import ShopClient from './shop-client';
+import { getProducts } from '@/lib/product-actions';
 
 export const metadata: Metadata = {
     title: 'Shop Catalog',
@@ -11,6 +12,9 @@ export const metadata: Metadata = {
     },
 };
 
-export default function ShopPage() {
-    return <ShopClient />;
+export default async function ShopPage() {
+    const products = await getProducts();
+    const activeProducts = products.filter((p) => p.status === 'active');
+
+    return <ShopClient initialProducts={activeProducts} />;
 }

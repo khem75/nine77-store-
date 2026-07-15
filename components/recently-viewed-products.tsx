@@ -2,14 +2,15 @@
 
 import { useEffect, useState } from 'react';
 import type { Product } from '@/types/product';
+import type { AdminProduct } from '@/types/admin';
 import CompactProductCard from '@/components/compact-product-card';
 
 const STORAGE_KEY = 'nine77_recently_viewed_products';
 
-export function trackRecentlyViewed(product: Product) {
+export function trackRecentlyViewed(product: Product | AdminProduct) {
     try {
         const stored = localStorage.getItem(STORAGE_KEY);
-        const list: Product[] = stored ? JSON.parse(stored) : [];
+        const list: Array<Product | AdminProduct> = stored ? JSON.parse(stored) : [];
         const filtered = list.filter((p) => p.id !== product.id);
         const updated = [product, ...filtered].slice(0, 10);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
@@ -19,13 +20,13 @@ export function trackRecentlyViewed(product: Product) {
 }
 
 export default function RecentlyViewed({ currentProductId }: { currentProductId: string }) {
-    const [items, setItems] = useState<Product[]>([]);
+    const [items, setItems] = useState<Array<Product | AdminProduct>>([]);
 
     useEffect(() => {
         try {
             const stored = localStorage.getItem(STORAGE_KEY);
             if (stored) {
-                const list: Product[] = JSON.parse(stored);
+                const list: Array<Product | AdminProduct> = JSON.parse(stored);
                 // Exclude current product from the recently viewed list
                 setItems(list.filter((p) => p.id !== currentProductId));
             }

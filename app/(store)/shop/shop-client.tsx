@@ -4,7 +4,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Search, SlidersHorizontal, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 import ProductCard from '@/components/product-card';
-import { products } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
+import type { AdminProduct } from '@/types/admin';
 
 const categories = ['All', 'Tops', 'Pants', 'Outerwear'] as const;
 const sortOptions = ['Price High to Low', 'Price Low to High', 'Newest First'] as const;
@@ -33,7 +34,7 @@ const campaignData: Record<string, { title: string; description: string; image: 
     },
 };
 
-export default function ShopClient() {
+export default function ShopClient({ initialProducts = [] }: { initialProducts?: AdminProduct[] }) {
     const [category, setCategory] = useState<(typeof categories)[number]>('All');
     const [sort, setSort] = useState<(typeof sortOptions)[number]>('Price High to Low');
     const [search, setSearch] = useState('');
@@ -68,7 +69,8 @@ export default function ShopClient() {
     };
 
     const filteredProducts = useMemo(() => {
-        let base = category === 'All' ? products : products.filter((p) => p.category === category);
+        const sourceProducts = initialProducts.length > 0 ? initialProducts : staticProducts;
+        let base = category === 'All' ? sourceProducts : sourceProducts.filter((p) => p.category === category);
         if (search.trim()) {
             const q = search.toLowerCase();
             base = base.filter(
@@ -80,9 +82,12 @@ export default function ShopClient() {
         return [...base].sort((a, b) => {
             if (sort === 'Price High to Low') return b.price - a.price;
             if (sort === 'Price Low to High') return a.price - b.price;
-            return (b.newArrival ? 1 : 0) - (a.newArrival ? 1 : 0);
+            const isNewArrivalA = 'newArrival' in a ? a.newArrival : true;
+            const isNewArrivalB = 'newArrival' in b ? b.newArrival : true;
+            return (isNewArrivalB ? 1 : 0) - (isNewArrivalA ? 1 : 0);
         });
-    }, [category, sort, search]);
+    }, [category, sort, search, initialProducts]);
+
 
     const activeCampaign = campaignData[category] || campaignData.All;
 

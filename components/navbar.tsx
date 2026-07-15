@@ -6,7 +6,9 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { Menu, X, Search, Instagram, MessageCircle, ArrowUpRight } from 'lucide-react';
-import { products } from '@/data/products';
+import { products as staticProducts } from '@/data/products';
+import { slugify } from '@/utils';
+import type { AdminProduct } from '@/types/admin';
 
 /* ─── Constants ─────────────────────────────────────── */
 const navLinks = [
@@ -18,9 +20,6 @@ const navLinks = [
 
 const WHATSAPP = 'https://wa.me/9779810605409?text=Hello%20NINE77%2C%20I%20have%20an%20inquiry.';
 const INSTAGRAM = 'https://www.instagram.com/nine.77___/';
-
-// Featured products for the drawer carousel (first 3 featured)
-const featuredProducts = products.filter((p) => p.featured).slice(0, 3);
 
 /* ─── Drawer Spring Config ───────────────────────────── */
 const drawerVariants = {
@@ -70,7 +69,7 @@ const cardStagger = {
 };
 
 /* ─── Component ──────────────────────────────────────── */
-export default function Navbar() {
+export default function Navbar({ products = [] }: { products?: AdminProduct[] }) {
     const pathname = usePathname();
     const router = useRouter();
     const reduceMotion = useReducedMotion();
@@ -82,6 +81,10 @@ export default function Navbar() {
     const [searchQuery, setSearchQuery] = useState('');
     const lastY = useRef(0);
     const searchRef = useRef<HTMLInputElement>(null);
+
+    const featuredProducts = (products.length > 0 ? products : staticProducts)
+        .filter((p) => p.featured)
+        .slice(0, 3);
 
     /* Mount timers */
     useEffect(() => {
@@ -426,7 +429,7 @@ export default function Navbar() {
                                                 role="listitem"
                                             >
                                                 <Link
-                                                    href={`/product/${product.slug}`}
+                                                    href={`/product/${('slug' in product && typeof product.slug === 'string') ? product.slug : slugify(product.name)}`}
                                                     onClick={closeDrawer}
                                                     className="group block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-[14px]"
                                                     aria-label={`${product.name} — Rs. ${product.price.toLocaleString()}`}
