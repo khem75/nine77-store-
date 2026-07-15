@@ -3,117 +3,96 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
+
+const luxuryEase = [0.16, 1, 0.3, 1] as const;
 
 const collections = [
     {
-        name: 'Pants',
-        description: 'Modern silhouettes.',
-        image: '/products/barrel-pants-1.jpg',
-        href: '/shop?category=Pants',
-        size: 'md:col-span-3 h-[380px] md:h-[450px]',
-    },
-    {
-        name: 'Shirts',
-        description: 'Built for confidence.',
+        name: 'Tops',
+        subtitle: 'New Arrivals',
         image: '/products/vintage-t-shirt-1.jpg',
         href: '/shop?category=Tops',
-        size: 'md:col-span-2 h-[380px] md:h-[450px]',
     },
     {
-        name: 'Linen',
-        description: 'Natural luxury.',
-        image: '/products/linen-shirt-1.jpg',
-        href: '/shop?search=Linen',
-        size: 'md:col-span-2 h-[380px] md:h-[480px]',
+        name: 'Pants',
+        subtitle: 'Utility & Cargo',
+        image: '/products/barrel-pants-1.jpg',
+        href: '/shop?category=Pants',
     },
     {
         name: 'Outerwear',
-        description: 'Layer up.',
+        subtitle: 'Jackets & Hoodies',
         image: '/products/windcheater-1.jpg',
         href: '/shop?category=Outerwear',
-        size: 'md:col-span-3 h-[380px] md:h-[480px]',
     },
     {
         name: 'Accessories',
-        description: 'Complete the fit.',
-        image: '/products/henley-1.jpg',
+        subtitle: 'Essentials',
+        image: '/products/linen-shirt-1.jpg',
         href: '/shop',
-        size: 'md:col-span-5 h-[340px] md:h-[400px]',
     },
 ];
 
 export default function ShopByCollection() {
     return (
-        <section className="py-20 md:py-32 border-b border-white/[0.08] bg-[#070707] px-6 lg:px-12">
+        <section className="py-16 md:py-24 bg-background px-5 md:px-12 lg:px-16">
             <div className="mx-auto max-w-[1440px]">
                 {/* Section Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 24 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: '-100px' }}
-                    transition={{ duration: 0.85, ease: [0.16, 1, 0.3, 1] }}
-                    className="mb-14 text-center md:text-left"
-                >
-                    <p className="text-[10px] uppercase tracking-[0.45em] text-gold font-black">
-                        Shop by Collection
-                    </p>
-                    <h2 className="mt-2 text-4xl font-extrabold uppercase tracking-tight text-white sm:text-5xl">
-                        Curated Campaigns
-                    </h2>
-                </motion.div>
+                <div className="mb-10 flex items-baseline justify-between">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true, margin: '-80px' }}
+                        transition={{ duration: 0.7, ease: luxuryEase }}
+                    >
+                        <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-gold font-bold">
+                            Shop by Collection
+                        </p>
+                        <h2 className="mt-1 text-2xl md:text-3xl font-black uppercase tracking-tight text-primary">
+                            Collections
+                        </h2>
+                    </motion.div>
+                    <Link
+                        href="/shop"
+                        className="group inline-flex items-center gap-1.5 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-secondary hover:text-primary transition-colors"
+                    >
+                        View All
+                        <ArrowUpRight size={13} strokeWidth={2} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                    </Link>
+                </div>
 
-                {/* Editorial Grid Layout */}
-                <div className="grid gap-6 grid-cols-1 md:grid-cols-5">
-                    {collections.map((col, idx) => (
+                {/* Mobile: horizontal scroll. Desktop: 4-column grid */}
+                <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 md:grid md:grid-cols-4 md:gap-5 md:overflow-visible md:pb-0">
+                    {collections.map((collection, i) => (
                         <motion.div
-                            key={col.name}
-                            initial={{ opacity: 0, y: 35 }}
+                            key={collection.name}
+                            initial={{ opacity: 0, y: 24 }}
                             whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: '-100px' }}
-                            transition={{ duration: 0.75, delay: idx * 0.05, ease: [0.16, 1, 0.3, 1] }}
-                            className={`${col.size} w-full`}
+                            viewport={{ once: true, margin: '-60px' }}
+                            transition={{ duration: 0.7, delay: i * 0.08, ease: luxuryEase }}
+                            className="flex-shrink-0 w-[200px] md:w-full"
                         >
-                            <Link
-                                href={col.href}
-                                className="group relative flex h-full w-full flex-col justify-end overflow-hidden rounded-[24px] border border-white/[0.06] bg-[#111] transition-all duration-500 ease-luxury hover:border-white/15"
-                            >
-                                {/* Portrait/Cover Image */}
-                                <Image
-                                    src={col.image}
-                                    alt={col.name}
-                                    fill
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    loading="lazy"
-                                    className="object-cover object-top transition-transform duration-700 ease-luxury group-hover:scale-[1.06] group-hover:translate-y-[4px] opacity-80 group-hover:opacity-90"
-                                />
+                            <Link href={collection.href} className="group block">
+                                <div className="relative aspect-[3/4] overflow-hidden rounded-2xl md:rounded-2xl bg-surface border border-border img-zoom">
+                                    <Image
+                                        src={collection.image}
+                                        alt={collection.name}
+                                        fill
+                                        sizes="(max-width: 768px) 200px, 25vw"
+                                        className="object-cover transition-transform duration-700 ease-luxury group-hover:scale-105"
+                                    />
+                                    {/* Bottom gradient overlay */}
+                                    <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-black/60 to-transparent" />
 
-                                {/* Luxury bottom gradient overlay */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-transparent transition-opacity duration-500 group-hover:opacity-95" />
-
-                                {/* Interactive diagonal shine sweep on card hover */}
-                                <motion.div
-                                    initial={{ x: '-100%', opacity: 0 }}
-                                    whileHover={{ x: '100%', opacity: [0, 1, 0] }}
-                                    transition={{ duration: 0.8, ease: 'easeInOut' }}
-                                    className="absolute inset-0 pointer-events-none z-20"
-                                    style={{
-                                        background: 'linear-gradient(110deg, transparent 35%, rgba(212,175,55,0.08) 48%, rgba(255,255,255,0.25) 50%, rgba(212,175,55,0.08) 52%, transparent 65%)'
-                                    }}
-                                />
-
-                                {/* Card Text Content */}
-                                <div className="relative z-10 p-6 md:p-8 flex flex-col items-start gap-1">
-                                    <h3 className="text-2xl md:text-3xl font-black uppercase tracking-wide text-white leading-none">
-                                        {col.name}
-                                    </h3>
-                                    <p className="text-xs md:text-sm text-white/55 font-light tracking-wide max-w-[280px]">
-                                        {col.description}
-                                    </p>
-                                    
-                                    {/* Action link */}
-                                    <div className="mt-4 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.25em] text-gold transition-all duration-300 group-hover:text-white group-hover:gap-2.5">
-                                        Explore <ArrowRight size={11} strokeWidth={2} className="transition-transform duration-300 group-hover:translate-x-[4px]" />
+                                    {/* Text overlay */}
+                                    <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
+                                        <p className="text-[15px] md:text-[17px] font-black uppercase tracking-tight text-white">
+                                            {collection.name}
+                                        </p>
+                                        <p className="text-[10px] md:text-[11px] text-white/60 uppercase tracking-[0.15em] font-medium mt-0.5">
+                                            {collection.subtitle}
+                                        </p>
                                     </div>
                                 </div>
                             </Link>

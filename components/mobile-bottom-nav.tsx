@@ -28,7 +28,7 @@ export default function MobileBottomNav() {
                 bottom: 'max(16px, env(safe-area-inset-bottom, 16px))',
                 width: '92vw',
                 maxWidth: '400px',
-                zIndex: 50,  // lower than drawer (9999) but above content
+                zIndex: 50,
             }}
             aria-label="Mobile navigation"
         >
@@ -38,16 +38,12 @@ export default function MobileBottomNav() {
                 transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
             >
                 <div
-                    className="border border-white/[0.06] backdrop-blur-2xl"
+                    className="border border-border backdrop-blur-2xl bg-white/80 shadow-luxury-lg"
                     style={{
                         borderRadius: 28,
-                        background:
-                            'linear-gradient(135deg, rgba(255,255,255,0.025) 0%, rgba(255,255,255,0.008) 100%), rgba(9,9,9,0.88)',
-                        boxShadow:
-                            'inset 0 1px 0px rgba(255,255,255,0.08), 0 16px 40px rgba(0,0,0,0.8)',
                     }}
                 >
-                    <div className="flex items-center justify-between px-2 py-1.5">
+                    <div className="flex items-center justify-between px-2.5 py-1.5">
                         {navItems.map(({ label, href, icon: Icon }) => {
                             const isActive = pathname === href;
                             return (
@@ -62,13 +58,13 @@ export default function MobileBottomNav() {
                                         size={18}
                                         strokeWidth={isActive ? 2.2 : 1.5}
                                         className={`transition-colors duration-300 ${
-                                            isActive ? 'text-gold' : 'text-white/40'
+                                            isActive ? 'text-gold' : 'text-secondary/50'
                                         }`}
                                         aria-hidden="true"
                                     />
                                     <span
                                         className={`text-[8px] font-bold uppercase tracking-[0.14em] transition-colors duration-300 ${
-                                            isActive ? 'text-gold' : 'text-white/28'
+                                            isActive ? 'text-gold' : 'text-secondary/60'
                                         }`}
                                     >
                                         {label}
@@ -76,7 +72,7 @@ export default function MobileBottomNav() {
                                     {isActive && (
                                         <motion.span
                                             layoutId="mobile-nav-dot"
-                                            className="absolute -bottom-0.5 h-[2px] w-4 rounded-full bg-gold shadow-[0_0_6px_rgba(212,175,55,0.5)]"
+                                            className="absolute -bottom-0.5 h-[2.5px] w-4 rounded-full bg-gold"
                                             transition={{
                                                 type: 'spring',
                                                 stiffness: 380,
@@ -95,11 +91,11 @@ export default function MobileBottomNav() {
                             target="_blank"
                             rel="noreferrer"
                             whileTap={{ scale: 0.93 }}
-                            className="relative ml-1.5 flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-gold px-4 shadow-[0_4px_18px_rgba(212,175,55,0.28)]"
+                            className="relative ml-1.5 flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-gold px-4 shadow-[0_4px_18px_rgba(183,134,74,0.22)] hover:bg-gold-light transition-colors"
                             aria-label="Order via WhatsApp"
                         >
-                            <MessageCircle size={14} strokeWidth={2.5} className="text-black" aria-hidden="true" />
-                            <span className="text-[9px] font-black uppercase tracking-[0.16em] text-black">
+                            <MessageCircle size={14} strokeWidth={2.5} className="text-white" aria-hidden="true" />
+                            <span className="text-[9px] font-bold uppercase tracking-[0.16em] text-white">
                                 Order
                             </span>
                         </motion.a>

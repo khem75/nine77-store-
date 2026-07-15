@@ -1,45 +1,74 @@
 'use client';
 
-import { motion } from 'framer-motion';
-import { products as staticProducts } from '@/data/products';
+import { useRef, useEffect, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
+import type { AdminProduct } from '@/types/admin';
 
-interface StatsProps {
-    productsCount?: number;
+const luxuryEase = [0.16, 1, 0.3, 1] as const;
+
+function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
+    const [count, setCount] = useState(0);
+    const ref = useRef<HTMLSpanElement>(null);
+    const inView = useInView(ref, { once: true });
+
+    useEffect(() => {
+        if (!inView) return;
+        let frame: number;
+        const duration = 2000;
+        const start = performance.now();
+
+        function tick(now: number) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            setCount(Math.round(eased * target));
+            if (progress < 1) frame = requestAnimationFrame(tick);
+        }
+
+        frame = requestAnimationFrame(tick);
+        return () => cancelAnimationFrame(frame);
+    }, [inView, target]);
+
+    return (
+        <span ref={ref}>
+            {count.toLocaleString()}{suffix}
+        </span>
+    );
 }
 
-export default function Stats({ productsCount }: StatsProps) {
-    const count = productsCount !== undefined ? productsCount : staticProducts.length;
+interface StatsProps {
+    products?: AdminProduct[];
+}
 
+export default function Stats({ products = [] }: StatsProps) {
     const stats = [
-        { label: 'Happy Customers', value: '500+' },
-        { label: 'Exclusive Pieces', value: count.toString() },
-        { label: 'Premium Quality', value: '100%' },
-        { label: 'Vision', value: '1' }
+        { value: 2500, suffix: '+', label: 'Happy Customers' },
+        { value: products.length > 0 ? products.length * 10 : 150, suffix: '+', label: 'Premium Garments' },
+        { value: 25, suffix: '+', label: 'Collections' },
+        { value: 99, suffix: '%', label: 'Customer Satisfaction' },
     ];
-    return (
-        <section className="border-t border-white/10 px-6 py-16 lg:px-8">
-            <div className="mx-auto max-w-7xl">
-                <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-4">
-                    {stats.map((stat, index) => (
-                        <motion.div
-                            key={stat.label}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, amount: 0.4 }}
-                            transition={{ duration: 0.55, delay: index * 0.1 }}
-                            className="rounded-[28px] border border-white/10 bg-white/5 p-8 text-center"
-                        >
-                            <p className="text-4xl font-black text-gold">
-                                {stat.value}
-                            </p>
 
-                            <p className="mt-4 text-sm uppercase tracking-[0.35em] text-white/70">
-                                {stat.label}
-                            </p>
-                        </motion.div>
-                    ))}
-                </div>
+    return (
+        <div className="mx-auto max-w-[1440px] px-5 md:px-12 lg:px-16">
+            <div className="grid grid-cols-2 gap-6 md:grid-cols-4 md:gap-10">
+                {stats.map((stat, i) => (
+                    <motion.div
+                        key={stat.label}
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: i * 0.1, ease: luxuryEase }}
+                        className="text-center md:text-left"
+                    >
+                        <p className="text-3xl md:text-4xl lg:text-5xl font-black text-primary tracking-tight">
+                            <AnimatedCounter target={stat.value} suffix={stat.suffix} />
+                        </p>
+                        <p className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-secondary font-medium mt-1.5">
+                            {stat.label}
+                        </p>
+                    </motion.div>
+                ))}
             </div>
-        </section>
+        </div>
     );
 }

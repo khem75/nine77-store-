@@ -3,11 +3,48 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useScroll } from 'framer-motion';
+import { useEffect, useRef, useState, useCallback } from 'react';
+import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowUpRight, Truck, Shield, Lock, MessageCircle, ChevronDown, Plus } from 'lucide-react';
 import type { HomepageSettings } from '@/types/admin';
 
 const HeroScene = dynamic(() => import('./hero-scene'), { ssr: false });
+
+/* ─── Product Card Data ──────────────────────────────────── */
+const heroProducts = [
+    {
+        tag: 'NEW DROP',
+        name: 'Oversized Hoodie',
+        price: 'Rs. 2,990',
+        image: '/products/windcheater-1.jpg',
+        href: '/shop',
+    },
+    {
+        tag: 'BEST SELLER',
+        name: 'Signature Tee',
+        price: 'Rs. 1,890',
+        image: '/products/vintage-t-shirt-1.jpg',
+        href: '/shop',
+    },
+    {
+        tag: 'LIMITED EDITION',
+        name: 'Utility Cargo',
+        price: 'Rs. 2,890',
+        image: '/products/barrel-pants-1.jpg',
+        href: '/shop',
+    },
+];
+
+/* ─── Feature Strip Items ────────────────────────────────── */
+const features = [
+    { icon: Truck, label: 'FREE SHIPPING', detail: 'On all orders above Rs. 3999' },
+    { icon: Shield, label: 'PREMIUM QUALITY', detail: 'Finest fabric. Built to last.' },
+    { icon: Lock, label: 'SECURE PAYMENTS', detail: '100% safe & protected' },
+    { icon: MessageCircle, label: 'WHATSAPP ORDER', detail: 'Easy order on WhatsApp' },
+];
+
+/* ─── Stagger Configs ────────────────────────────────────── */
+const luxuryEase = [0.16, 1, 0.3, 1] as const;
 
 interface HeroProps {
     settings: HomepageSettings | null;
@@ -15,260 +52,310 @@ interface HeroProps {
 
 export default function Hero({ settings }: HeroProps) {
     const heroRef = useRef<HTMLElement>(null);
-    const [audioActive, setAudioActive] = useState(false);
     const [threeReady, setThreeReady] = useState(false);
-    const [introComplete, setIntroComplete] = useState(false);
-    const [ambientOsc, setAmbientOsc] = useState<any>(null);
+    const [introStage, setIntroStage] = useState(0);
+    const mouseRef = useRef({ x: 0, y: 0 });
     const scrollProgressRef = useRef(0);
 
-    const title = settings?.hero_title || 'NINE77';
-    const subtitle = settings?.hero_subtitle || 'Fusing architectural obsidian geometry with premium streetwear direction. Kathmandu, Nepal.';
-    const buttonText = settings?.hero_button || 'Shop Collection';
-    const buttonLink = settings?.hero_button_link || '/shop';
+    // Dynamic values from admin settings
     const heroImage = settings?.hero_image || null;
-    const tagline = title.toLowerCase().includes('different') ? 'NINE77' : 'Built Different.';
+    const buttonText = settings?.hero_button || 'SHOP NEW DROP';
+    const buttonLink = settings?.hero_button_link || '/shop';
 
+    // Skip 3D loading if hero image is set
     useEffect(() => {
-        if (heroImage) {
-            setThreeReady(true);
-        }
+        if (heroImage) setThreeReady(true);
     }, [heroImage]);
 
-    // Track scroll progress of the hero section container
+    // Staggered intro sequence
+    useEffect(() => {
+        const timers = [
+            setTimeout(() => setIntroStage(1), 300),   // bg
+            setTimeout(() => setIntroStage(2), 800),   // headline
+            setTimeout(() => setIntroStage(3), 1400),  // monolith
+            setTimeout(() => setIntroStage(4), 2000),  // cards
+            setTimeout(() => setIntroStage(5), 2500),  // buttons
+            setTimeout(() => setIntroStage(6), 3000),  // feature strip
+        ];
+        return () => timers.forEach(clearTimeout);
+    }, []);
+
+    // Mouse parallax tracking (desktop only)
+    const handleMouseMove = useCallback((e: React.MouseEvent) => {
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        mouseRef.current = {
+            x: ((e.clientX - rect.left) / rect.width - 0.5) * 2,
+            y: ((e.clientY - rect.top) / rect.height - 0.5) * 2,
+        };
+    }, []);
+
+    // Scroll-based hero scale
     const { scrollYProgress } = useScroll({
         target: heroRef,
         offset: ['start start', 'end start'],
     });
-
-    useEffect(() => {
-        const unsubscribe = scrollYProgress.on('change', (latest) => {
-            scrollProgressRef.current = latest;
-        });
-        return () => unsubscribe();
-    }, [scrollYProgress]);
-
-    // Preloader and Intro Sequence triggers
-    useEffect(() => {
-        const timer = setTimeout(() => {
-            setIntroComplete(true);
-        }, 1200); // 1.2s delay for slow reveal
-        return () => clearTimeout(timer);
-    }, []);
-
-    // Web Audio API ambient hum synth (compliant with browser safety policies)
-    const toggleAmbientSound = () => {
-        if (typeof window === 'undefined') return;
-
-        if (audioActive) {
-            // Stop hum
-            if (ambientOsc) {
-                try {
-                    ambientOsc.stop();
-                    ambientOsc.disconnect();
-                } catch (e) {}
-                setAmbientOsc(null);
-            }
-            setAudioActive(false);
-            return;
-        }
-
-        try {
-            const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
-            if (!AudioCtx) return;
-            const ctx = new AudioCtx();
-            const osc = ctx.createOscillator();
-            const gain = ctx.createGain();
-
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(54, ctx.currentTime); // Deep luxury sub hum
-
-            // Soft atmospheric modulation
-            const filter = ctx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(140, ctx.currentTime);
-
-            gain.gain.setValueAtTime(0.0, ctx.currentTime);
-            gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 3.0); // slow fade in
-
-            osc.connect(filter);
-            filter.connect(gain);
-            gain.connect(ctx.destination);
-
-            osc.start();
-            setAmbientOsc(osc);
-            setAudioActive(true);
-        } catch (e) {
-            console.warn('Web Audio activation blocked or not supported:', e);
-        }
-    };
-
-    // Cleanup audio on unmount
-    useEffect(() => {
-        return () => {
-            if (ambientOsc) {
-                try {
-                    ambientOsc.stop();
-                } catch (e) {}
-            }
-        };
-    }, [ambientOsc]);
+    const heroScale = useTransform(scrollYProgress, [0, 1], [1, 0.92]);
+    const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
     return (
-        <section
+        <motion.section
             ref={heroRef}
-            className="relative w-full h-[220vh] bg-[#000000] overflow-hidden"
+            onMouseMove={handleMouseMove}
+            style={{ scale: heroScale }}
+            className="relative w-full min-h-[100svh] bg-hero-dark overflow-hidden"
         >
-            {/* Sticky viewport frame to project the cinematic story */}
-            <div className="sticky top-0 w-full h-screen overflow-hidden flex flex-col justify-between">
-                
-                {/* ── Background Image / 3D Visual Engine Container ── */}
-                <div className="absolute inset-0 z-0">
-                    {heroImage ? (
-                        <div className="relative w-full h-full">
-                            <Image
-                                src={heroImage}
-                                alt={title}
-                                fill
-                                priority
-                                className="object-cover opacity-60"
-                            />
-                            {/* Vignette overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-black/60" />
-                        </div>
-                    ) : (
-                        <>
-                            <HeroScene
-                                scrollProgressRef={scrollProgressRef}
-                                onLoaded={() => setThreeReady(true)}
-                            />
-                        </>
-                    )}
-                    
-                    {/* Shadow overlay to fade the background into the bottom products table */}
-                    <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black to-transparent pointer-events-none z-10" />
-                </div>
+            {/* ── Film Grain Overlay ── */}
+            <div className="grain absolute inset-0 z-50 pointer-events-none" />
 
-                {/* ── Editorial Header Overlay (Announcements) ── */}
-                <div className="relative z-10 w-full px-6 py-6 flex items-center justify-between pointer-events-none sm:px-12">
+            {/* ── Background Ambient ── */}
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={introStage >= 1 ? { opacity: 1 } : {}}
+                transition={{ duration: 1.5 }}
+                className="absolute inset-0"
+            >
+                {/* Warm radial spotlight */}
+                <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_50%,rgba(183,134,74,0.06)_0%,transparent_70%)]" />
+                {/* Bottom fade to next section */}
+                <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-hero-dark to-transparent z-10" />
+            </motion.div>
+
+            {/* ── 3D Scene / Hero Image Background ── */}
+            <div className="absolute inset-0 z-0">
+                {heroImage ? (
+                    <div className="relative w-full h-full">
+                        <Image
+                            src={heroImage}
+                            alt="NINE77 Hero"
+                            fill
+                            priority
+                            className="object-cover opacity-40"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-hero-dark via-hero-dark/60 to-hero-dark/40" />
+                    </div>
+                ) : (
                     <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={introComplete ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 1.0, ease: 'easeOut' }}
-                        className="text-[9px] uppercase tracking-[0.45em] text-white/50"
+                        initial={{ opacity: 0, y: 40 }}
+                        animate={introStage >= 3 ? { opacity: 1, y: 0 } : {}}
+                        transition={{ duration: 1.4, ease: luxuryEase }}
+                        className="absolute inset-0"
                     >
-                        {settings?.announcement ? settings.announcement.toUpperCase() : "NINE77 COLLECTION DROP '26"}
+                        <HeroScene
+                            scrollProgressRef={scrollProgressRef}
+                            onLoaded={() => setThreeReady(true)}
+                        />
                     </motion.div>
-
-                    {/* Sound Controller Button (User-action required by modern browsers) */}
-                    <motion.button
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={introComplete ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 1.0, delay: 0.15, ease: 'easeOut' }}
-                        onClick={toggleAmbientSound}
-                        className="pointer-events-auto flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[8px] uppercase tracking-[0.25em] text-white/60 hover:bg-white/10 hover:text-white transition-all cursor-pointer"
-                    >
-                        <span className={`w-1.5 h-1.5 rounded-full ${audioActive ? 'bg-gold animate-pulse' : 'bg-white/20'}`} />
-                        {audioActive ? 'Mute Hum' : 'Ambient Audio'}
-                    </motion.button>
-                </div>
-
-                {/* ── Editorial Monolith Typography Reveal ── */}
-                <div className="relative z-10 w-full px-6 pb-24 sm:px-12 flex flex-col items-start max-w-4xl">
-                    <div className="space-y-4 select-none">
-                        
-                        {/* Staggered letter reveal */}
-                        <div className="overflow-hidden">
-                            <motion.h1
-                                initial={{ y: '100%' }}
-                                animate={introComplete ? { y: 0 } : {}}
-                                transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
-                                className="text-[clamp(3.5rem,10vw,8.5rem)] font-black uppercase leading-none tracking-tight text-white"
-                            >
-                                {title}
-                            </motion.h1>
-                        </div>
-
-                        <div className="overflow-hidden max-w-lg">
-                            <motion.p
-                                initial={{ y: '100%' }}
-                                animate={introComplete ? { y: 0 } : {}}
-                                transition={{ duration: 1.4, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                                className="text-sm font-semibold uppercase tracking-[0.35em] text-gold"
-                            >
-                                {tagline}
-                            </motion.p>
-                        </div>
-
-                        <div className="overflow-hidden max-w-xl">
-                            <motion.p
-                                initial={{ opacity: 0 }}
-                                animate={introComplete ? { opacity: 0.45 } : {}}
-                                transition={{ duration: 2.0, delay: 0.35 }}
-                                className="text-xs text-white leading-relaxed font-light tracking-wide pt-2"
-                            >
-                                {subtitle}
-                            </motion.p>
-                        </div>
-                    </div>
-
-                    {/* Magnetic Buttons block */}
-                    <div className="mt-8 flex flex-wrap items-center gap-4">
-                        
-                        {/* Primary Button */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={introComplete ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 1.2, delay: 0.45, ease: 'easeOut' }}
-                        >
-                            <Link
-                                href={buttonLink}
-                                data-cursor="magnetic"
-                                className="group relative overflow-hidden inline-flex items-center justify-center rounded-full bg-gold px-8 py-3.5 text-[10px] font-bold uppercase tracking-[0.2em] text-black shadow-lg hover:bg-gold-light transition-all"
-                            >
-                                {buttonText}
-                                <div className="absolute inset-0 bg-white/20 transform -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-out pointer-events-none" />
-                            </Link>
-                        </motion.div>
-
-                        {/* Secondary Button */}
-                        <motion.div
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={introComplete ? { opacity: 1, y: 0 } : {}}
-                            transition={{ duration: 1.2, delay: 0.55, ease: 'easeOut' }}
-                        >
-                            <a
-                                href="#new-drop"
-                                data-cursor="magnetic"
-                                className="inline-flex items-center justify-center rounded-full border border-white/10 bg-white/5 hover:bg-white/10 px-8 py-3.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white transition-all"
-                            >
-                                Explore drop
-                            </a>
-                        </motion.div>
-                    </div>
-                </div>
-
-                {/* ── Filmstrip Indicator (Bottom corner scrolling tip) ── */}
-                <div className="relative z-10 w-full px-6 py-6 flex items-center justify-between text-white/30 text-[8px] uppercase tracking-[0.3em] pointer-events-none sm:px-12">
-                    <div>DRAG MOUSE TO SHIFT VOLUMETRIC SPOTLIGHTS</div>
-                    <div>SCROLL DOWN TO DISSOLVE THE MONOLITH</div>
-                </div>
+                )}
             </div>
 
-            {/* Pitch black initial loading preloader (cross-faded to clean up rendering initialization lag) */}
+            {/* ── Main Content Grid (mobile-first: stacked → desktop: 3 columns) ── */}
+            <div className="relative z-20 flex flex-col justify-between min-h-[100svh] px-5 pt-24 pb-6 md:px-10 lg:px-16 xl:px-20">
+
+                {/* ── Top Section: Content Grid ── */}
+                <div className="flex-1 flex flex-col lg:flex-row lg:items-center lg:gap-8 xl:gap-12">
+
+                    {/* ═══ LEFT COLUMN — Editorial Typography ═══ */}
+                    <div className="flex-shrink-0 lg:w-[30%] xl:w-[28%] pt-4 md:pt-8 lg:pt-0">
+
+                        {/* Since Label */}
+                        <motion.div
+                            initial={{ opacity: 0, x: -20 }}
+                            animate={introStage >= 2 ? { opacity: 1, x: 0 } : {}}
+                            transition={{ duration: 0.8, ease: luxuryEase }}
+                            className="flex items-center gap-3 mb-6 md:mb-8"
+                        >
+                            <span className="text-[10px] md:text-[11px] font-semibold uppercase tracking-[0.35em] text-gold">
+                                Since 2025
+                            </span>
+                            <div className="h-[1px] w-8 md:w-12 bg-gold/40" />
+                        </motion.div>
+
+                        {/* Main Headline — Line by Line Reveal */}
+                        <div className="space-y-0 mb-6 md:mb-8">
+                            {['OWN', 'THE', 'STREET.'].map((word, i) => (
+                                <div key={word} className="overflow-hidden">
+                                    <motion.h1
+                                        initial={{ y: '110%' }}
+                                        animate={introStage >= 2 ? { y: 0 } : {}}
+                                        transition={{
+                                            duration: 1.2,
+                                            delay: i * 0.12,
+                                            ease: luxuryEase,
+                                        }}
+                                        className="text-[clamp(3.2rem,12vw,7rem)] md:text-[clamp(4rem,6vw,5.5rem)] lg:text-[clamp(3.5rem,5vw,5rem)] xl:text-[5.5rem] font-black uppercase leading-[0.9] tracking-[-0.02em] text-white select-none"
+                                    >
+                                        {word}
+                                    </motion.h1>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Subtitle */}
+                        <motion.p
+                            initial={{ opacity: 0, y: 16 }}
+                            animate={introStage >= 2 ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 1.0, delay: 0.5, ease: luxuryEase }}
+                            className="text-[13px] md:text-[14px] leading-relaxed text-white/50 font-light max-w-[280px] mb-8 md:mb-10"
+                        >
+                            Premium streetwear engineered<br />
+                            for those who refuse to blend in.
+                        </motion.p>
+
+                        {/* CTA Buttons */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={introStage >= 5 ? { opacity: 1, y: 0 } : {}}
+                            transition={{ duration: 0.8, ease: luxuryEase }}
+                            className="flex items-center gap-3 mb-10 lg:mb-0"
+                        >
+                            {/* Primary CTA */}
+                            <Link
+                                href={buttonLink}
+                                className="group relative inline-flex items-center gap-2.5 bg-white text-[#111] px-6 py-3 md:px-7 md:py-3.5 rounded-none text-[10px] md:text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-300 hover:bg-gold hover:text-white"
+                            >
+                                {buttonText}
+                                <ArrowUpRight size={13} strokeWidth={2.5} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </Link>
+
+                            {/* Secondary CTA */}
+                            <Link
+                                href="#new-drop"
+                                className="group inline-flex items-center gap-2.5 border border-white/20 text-white px-6 py-3 md:px-7 md:py-3.5 rounded-none text-[10px] md:text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-300 hover:border-white/50 hover:bg-white/5"
+                            >
+                                EXPLORE
+                                <ArrowUpRight size={13} strokeWidth={2.5} className="transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                            </Link>
+                        </motion.div>
+                    </div>
+
+                    {/* ═══ CENTER COLUMN — 3D Monolith (hidden on mobile, shown on lg+) ═══ */}
+                    <div className="hidden lg:flex lg:w-[40%] xl:w-[44%] items-center justify-center relative">
+                        {/* This space is occupied by the absolute-positioned 3D scene */}
+                    </div>
+
+                    {/* ═══ RIGHT COLUMN — Floating Product Cards ═══ */}
+                    <motion.div
+                        initial={{ opacity: 0, x: 40 }}
+                        animate={introStage >= 4 ? { opacity: 1, x: 0 } : {}}
+                        transition={{ duration: 1.0, ease: luxuryEase }}
+                        className="flex-shrink-0 lg:w-[30%] xl:w-[28%]"
+                    >
+                        {/* Mobile: horizontal scroll strip. Desktop: vertical stack */}
+                        <div className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 lg:flex-col lg:gap-4 lg:overflow-visible lg:pb-0">
+                            {heroProducts.map((product, i) => (
+                                <Link
+                                    key={product.name}
+                                    href={product.href}
+                                    className={`
+                                        group flex-shrink-0 w-[260px] lg:w-full
+                                        glass-card-dark rounded-2xl p-3 md:p-3.5
+                                        flex items-center gap-3.5
+                                        transition-all duration-500 ease-luxury
+                                        hover:bg-white/10 hover:shadow-glow-sm hover:-translate-y-1
+                                        ${i === 0 ? 'animate-float-card-1' : i === 1 ? 'animate-float-card-2' : 'animate-float-card-3'}
+                                    `}
+                                    style={{ animationDelay: `${i * 0.3}s` }}
+                                >
+                                    {/* Product Thumbnail */}
+                                    <div className="relative w-16 h-16 md:w-[72px] md:h-[72px] rounded-xl overflow-hidden bg-white/5 flex-shrink-0">
+                                        <Image
+                                            src={product.image}
+                                            alt={product.name}
+                                            fill
+                                            className="object-cover"
+                                            sizes="72px"
+                                        />
+                                    </div>
+
+                                    {/* Product Info */}
+                                    <div className="flex-1 min-w-0">
+                                        <span className="text-[8px] md:text-[9px] font-bold uppercase tracking-[0.2em] text-gold">
+                                            {product.tag}
+                                        </span>
+                                        <p className="text-[13px] md:text-[14px] font-bold text-white truncate mt-0.5">
+                                            {product.name}
+                                        </p>
+                                        <p className="text-[12px] text-white/50 mt-0.5">
+                                            {product.price}
+                                        </p>
+                                    </div>
+
+                                    {/* Action Button */}
+                                    <div className="w-8 h-8 rounded-full border border-white/15 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:border-gold group-hover:bg-gold/10">
+                                        <Plus size={14} className="text-white/50 group-hover:text-gold transition-colors" />
+                                    </div>
+                                </Link>
+                            ))}
+                        </div>
+
+                        {/* Card Numbering (desktop) */}
+                        <div className="hidden lg:flex flex-col gap-[52px] absolute right-4 top-1/2 -translate-y-1/2 items-end">
+                            {['01', '02', '03'].map((num, i) => (
+                                <span key={num} className="text-[11px] font-light tracking-[0.15em] text-white/25">
+                                    {num}
+                                </span>
+                            ))}
+                        </div>
+                    </motion.div>
+                </div>
+
+                {/* ── Bottom Area: Feature Strip + Scroll Indicator ── */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={introStage >= 6 ? { opacity: 1, y: 0 } : {}}
+                    transition={{ duration: 0.8, ease: luxuryEase }}
+                    className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between"
+                >
+                    {/* Scroll Indicator (mobile: hidden, desktop: bottom-left) */}
+                    <div className="hidden lg:flex items-center gap-3 flex-shrink-0">
+                        <div className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center">
+                            <ChevronDown size={16} className="text-white/40 animate-scroll-bounce" />
+                        </div>
+                        <span className="text-[9px] font-semibold uppercase tracking-[0.3em] text-white/30">
+                            Scroll
+                        </span>
+                    </div>
+
+                    {/* Feature Strip */}
+                    <div className="w-full lg:w-auto">
+                        <div className="glass-card-dark rounded-2xl px-4 py-3.5 md:px-6 md:py-4">
+                            <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-6">
+                                {features.map(({ icon: Icon, label, detail }) => (
+                                    <div key={label} className="flex items-center gap-2.5 group">
+                                        <div className="w-8 h-8 md:w-9 md:h-9 rounded-full border border-white/10 flex items-center justify-center flex-shrink-0 transition-all duration-300 group-hover:border-gold/30 group-hover:bg-gold/5">
+                                            <Icon size={14} strokeWidth={1.5} className="text-white/40 transition-colors group-hover:text-gold" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <p className="text-[9px] md:text-[10px] font-bold uppercase tracking-[0.12em] text-white/80 truncate">
+                                                {label}
+                                            </p>
+                                            <p className="text-[9px] md:text-[10px] text-white/35 truncate hidden md:block">
+                                                {detail}
+                                            </p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </motion.div>
+            </div>
+
+            {/* ── Preloader ── */}
             <AnimatePresence>
                 {!threeReady && (
                     <motion.div
                         exit={{ opacity: 0 }}
-                        transition={{ duration: 1.0 }}
-                        className="fixed inset-0 z-[999] bg-[#000000] flex flex-col items-center justify-center pointer-events-none"
+                        transition={{ duration: 0.8 }}
+                        className="fixed inset-0 z-[999] bg-hero-dark flex items-center justify-center pointer-events-none"
                     >
                         <div className="flex flex-col items-center gap-3">
                             <div className="w-1.5 h-1.5 bg-gold rounded-full animate-ping" />
-                            <p className="text-[9px] uppercase tracking-[0.5em] text-white/40">Entering NINE77</p>
+                            <p className="text-[9px] uppercase tracking-[0.5em] text-white/30">Entering NINE77</p>
                         </div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </section>
+        </motion.section>
     );
 }

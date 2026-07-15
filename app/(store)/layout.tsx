@@ -26,7 +26,7 @@ export default async function StoreLayout({
             </a>
 
             <div
-                className="relative min-h-screen bg-background text-white"
+                className="relative min-h-screen bg-background text-primary"
                 style={{ overflowX: 'hidden', maxWidth: '100vw' }}
             >
                 <AnnouncementBar />

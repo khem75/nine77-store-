@@ -1,119 +1,114 @@
 'use client';
 
-import Link from 'next/link';
-import Image from 'next/image';
 import { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
-import type { Product } from '@/types/product';
-import { formatPrice, slugify } from '@/utils';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Heart, MessageCircle } from 'lucide-react';
+import { slugify } from '@/utils';
 import type { AdminProduct } from '@/types/admin';
+import type { Product } from '@/types/product';
+
+const luxuryEase = [0.16, 1, 0.3, 1] as const;
 
 interface ProductCardProps {
-    product: Product | AdminProduct;
+    product: AdminProduct | Product;
     index?: number;
     showPrice?: boolean;
-    priority?: boolean;
 }
 
-export default function ProductCard({
-    product,
-    index = 0,
-    showPrice = false,
-    priority = false,
-}: ProductCardProps) {
+export default function ProductCard({ product, index = 0, showPrice = true }: ProductCardProps) {
     const cardRef = useRef<HTMLDivElement>(null);
     const isInView = useInView(cardRef, { once: true, amount: 0.05 });
     const [hovered, setHovered] = useState(false);
+    const [liked, setLiked] = useState(false);
 
     const [imgSrc, setImgSrc] = useState(product.images[0] || '/luxury-streetwear-garment.png');
-    const [img2Src, setImg2Src] = useState(product.images[1] || '');
-    const [fallback, setFallback] = useState(false);
+    const [img2Src] = useState(product.images[1] || '');
 
     const slug = 'slug' in product ? product.slug : slugify(product.name);
-    const isNewArrival = 'newArrival' in product ? product.newArrival : false;
+    const isFeatured = 'featured' in product ? product.featured : false;
 
     return (
         <motion.div
             ref={cardRef}
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: index * 0.04, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full"
+            transition={{ duration: 0.6, delay: index * 0.06, ease: luxuryEase }}
+            className="w-full group"
         >
-            <Link href={`/product/${slug}`} data-cursor="view" className="block group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-[20px]">
+            <Link href={`/product/${slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 rounded-2xl">
                 <article
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
-                    className="relative flex flex-col overflow-hidden rounded-[20px] border border-white/[0.06] bg-[#111111] transition-all duration-500 ease-luxury group-hover:border-white/15 group-hover:-translate-y-1.5 group-hover:shadow-[0_16px_36px_rgba(0,0,0,0.65),0_0_20px_rgba(212,175,55,0.03)]"
+                    className="relative flex flex-col overflow-hidden rounded-2xl bg-card border border-border transition-all duration-500 ease-luxury hover:shadow-card-hover hover:-translate-y-1"
                 >
-                    {/* Image Container (aspect-[3/4] portrait) */}
-                    <div
-                        className="relative w-full overflow-hidden bg-[#090909]"
-                        style={{ paddingBottom: '133.3%' }} // 3:4 aspect ratio
-                    >
-                        {/* Status Badge */}
-                        {(isNewArrival || product.featured) && (
-                            <div className="absolute left-4 top-4 z-10 flex flex-col gap-1.5 pointer-events-none">
-                                {isNewArrival && (
-                                    <span className="rounded-sm bg-gold text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.16em] leading-none shadow-md">
-                                        New Drop
-                                    </span>
-                                )}
-                                {!isNewArrival && product.featured && (
-                                    <span className="rounded-sm bg-white/90 text-black px-2 py-0.5 text-[8px] font-black uppercase tracking-[0.16em] leading-none shadow-md">
-                                        Featured
-                                    </span>
-                                )}
+                    {/* Image Container */}
+                    <div className="relative w-full overflow-hidden bg-surface" style={{ paddingBottom: '133.3%' }}>
+
+                        {/* Featured Badge */}
+                        {isFeatured && (
+                            <div className="absolute left-3 top-3 z-10">
+                                <span className="rounded-full bg-gold text-white px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.15em] leading-none shadow-sm">
+                                    Featured
+                                </span>
                             </div>
                         )}
 
+                        {/* Favourite Heart */}
+                        <button
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                setLiked(!liked);
+                            }}
+                            className="absolute right-3 top-3 z-10 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-border flex items-center justify-center transition-all hover:bg-white hover:shadow-soft"
+                        >
+                            <Heart
+                                size={14}
+                                className={`transition-colors ${liked ? 'text-red-500 fill-red-500' : 'text-secondary'}`}
+                            />
+                        </button>
+
+                        {/* Product Image */}
                         <Image
-                            src={imgSrc}
+                            src={hovered && img2Src ? img2Src : imgSrc}
                             alt={product.name}
                             fill
-                            priority={priority}
-                            loading={priority ? 'eager' : 'lazy'}
-                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                            onError={() => { 
-                                if (!fallback) { 
-                                    setImgSrc('/luxury-streetwear-garment.png'); 
-                                    setFallback(true); 
-                                } 
-                             }}
-                            className={`object-contain object-center transition-all duration-700 ease-luxury ${
-                                hovered && img2Src ? 'opacity-0 scale-[1.03]' : 'opacity-100 scale-100'
-                            }`}
+                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                            className="object-cover transition-all duration-700 ease-luxury group-hover:scale-105"
+                            onError={() => setImgSrc('/luxury-streetwear-garment.png')}
                         />
-                        {img2Src && (
-                            <Image
-                                src={img2Src}
-                                alt={`${product.name} — alternate`}
-                                fill
-                                loading="lazy"
-                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                                onError={() => setImg2Src('')}
-                                className={`object-contain object-center transition-all duration-700 ease-luxury absolute inset-0 ${
-                                    hovered ? 'opacity-100 scale-[1.03]' : 'opacity-0 scale-100'
-                                }`}
-                            />
-                        )}
-                        
-                        {/* Subtle vignette on hover */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                     </div>
 
-                    {/* Bottom Metadata Info */}
-                    <div className="flex flex-col items-start gap-1 px-5 py-4.5 border-t border-white/[0.04] bg-[#111111] transition-colors duration-300 group-hover:bg-[#141414]">
-                        <span className="text-[8px] font-bold uppercase tracking-[0.25em] text-white/30">
-                            {product.category}
-                        </span>
-                        <h3 className="truncate w-full text-[11px] font-bold uppercase tracking-[0.16em] text-white/90 group-hover:text-white transition-colors duration-300 leading-none">
+                    {/* Product Info */}
+                    <div className="p-3 md:p-4 space-y-1.5">
+                        <h3 className="text-[12px] md:text-[13px] font-bold text-primary uppercase tracking-[0.04em] truncate">
                             {product.name}
                         </h3>
+
                         {showPrice && (
-                            <p className="text-[12px] font-semibold text-gold tracking-wide mt-1">
-                                {formatPrice(product.price)}
-                            </p>
+                            <div className="flex items-center justify-between">
+                                <p className="text-[12px] md:text-[13px] font-semibold text-secondary">
+                                    Rs. {product.price.toLocaleString()}
+                                </p>
+
+                                {/* Quick WhatsApp */}
+                                <button
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        window.open(
+                                            `https://wa.me/9779810605409?text=${encodeURIComponent(`Hi NINE77, I'm interested in ${product.name} (Rs. ${product.price})`)}`,
+                                            '_blank'
+                                        );
+                                    }}
+                                    className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] text-gold hover:text-gold-dark transition-colors"
+                                >
+                                    <MessageCircle size={11} />
+                                    WhatsApp Order
+                                </button>
+                            </div>
                         )}
                     </div>
                 </article>

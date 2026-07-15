@@ -17,7 +17,7 @@ export default function WhatsappButton() {
             transition={{ delay: 2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.92 }}
-            className="group fixed bottom-24 right-5 z-50 hidden items-center gap-3 rounded-full bg-gold px-4 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-black shadow-glow transition-all duration-300 hover:shadow-glow-lg hover:gap-4 md:bottom-8 md:right-8 md:flex"
+            className="group fixed bottom-24 right-5 z-50 hidden items-center gap-3 rounded-full bg-gold px-4 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-glow transition-all duration-300 hover:bg-gold-light hover:shadow-glow-lg hover:gap-4 md:bottom-8 md:right-8 md:flex"
         >
             {/* Ambient breathing gold aura */}
             <motion.span

@@ -18,16 +18,15 @@ export default function AnnouncementBar() {
     const [ready, setReady] = useState(false);
 
     useEffect(() => {
-        // Small delay prevents flash of unstyled marquee before hydration
         const t = setTimeout(() => setReady(true), 100);
         return () => clearTimeout(t);
     }, []);
 
     return (
         <div
-            className="relative z-50 flex h-8 items-center overflow-hidden border-b border-white/[0.05] bg-[#050505]"
+            className="relative z-50 flex h-8 items-center overflow-hidden bg-gold"
             role="marquee"
-            aria-label="Announcement: Free delivery above Rs. 2999. New Drop '26 available."
+            aria-label="Announcement: Free delivery above Rs. 2999. New Drop available."
             aria-live="off"
         >
             <div className="flex w-full overflow-hidden" aria-hidden="true">
@@ -36,7 +35,7 @@ export default function AnnouncementBar() {
                     transition={{ duration: 42, repeat: Infinity, ease: 'linear' }}
                     className="flex shrink-0 whitespace-nowrap will-change-transform"
                 >
-                    <span className="text-[9px] font-bold uppercase tracking-[0.38em] text-white/55">
+                    <span className="text-[9px] font-bold uppercase tracking-[0.35em] text-white">
                         {repeatedText}
                     </span>
                 </motion.div>
