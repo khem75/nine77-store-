@@ -6,7 +6,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ArrowUpRight } from 'lucide-react';
 
-import Hero from '@/components/hero';
+import Hero from '@/components/Hero';
+import type { Campaign } from '@/types/campaign';
 import ShopByCollection from '@/components/shop-by-collection';
 import LookbookHorizontal from '@/components/lookbook-horizontal';
 import ProductCard from '@/components/product-card';
@@ -20,9 +21,10 @@ const luxuryEase = [0.16, 1, 0.3, 1] as const;
 interface HomeClientProps {
     initialProducts: AdminProduct[];
     initialSettings: HomepageSettings | null;
+    initialCampaigns?: Campaign[];
 }
 
-export default function HomeClient({ initialProducts, initialSettings }: HomeClientProps) {
+export default function HomeClient({ initialProducts, initialSettings, initialCampaigns }: HomeClientProps) {
     const brandRef = useRef<HTMLDivElement>(null);
     const brandInView = useInView(brandRef, { once: true, amount: 0.3 });
 
@@ -39,7 +41,7 @@ export default function HomeClient({ initialProducts, initialSettings }: HomeCli
     return (
         <>
             {/* ═══ 1. HERO — Dark ambient, cinematic ═══ */}
-            <Hero settings={initialSettings} products={initialProducts} />
+            <Hero initialCampaigns={initialCampaigns} />
 
             {/* ═══ 2. NIGHTFALL COLLECTION — Dark editorial banner ═══ */}
             <section className="relative dark-section border-b border-white/[0.06] overflow-hidden">

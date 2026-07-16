@@ -3,6 +3,7 @@
 // ============================================================
 
 import type { AdminProduct, HomepageSettings, StoreSettings } from '@/types/admin';
+import type { Campaign } from '@/types/campaign';
 
 // In-memory store (resets on server restart — that's fine for mock mode)
 let mockProducts: AdminProduct[] = [
@@ -234,4 +235,155 @@ export function mockGetStats() {
     featured: products.filter((p) => p.featured).length,
     draft: products.filter((p) => p.status === 'draft').length,
   };
+}
+
+// ── Campaigns Mock Store ───────────────────────────────────────
+let mockCampaigns: Campaign[] = [
+  {
+    id: 'campaign-001',
+    title: { en: 'NEW SEASON', np: 'नयाँ सिजन' },
+    subtitle: { en: 'Elevated streetwear drops shaped for modern quiet luxury.', np: 'आधुनिक मन्द विलासिताको लागि आकार दिइएको उन्नत स्ट्रीटवियर।' },
+    tagline: { en: 'DROP 01 / EDITORIAL', np: 'ड्रप ०१ / सम्पादकीय' },
+    media: {
+      desktop: {
+        url: '/products/campaign-new-season.png',
+        alt: 'NINE77 New Season Autumn Campaign Model',
+        focalPoint: { x: 50, y: 45 }
+      },
+      mobile: {
+        url: '/products/campaign-new-season.png',
+        alt: 'NINE77 New Season Portrait Crop',
+        focalPoint: { x: 50, y: 40 }
+      }
+    },
+    type: 'image',
+    cta: 'Shop Collection',
+    secondaryCta: 'Explore',
+    ctaLink: '/shop',
+    theme: { accent: '#c8a84b', overlay: 'dark', text: 'light', button: 'gold' },
+    status: 'published',
+    order: 0,
+    version: 1,
+    created_at: '2026-07-01T10:00:00Z',
+    updated_at: '2026-07-01T10:00:00Z'
+  },
+  {
+    id: 'campaign-002',
+    title: 'EVERYDAY UNIFORM',
+    subtitle: 'Premium weight fabrics tailored with absolute museum-grade precision.',
+    tagline: 'CORE ESSENTIALS',
+    media: {
+      desktop: {
+        url: '/products/campaign-everyday-uniform.png',
+        alt: 'NINE77 Everyday Uniform Core Styling',
+        focalPoint: { x: 50, y: 50 }
+      },
+      mobile: {
+        url: '/products/campaign-everyday-uniform.png',
+        alt: 'NINE77 Everyday Uniform Portrait Crop',
+        focalPoint: { x: 50, y: 50 }
+      }
+    },
+    type: 'image',
+    cta: 'Discover Fits',
+    ctaLink: '/shop',
+    theme: { accent: '#bcc8e0', overlay: 'dark', text: 'light', button: 'white' },
+    status: 'published',
+    order: 1,
+    version: 1,
+    created_at: '2026-07-02T10:00:00Z',
+    updated_at: '2026-07-02T10:00:00Z'
+  },
+  {
+    id: 'campaign-003',
+    title: 'LIMITED DROP',
+    subtitle: 'High-demand outerwear and pants engineered for those who refuse to blend in.',
+    tagline: 'TECHNICAL GARMENTS',
+    media: {
+      desktop: {
+        url: '/products/campaign-limited-drop.png',
+        alt: 'NINE77 Limited Drop Technical Outerwear',
+        focalPoint: { x: 50, y: 50 }
+      },
+      mobile: {
+        url: '/products/campaign-limited-drop.png',
+        alt: 'NINE77 Limited Drop Portrait Crop',
+        focalPoint: { x: 50, y: 50 }
+      }
+    },
+    type: 'image',
+    cta: 'Pre-Order Now',
+    ctaLink: '/shop',
+    theme: { accent: '#e8dcc8', overlay: 'dark', text: 'light', button: 'gold' },
+    status: 'published',
+    order: 2,
+    version: 1,
+    created_at: '2026-07-03T10:00:00Z',
+    updated_at: '2026-07-03T10:00:00Z'
+  }
+];
+
+// ── Campaigns ──────────────────────────────────────────────────
+export function mockGetCampaigns(adminMode = false, previewTimeStr?: string): Campaign[] {
+  let campaigns = [...mockCampaigns].sort((a, b) => a.order - b.order);
+
+  if (!adminMode) {
+    const previewTime = previewTimeStr ? new Date(previewTimeStr) : new Date();
+    campaigns = campaigns.filter((c) => {
+      if (c.status !== 'published') return false;
+      const pub = c.publish_at ? new Date(c.publish_at) : null;
+      const exp = c.expires_at ? new Date(c.expires_at) : null;
+      if (pub && pub > previewTime) return false;
+      if (exp && exp < previewTime) return false;
+      return true;
+    });
+  }
+
+  return campaigns;
+}
+
+export function mockCreateCampaign(
+  values: Omit<Campaign, 'id' | 'created_at' | 'updated_at' | 'version'>
+): Campaign {
+  const now = new Date().toISOString();
+  const newCampaign: Campaign = {
+    ...values,
+    id: 'campaign-' + Math.random().toString(36).slice(2, 9),
+    version: 1,
+    created_at: now,
+    updated_at: now
+  };
+  mockCampaigns.push(newCampaign);
+  return newCampaign;
+}
+
+export function mockUpdateCampaign(
+  id: string,
+  values: Partial<Omit<Campaign, 'id' | 'created_at' | 'updated_at' | 'version'>>
+): boolean {
+  const idx = mockCampaigns.findIndex((c) => c.id === id);
+  if (idx === -1) return false;
+  
+  mockCampaigns[idx] = {
+    ...mockCampaigns[idx],
+    ...values,
+    version: mockCampaigns[idx].version + 1,
+    updated_at: new Date().toISOString()
+  };
+  return true;
+}
+
+export function mockDeleteCampaign(id: string): boolean {
+  const before = mockCampaigns.length;
+  mockCampaigns = mockCampaigns.filter((c) => c.id !== id);
+  return mockCampaigns.length < before;
+}
+
+export function mockReorderCampaigns(orderedIds: string[]): void {
+  orderedIds.forEach((id, index) => {
+    const idx = mockCampaigns.findIndex((c) => c.id === id);
+    if (idx !== -1) {
+      mockCampaigns[idx].order = index;
+    }
+  });
 }
