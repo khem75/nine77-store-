@@ -416,3 +416,41 @@ a,
 .hero-cinematic {
     background: #050505;
 }
+
+/* ══ HERO CINEMATIC KEYFRAMES ══════════════════════════════ */
+
+/* Ken Burns — very slow, almost imperceptible zoom */
+@keyframes kenBurns {
+    0%   { transform: scale(1.00) translateZ(0); }
+    100% { transform: scale(1.04) translateZ(0); }
+}
+
+/* Gold dust particle float upward */
+@keyframes goldFloat {
+    0%   { transform: translateY(0)    translateX(0)   translateZ(0); opacity: 0; }
+    8%   { opacity: 0.55; }
+    88%  { opacity: 0.45; }
+    100% { transform: translateY(-130px) translateX(18px)  translateZ(0); opacity: 0; }
+}
+
+/* Scroll indicator dot bounce */
+@keyframes scrollDot {
+    0%   { transform: translateY(0);   opacity: 1; }
+    60%  { transform: translateY(16px); opacity: 0.3; }
+    100% { transform: translateY(0);   opacity: 1; }
+}
+
+/* Film grain texture shift */
+@keyframes heroGrain {
+    0%, 100% { transform: translate(0, 0); }
+    20%       { transform: translate(-1%, -1%); }
+    40%       { transform: translate(1%, 0.5%); }
+    60%       { transform: translate(-0.5%, 1%); }
+    80%       { transform: translate(1%, -0.5%); }
+}
+
+/* Hero gold line draw-in */
+@keyframes drawLine {
+    from { transform: scaleX(0); opacity: 0; }
+    to   { transform: scaleX(1); opacity: 1; }
+}

@@ -5,7 +5,7 @@ import { getProducts } from '@/lib/product-actions';
 export const metadata: Metadata = {
     title: 'Shop Catalog',
     description:
-        'Explore the exclusive NINE77 streetwear catalog. Tops, pants, outerwear, and accessories designed for those who refuse to blend in. Kathmandu, Nepal.',
+        'Explore the exclusive NINE77 streetwear catalog. Tops, pants, outerwear, and accessories designed for those who refuse to blend in. Mahendranagar, Nepal.',
     openGraph: {
         title: 'Shop Catalog | NINE77',
         description: 'Explore premium luxury streetwear drops built for the bold.',

@@ -26,7 +26,7 @@ export const metadata: Metadata = {
         template: '%s | NINE77',
     },
     description:
-        'NINE77 — Next-generation luxury streetwear. Premium garments crafted for the bold. Shop exclusive drops in Kathmandu, Nepal.',
+        'NINE77 — Next-generation luxury streetwear. Premium garments crafted for the bold. Shop exclusive drops in Mahendranagar, Nepal.',
     metadataBase: new URL('https://nine77-store.vercel.app'),
     keywords: [
         'NINE77',
@@ -34,11 +34,11 @@ export const metadata: Metadata = {
         'luxury fashion',
         'Nepal fashion',
         'premium clothing',
-        'Kathmandu streetwear',
+        'Mahendranagar streetwear',
         'premium streetwear Nepal',
         'NINE77 shop',
     ],
-    authors: [{ name: 'Khem R. Joshi', url: 'https://khemjoshi.tech/' }],
+    authors: [{ name: 'Khem R. Joshi', url: 'https://khemjoshi.com.np/' }],
     creator: 'NINE77',
     publisher: 'NINE77',
     robots: {

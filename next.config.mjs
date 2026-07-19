@@ -14,6 +14,11 @@ const nextConfig = {
                 port: '54321',
                 pathname: '/storage/v1/object/public/**',
             },
+            // qrserver.com — QR code fallback until /public/whatsapp-qr.png is added
+            {
+                protocol: 'https',
+                hostname: 'api.qrserver.com',
+            },
         ],
     },
     transpilePackages: ['three', '@react-three/fiber', '@react-three/drei'],

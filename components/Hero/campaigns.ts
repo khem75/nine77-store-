@@ -12,35 +12,35 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
   {
     id: 'fallback-new-season',
     title: {
-      en: 'NEW SEASON',
-      np: 'नयाँ सिजन'
+      en: 'NEW\nSEASON',
+      np: 'नयाँ\nसिजन'
     },
     subtitle: {
-      en: 'Elevated streetwear drops shaped for modern quiet luxury.',
-      np: 'आधुनिक मन्द विलासिताको लागि आकार दिइएको उन्नत स्ट्रीटवियर।'
+      en: 'Designed with precision and crafted for those who appreciate understated luxury. Every collection is built to outlast trends and elevate everyday wear.',
+      np: 'शान्त विलासिताको कदर गर्नेहरूका लागि सटीकतापूर्वक डिजाइन।'
     },
     tagline: {
-      en: 'DROP 01 / EDITORIAL',
-      np: 'ड्रप ०१ / सम्पादकीय'
+      en: 'DROP 01 · EDITORIAL COLLECTION',
+      np: 'ड्रप ०१ · सम्पादकीय'
     },
     media: {
       desktop: {
-        url: '/products/campaign-new-season.png',
-        alt: 'NINE77 New Season Autumn Campaign Model',
-        focalPoint: { x: 50, y: 45 }
+        url: '/products/henley-1.jpg',
+        alt: 'NINE77 New Season Campaign — Henley Knitted Tee',
+        focalPoint: { x: 50, y: 35 }
       },
       mobile: {
-        url: '/products/campaign-new-season.png',
-        alt: 'NINE77 New Season Portrait Crop',
-        focalPoint: { x: 50, y: 40 }
+        url: '/products/henley-1.jpg',
+        alt: 'NINE77 New Season Portrait',
+        focalPoint: { x: 50, y: 30 }
       }
     },
     type: 'image',
-    cta: 'Shop Collection',
-    secondaryCta: 'Explore',
+    cta: 'DISCOVER THE COLLECTION',
+    secondaryCta: 'VIEW LOOKBOOK',
     ctaLink: '/shop',
     theme: {
-      accent: '#c8a84b',
+      accent: '#C89B5A',
       overlay: 'dark',
       text: 'light',
       button: 'gold'
@@ -53,23 +53,24 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
   },
   {
     id: 'fallback-everyday-uniform',
-    title: 'EVERYDAY UNIFORM',
-    subtitle: 'Premium weight fabrics tailored with absolute museum-grade precision.',
-    tagline: 'CORE ESSENTIALS',
+    title: 'EVERY\nDAY',
+    subtitle: 'Premium weight fabrics tailored with absolute museum-grade precision. Wear it everywhere. Own every room.',
+    tagline: 'CORE ESSENTIALS · SS26',
     media: {
       desktop: {
-        url: '/products/campaign-everyday-uniform.png',
-        alt: 'NINE77 Everyday Uniform Core Styling',
-        focalPoint: { x: 50, y: 50 }
+        url: '/products/windcheater-1.jpg',
+        alt: 'NINE77 Everyday Uniform Windcheater',
+        focalPoint: { x: 50, y: 35 }
       },
       mobile: {
-        url: '/products/campaign-everyday-uniform.png',
-        alt: 'NINE77 Everyday Uniform Portrait Crop',
-        focalPoint: { x: 50, y: 50 }
+        url: '/products/windcheater-1.jpg',
+        alt: 'NINE77 Everyday Uniform Windcheater Mobile',
+        focalPoint: { x: 50, y: 35 }
       }
     },
     type: 'image',
-    cta: 'Discover Fits',
+    cta: 'DISCOVER THE COLLECTION',
+    secondaryCta: 'VIEW LOOKBOOK',
     ctaLink: '/shop',
     theme: {
       accent: '#bcc8e0',
@@ -85,23 +86,24 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
   },
   {
     id: 'fallback-limited-drop',
-    title: 'LIMITED DROP',
-    subtitle: 'High-demand outerwear and pants engineered for those who refuse to blend in.',
-    tagline: 'TECHNICAL GARMENTS',
+    title: 'LIMITED\nDROP',
+    subtitle: 'High-demand outerwear engineered for those who refuse to blend in. Made in limited numbers. Gone forever.',
+    tagline: 'TECHNICAL GARMENTS · AW26',
     media: {
       desktop: {
-        url: '/products/campaign-limited-drop.png',
-        alt: 'NINE77 Limited Drop Technical Outerwear',
-        focalPoint: { x: 50, y: 50 }
+        url: '/products/old-money-tee-1.jpg',
+        alt: 'NINE77 Limited Drop Premium Tee',
+        focalPoint: { x: 50, y: 35 }
       },
       mobile: {
-        url: '/products/campaign-limited-drop.png',
-        alt: 'NINE77 Limited Drop Portrait Crop',
-        focalPoint: { x: 50, y: 50 }
+        url: '/products/old-money-tee-1.jpg',
+        alt: 'NINE77 Limited Drop Premium Tee Mobile',
+        focalPoint: { x: 50, y: 35 }
       }
     },
     type: 'image',
-    cta: 'Pre-Order Now',
+    cta: 'DISCOVER THE COLLECTION',
+    secondaryCta: 'VIEW LOOKBOOK',
     ctaLink: '/shop',
     theme: {
       accent: '#e8dcc8',
@@ -116,6 +118,7 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
     updated_at: new Date().toISOString()
   }
 ];
+
 
 /**
  * Expose helper to resolve translation strings

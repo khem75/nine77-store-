@@ -5,11 +5,11 @@ import { getHomepageSettings } from '@/lib/homepage-actions';
 import { getCampaigns } from '@/lib/campaign-actions';
 
 export const metadata: Metadata = {
-    title: 'NINE77 | Premium Streetwear Kathmandu',
+    title: 'NINE77 | Premium Streetwear Mahendranagar',
     description:
-        'Premium streetwear engineered for those who refuse to blend in. Custom fits, luxury materials, museum-grade craftsmanship. Kathmandu, Nepal.',
+        'Premium streetwear engineered for those who refuse to blend in. Custom fits, luxury materials, museum-grade craftsmanship. Mahendranagar, Nepal.',
     openGraph: {
-        title: 'NINE77 | Premium Streetwear Kathmandu',
+        title: 'NINE77 | Premium Streetwear Mahendranagar',
         description: 'Luxury streetwear Drop. Built different.',
         images: [
             {

@@ -13,6 +13,7 @@ import LookbookHorizontal from '@/components/lookbook-horizontal';
 import ProductCard from '@/components/product-card';
 import WhatsappButton from '@/components/whatsapp-button';
 import Stats from '@/components/stats';
+import WhatsAppCommunity from '@/components/whatsapp-community';
 import { products as staticProducts } from '@/data/products';
 import type { AdminProduct, HomepageSettings } from '@/types/admin';
 
@@ -30,9 +31,6 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
 
     const storyRef = useRef<HTMLDivElement>(null);
     const storyInView = useInView(storyRef, { once: true, amount: 0.2 });
-
-    const newsletterRef = useRef<HTMLDivElement>(null);
-    const newsletterInView = useInView(newsletterRef, { once: true, amount: 0.35 });
 
     const newArrivals = initialProducts.length > 0
         ? initialProducts.slice(0, 6)
@@ -180,45 +178,8 @@ export default function HomeClient({ initialProducts, initialSettings, initialCa
                 </div>
             </section>
 
-            {/* ═══ 7. NEWSLETTER — Dark CTA section ═══ */}
-            <section className="dark-section py-16 md:py-24 border-t border-white/[0.06] px-5 md:px-12 lg:px-16">
-                <div ref={newsletterRef} className="mx-auto max-w-xl text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 24 }}
-                        animate={newsletterInView ? { opacity: 1, y: 0 } : {}}
-                        transition={{ duration: 0.7, ease: luxuryEase }}
-                        className="space-y-5"
-                    >
-                        <p className="text-[9px] md:text-[10px] uppercase tracking-[0.4em] text-gold font-bold">
-                            Join the Club
-                        </p>
-                        <h2 className="text-2xl md:text-4xl font-black uppercase tracking-tight text-white select-none">
-                            Get 10% Off Your First Order
-                        </h2>
-                        <p className="text-[13px] text-white/45 leading-relaxed font-light">
-                            Be the first to know about new drops, exclusive offers and more.
-                        </p>
-
-                        <form
-                            onSubmit={(e) => e.preventDefault()}
-                            className="mt-8 flex flex-col gap-3 sm:flex-row items-center w-full"
-                        >
-                            <input
-                                type="email"
-                                placeholder="Enter your email"
-                                aria-label="Email address"
-                                className="h-12 w-full rounded-none border border-white/[0.12] bg-white/[0.03] px-5 text-[12px] text-white placeholder:text-white/30 outline-none focus:border-gold/40 transition-all font-light"
-                            />
-                            <button
-                                type="submit"
-                                className="h-12 w-full sm:w-auto bg-gold px-8 text-[10px] md:text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-gold-light active:scale-95 shrink-0"
-                            >
-                                Subscribe
-                            </button>
-                        </form>
-                    </motion.div>
-                </div>
-            </section>
+            {/* ═══ 7. WHATSAPP COMMUNITY — replaces newsletter ═══ */}
+            <WhatsAppCommunity />
 
             {/* Floating WhatsApp */}
             <WhatsappButton />

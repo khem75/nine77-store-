@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 export const metadata: Metadata = {
     title: 'FAQ',
     description:
-        'Frequently Asked Questions about NINE77 streetwear. Sizes, returns, delivery times in Kathmandu and Nepal, and how to order.',
+        'Frequently Asked Questions about NINE77 streetwear. Sizes, returns, delivery times in Mahendranagar and Nepal, and how to order.',
     openGraph: {
         title: 'FAQ | NINE77',
         description: 'Have questions about sizing, delivery, or returns? We have answers.',

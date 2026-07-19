@@ -17,7 +17,7 @@ export default function Footer() {
                             NINE<span className="text-gold">77</span>
                         </h3>
                         <p className="text-[12px] leading-relaxed text-white/40 max-w-xs font-light">
-                            Premium streetwear engineered for those who refuse to blend in. Kathmandu, Nepal.
+                            Premium streetwear engineered for those who refuse to blend in. Mahendranagar, Nepal.
                         </p>
                         <Link
                             href="/shop"
@@ -26,7 +26,7 @@ export default function Footer() {
                             Discover Collection
                             <ArrowRight size={12} className="transition-transform group-hover:translate-x-0.5" />
                         </Link>
-
+                        
                         {/* Social */}
                         <div className="flex gap-3 mt-4">
                             {[
@@ -109,27 +109,36 @@ export default function Footer() {
                             >
                                 +977 9810605409
                             </a>
-                            <a
-                                href={`mailto:nine77nepal@gmail.com`}
-                                className="block text-[12px] text-white/40 hover:text-white transition-colors font-light"
-                            >
-                                nine77nepal@gmail.com
-                            </a>
                             <p className="text-[12px] text-white/30 font-light">
-                                Kathmandu, Nepal
+                                Mahendranagar, Nepal
                             </p>
                         </div>
                     </div>
                 </div>
 
                 {/* Copyright */}
-                <div className="mt-10 pt-6 border-t border-white/[0.06] flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                    <p className="text-[10px] text-white/25 tracking-wide">
-                        © {new Date().getFullYear()} NINE77. All rights reserved.
-                    </p>
+                <div className="mt-10 pt-6 border-t border-white/[0.06] flex flex-col gap-4 md:flex-row md:items-center md:justify-between text-[10px] text-white/25 tracking-wide">
+                    <p>© {new Date().getFullYear()} NINE77. All rights reserved.</p>
+
+                    {/* Developer Credit */}
+                    <div className="flex items-center gap-1.5 uppercase tracking-[0.18em] text-[9px] text-white/30">
+                        <span>Designed &amp; Developed by</span>
+                        <a
+                            href="https://khemjoshi.com.np/"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-black text-white/55 hover:text-gold transition-all duration-300 relative group flex items-center gap-1.5"
+                        >
+                            <span>Khem R. Joshi</span>
+                            <span className="w-1.5 h-1.5 rounded-full bg-gold inline-block animate-pulse" />
+                            {/* Hover line */}
+                            <span className="absolute bottom-0 left-0 w-0 h-px bg-gold transition-all duration-300 group-hover:w-full" />
+                        </a>
+                    </div>
+
                     <div className="flex gap-4">
                         {['Privacy Policy', 'Terms & Conditions'].map((item) => (
-                            <span key={item} className="text-[10px] text-white/25 hover:text-white/50 cursor-pointer transition-colors">
+                            <span key={item} className="text-white/25 hover:text-white/50 cursor-pointer transition-colors">
                                 {item}
                             </span>
                         ))}
