@@ -15,25 +15,26 @@ module.exports = {
                 mono: ['var(--font-sans)', 'monospace'],
             },
             colors: {
-                /* ── Luxury Master Palette ── */
-                background: '#F5F3EF',
-                'background-2': '#EEE9E2',
-                surface: '#EEE9E2',
+                /* ── NINE77 Luxury Brand Palette ── */
+                background: '#F7F5F2',
+                'background-2': '#F1EEE8',
+                surface: '#F1EEE8',
                 card: '#FFFFFF',
 
                 /* ── Text ── */
                 primary: '#111111',
-                secondary: '#6B6B6B',
+                secondary: '#666666',
                 muted: '#8A8A8A',
 
                 /* ── Accent ── */
-                gold: '#8B6A3E',
+                gold: '#8A6A44',
                 'gold-light': '#A5804F',
-                'gold-dark': '#6E522E',
+                'gold-dark': '#6E5234',
+                success: '#1D6B3A',
 
                 /* ── Borders ── */
-                border: 'rgba(0, 0, 0, 0.08)',
-                'border-subtle': 'rgba(0, 0, 0, 0.04)',
+                border: '#E8E3DC',
+                'border-subtle': 'rgba(232, 227, 220, 0.5)',
 
                 /* ── Dark Sections ── */
                 'hero-dark': '#0C0A08',
@@ -46,25 +47,25 @@ module.exports = {
                 'safe-bottom': 'env(safe-area-inset-bottom)',
             },
             boxShadow: {
-                'luxury': '0 8px 32px rgba(0,0,0,0.06)',
-                'luxury-lg': '0 16px 48px rgba(0,0,0,0.08)',
-                'luxury-xl': '0 24px 64px rgba(0,0,0,0.1)',
-                'card': '0 2px 16px rgba(0,0,0,0.04)',
-                'card-hover': '0 16px 40px rgba(0,0,0,0.08)',
-                'glow': '0 0 40px rgba(183,134,74,0.12)',
-                'glow-sm': '0 0 20px rgba(183,134,74,0.08)',
-                'glow-lg': '0 0 60px rgba(183,134,74,0.18)',
-                'glass': '0 8px 32px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.5)',
-                'soft': '0 1px 3px rgba(0,0,0,0.04)',
+                'luxury': '0 8px 32px rgba(0,0,0,0.04)',
+                'luxury-lg': '0 16px 48px rgba(0,0,0,0.06)',
+                'luxury-xl': '0 24px 64px rgba(0,0,0,0.08)',
+                'card': '0 2px 16px rgba(0,0,0,0.03)',
+                'card-hover': '0 16px 40px rgba(0,0,0,0.06)',
+                'glow': '0 0 40px rgba(138,106,68,0.12)',
+                'glow-sm': '0 0 20px rgba(138,106,68,0.08)',
+                'glow-lg': '0 0 60px rgba(138,106,68,0.18)',
+                'glass': '0 8px 32px rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.6)',
+                'soft': '0 1px 3px rgba(0,0,0,0.03)',
             },
             backgroundImage: {
-                'gold-gradient': 'linear-gradient(135deg, #B7864A 0%, #C99B5F 50%, #9A6F3A 100%)',
-                'warm-radial': 'radial-gradient(ellipse at center, rgba(183,134,74,0.08) 0%, transparent 70%)',
+                'gold-gradient': 'linear-gradient(135deg, #8A6A44 0%, #A5804F 50%, #6E5234 100%)',
+                'warm-radial': 'radial-gradient(ellipse at center, rgba(138,106,68,0.08) 0%, transparent 70%)',
             },
             animation: {
                 'shimmer': 'shimmer 2.8s infinite',
                 'fade-in': 'fadeIn 0.5s ease both',
-                'reveal-up': 'revealUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both',
+                'reveal-up': 'revealUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both',
                 'pulse-subtle': 'pulseSubtle 3s ease-in-out infinite',
                 'float': 'float 6s ease-in-out infinite',
                 'float-slow': 'float 8s ease-in-out infinite',
@@ -131,18 +132,22 @@ module.exports = {
                 'wide-xl': '0.15em',
             },
             transitionTimingFunction: {
-                'luxury': 'cubic-bezier(0.16, 1, 0.3, 1)',
+                'luxury': 'cubic-bezier(0.22, 1, 0.36, 1)',
             },
             transitionDuration: {
-                '250': '250ms',
+                '180': '180ms',
+                '200': '200ms',
                 '350': '350ms',
                 '400': '400ms',
-                '550': '550ms',
                 '650': '650ms',
-                '750': '750ms',
-                '850': '850ms',
+                '900': '900ms',
             },
             borderRadius: {
+                'btn': '12px',
+                'input': '14px',
+                'card': '18px',
+                'img': '20px',
+                'hero-card': '24px',
                 'xl2': '20px',
                 'xl3': '24px',
                 'xl4': '28px',

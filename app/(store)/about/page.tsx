@@ -149,7 +149,7 @@ export default function AboutPage() {
                     </p>
                     <Link
                         href="/shop"
-                        className="inline-flex h-12 items-center justify-center gap-3 rounded-full bg-gold px-8 text-[11px] font-bold uppercase tracking-[0.25em] text-white transition-all duration-300 hover:bg-gold-light hover:shadow-[0_8px_30px_rgba(183,134,74,0.22)] hover:-translate-y-0.5 active:scale-[0.98]"
+                        className="inline-flex w-full sm:w-auto min-h-[44px] items-center justify-center gap-3 rounded-[12px] bg-gold px-8 text-[11px] font-black uppercase tracking-[0.24em] text-white transition-all duration-200 hover:bg-gold-dark shadow-sm hover:-translate-y-0.5 active:scale-[0.98]"
                     >
                         Browse Collection
                     </Link>

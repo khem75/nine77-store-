@@ -35,12 +35,12 @@ export default function MobileBottomNav() {
             <motion.div
                 initial={{ y: 100, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.7, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ duration: 0.6, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
             >
                 <div
-                    className="border border-border backdrop-blur-2xl bg-white/80 shadow-luxury-lg"
+                    className="border border-[#E8E3DC] backdrop-blur-2xl bg-[#F7F5F2]/90 shadow-luxury-lg"
                     style={{
-                        borderRadius: 28,
+                        borderRadius: 24,
                     }}
                 >
                     <div className="flex items-center justify-between px-2.5 py-1.5">
@@ -50,21 +50,21 @@ export default function MobileBottomNav() {
                                 <Link
                                     key={label}
                                     href={href}
-                                    className="relative flex flex-1 flex-col items-center justify-center gap-1 py-1.5 px-1 rounded-[20px] transition-colors duration-200"
+                                    className="relative flex flex-1 flex-col items-center justify-center gap-1 py-1.5 px-1 rounded-[18px] min-h-[44px] transition-colors duration-200"
                                     aria-current={isActive ? 'page' : undefined}
                                     aria-label={label}
                                 >
                                     <Icon
                                         size={18}
-                                        strokeWidth={isActive ? 2.2 : 1.5}
-                                        className={`transition-colors duration-300 ${
-                                            isActive ? 'text-gold' : 'text-secondary/50'
+                                        strokeWidth={1.75}
+                                        className={`transition-colors duration-200 ${
+                                            isActive ? 'text-gold' : 'text-secondary/60'
                                         }`}
                                         aria-hidden="true"
                                     />
                                     <span
-                                        className={`text-[8px] font-bold uppercase tracking-[0.14em] transition-colors duration-300 ${
-                                            isActive ? 'text-gold' : 'text-secondary/60'
+                                        className={`text-[8px] font-bold uppercase tracking-[0.14em] transition-colors duration-200 ${
+                                            isActive ? 'text-gold' : 'text-secondary/70'
                                         }`}
                                     >
                                         {label}
@@ -75,8 +75,9 @@ export default function MobileBottomNav() {
                                             className="absolute -bottom-0.5 h-[2.5px] w-4 rounded-full bg-gold"
                                             transition={{
                                                 type: 'spring',
-                                                stiffness: 380,
-                                                damping: 30,
+                                                stiffness: 140,
+                                                damping: 20,
+                                                mass: 0.8,
                                             }}
                                             aria-hidden="true"
                                         />
@@ -90,12 +91,12 @@ export default function MobileBottomNav() {
                             href={ORDER_URL}
                             target="_blank"
                             rel="noreferrer"
-                            whileTap={{ scale: 0.93 }}
-                            className="relative ml-1.5 flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-full bg-gold px-4 shadow-[0_4px_18px_rgba(183,134,74,0.22)] hover:bg-gold-light transition-colors"
+                            whileTap={{ scale: 0.94 }}
+                            className="relative ml-1.5 flex h-11 shrink-0 items-center justify-center gap-1.5 rounded-[12px] bg-gold px-4 shadow-luxury hover:bg-gold-dark transition-colors"
                             aria-label="Order via WhatsApp"
                         >
-                            <MessageCircle size={14} strokeWidth={2.5} className="text-white" aria-hidden="true" />
-                            <span className="text-[9px] font-bold uppercase tracking-[0.16em] text-white">
+                            <MessageCircle size={14} strokeWidth={1.75} className="text-white" aria-hidden="true" />
+                            <span className="text-[9px] font-black uppercase tracking-[0.16em] text-white">
                                 Order
                             </span>
                         </motion.a>

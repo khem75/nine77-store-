@@ -21,50 +21,50 @@ export default function Logo({
 }: LogoProps) {
   const shouldReduceMotion = useReducedMotion();
 
-  // Ultra-refined luxury editorial logo dimensions — minimal, understated, high-fashion proportions
+  // Precision optical sizing and height constraints for luxury editorial balance
   const getVariantStyles = () => {
     switch (variant) {
       case 'navbar':
         return {
-          container: `flex flex-col items-center justify-center text-center group cursor-pointer transition-all duration-300 ${
-            scrolled ? 'py-0.5' : 'py-1'
+          container: `flex flex-col items-center justify-center text-center group cursor-pointer transition-all duration-300 h-[28px] sm:h-[32px] md:h-[34px] lg:h-[38px] xl:h-[40px] my-auto select-none ${
+            scrolled ? 'scale-[0.92]' : 'scale-100'
           }`,
           mainTextClass: scrolled
-            ? 'text-[7.5px] sm:text-[8px] md:text-[8.5px] tracking-[0.28em]'
-            : 'text-[8.5px] sm:text-[9px] md:text-[9.5px] tracking-[0.32em]',
+            ? 'text-[10px] sm:text-[11px] md:text-[12px] lg:text-[13px] tracking-[0.34em]'
+            : 'text-[11px] sm:text-[12px] md:text-[13px] lg:text-[14px] tracking-[0.36em]',
           subtextClass: scrolled
-            ? 'text-[4.5px] sm:text-[5px] tracking-[0.2em] mt-[1px] opacity-70'
-            : 'text-[5px] sm:text-[5.5px] tracking-[0.22em] mt-[1px] opacity-75',
+            ? 'text-[4.5px] sm:text-[5px] md:text-[5.5px] tracking-[0.24em] mt-[1.5px] opacity-75'
+            : 'text-[5px] sm:text-[5.5px] md:text-[6px] tracking-[0.26em] mt-[2px] opacity-80',
         };
       case 'footer':
         return {
-          container: 'flex flex-col items-start text-left group cursor-pointer py-0.5',
-          mainTextClass: 'text-[13px] sm:text-[15px] md:text-[16px] tracking-[0.28em]',
-          subtextClass: 'text-[6px] sm:text-[6.5px] tracking-[0.22em] mt-0.5 opacity-75',
+          container: 'flex flex-col items-start text-left group cursor-pointer py-1 select-none',
+          mainTextClass: 'text-[14px] sm:text-[16px] md:text-[18px] tracking-[0.32em]',
+          subtextClass: 'text-[6px] sm:text-[7px] tracking-[0.26em] mt-1 opacity-75',
         };
       case 'drawer':
         return {
-          container: 'flex flex-col items-start text-left group cursor-pointer',
-          mainTextClass: 'text-[9.5px] sm:text-[10px] tracking-[0.32em]',
-          subtextClass: 'text-[5.5px] tracking-[0.22em] mt-[1px] opacity-75',
+          container: 'flex flex-col items-start text-left group cursor-pointer select-none py-1',
+          mainTextClass: 'text-[12px] sm:text-[13px] tracking-[0.34em]',
+          subtextClass: 'text-[5.5px] sm:text-[6px] tracking-[0.24em] mt-[1.5px] opacity-75',
         };
       case 'about':
         return {
-          container: 'flex flex-col items-start text-left group cursor-pointer max-w-[120px]',
-          mainTextClass: 'text-[9.5px] sm:text-[10px] md:text-[11px] tracking-[0.3em]',
-          subtextClass: 'text-[5.5px] sm:text-[6px] tracking-[0.2em] mt-[1px] opacity-75',
+          container: 'flex flex-col items-start text-left group cursor-pointer max-w-[130px] select-none',
+          mainTextClass: 'text-[12px] sm:text-[13px] md:text-[14px] tracking-[0.32em]',
+          subtextClass: 'text-[6px] tracking-[0.24em] mt-[1px] opacity-75',
         };
       case 'admin':
         return {
-          container: 'flex flex-col items-start text-left group cursor-pointer',
-          mainTextClass: 'text-[9px] font-black uppercase tracking-[0.28em]',
-          subtextClass: 'text-[5.5px] tracking-[0.2em] mt-[1px] opacity-75',
+          container: 'flex flex-col items-start text-left group cursor-pointer select-none',
+          mainTextClass: 'text-[11px] font-black uppercase tracking-[0.3em]',
+          subtextClass: 'text-[5.5px] tracking-[0.22em] mt-[1px] opacity-75',
         };
       default:
         return {
-          container: 'flex flex-col items-center text-center group cursor-pointer',
-          mainTextClass: 'text-[10px] tracking-[0.5em]',
-          subtextClass: 'text-[6px] tracking-[0.38em] mt-0.5',
+          container: 'flex flex-col items-center text-center group cursor-pointer select-none',
+          mainTextClass: 'text-[12px] tracking-[0.4em]',
+          subtextClass: 'text-[6px] tracking-[0.32em] mt-0.5',
         };
     }
   };
@@ -74,15 +74,15 @@ export default function Logo({
   const content = (
     <motion.div
       whileHover={shouldReduceMotion ? {} : { scale: 1.015 }}
-      transition={{ duration: 0.2, ease: 'easeOut' }}
+      transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
       className={`${container} ${className}`}
     >
       {/* Primary Brand Typography */}
       <span
-        className={`font-black uppercase leading-none text-primary transition-all duration-300 group-hover:text-gold ${mainTextClass}`}
+        className={`font-black uppercase leading-none text-primary transition-colors duration-200 group-hover:text-gold ${mainTextClass}`}
       >
         N I N E{' '}
-        <span className="text-gold transition-colors duration-300 group-hover:text-gold-light">
+        <span className="text-gold transition-colors duration-200 group-hover:text-gold-light">
           7 7
         </span>
       </span>
@@ -90,7 +90,7 @@ export default function Logo({
       {/* Sublabel */}
       {showSublabel && (
         <span
-          className={`font-bold uppercase leading-none text-secondary/70 transition-colors duration-300 group-hover:text-primary select-none ${subtextClass}`}
+          className={`font-bold uppercase leading-none text-secondary/80 transition-colors duration-200 group-hover:text-primary ${subtextClass}`}
         >
           PREMIUM STREETWEAR
         </span>
@@ -103,7 +103,7 @@ export default function Logo({
       <button
         type="button"
         onClick={onClick}
-        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-sm"
+        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-sm inline-flex items-center justify-center"
         aria-label="NINE77 — Home"
       >
         {content}
@@ -114,7 +114,7 @@ export default function Logo({
   return (
     <Link
       href="/"
-      className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-sm inline-block"
+      className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-sm inline-flex items-center justify-center"
       aria-label="NINE77 — Home"
     >
       {content}

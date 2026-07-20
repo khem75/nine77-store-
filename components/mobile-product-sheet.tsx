@@ -300,7 +300,7 @@ export default function MobileProductSheet({
                                         target="_blank"
                                         rel="noreferrer"
                                         onClick={handleOrder}
-                                        className="flex h-12 items-center justify-center gap-2 rounded-full bg-gold px-5 text-[11px] font-bold uppercase tracking-[0.3em] text-black transition-all duration-300 hover:bg-gold-light"
+                                        className="flex h-12 items-center justify-center gap-2 rounded-[12px] bg-gold px-5 text-[11px] font-black uppercase tracking-[0.24em] text-white transition-all duration-200 hover:bg-gold-dark"
                                     >
                                         <AnimatePresence mode="wait" initial={false}>
                                             {isSubmitting ? (
@@ -311,8 +311,8 @@ export default function MobileProductSheet({
                                                     exit={{ opacity: 0, y: -6 }}
                                                     className="flex items-center gap-2"
                                                 >
-                                                    <Check size={16} />
-                                                    Opening WhatsApp
+                                                    <Check size={16} strokeWidth={1.75} />
+                                                    Opening WhatsApp...
                                                 </motion.span>
                                             ) : (
                                                 <motion.span
@@ -322,8 +322,8 @@ export default function MobileProductSheet({
                                                     exit={{ opacity: 0, y: -6 }}
                                                     className="flex items-center gap-2"
                                                 >
-                                                    <MessageCircle size={16} />
-                                                    Order on WhatsApp
+                                                    <MessageCircle size={16} strokeWidth={1.75} />
+                                                    Order via WhatsApp
                                                 </motion.span>
                                             )}
                                         </AnimatePresence>
@@ -332,9 +332,9 @@ export default function MobileProductSheet({
                                     <Link
                                         href={`/product/${product.slug}`}
                                         onClick={onClose}
-                                        className="flex h-12 items-center justify-center rounded-full border border-white/10 bg-transparent text-[11px] font-bold uppercase tracking-[0.3em] text-white/80 transition-all duration-300 hover:border-gold/30 hover:text-gold"
+                                        className="flex h-12 items-center justify-center rounded-[12px] border border-white/10 bg-transparent text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-all duration-200 hover:border-gold/40 hover:text-gold"
                                     >
-                                        View Details
+                                        View Full Details
                                     </Link>
                                 </div>
                             </div>

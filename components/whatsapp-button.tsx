@@ -14,10 +14,10 @@ export default function WhatsappButton() {
             rel="noreferrer"
             initial={{ opacity: 0, scale: 0.5, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            transition={{ delay: 2, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.92 }}
-            className="group fixed bottom-24 right-5 z-50 hidden items-center gap-3 rounded-full bg-gold px-4 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-glow transition-all duration-300 hover:bg-gold-light hover:shadow-glow-lg hover:gap-4 md:bottom-8 md:right-8 md:flex"
+            transition={{ delay: 1.5, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.94 }}
+            className="group fixed bottom-24 right-5 z-50 hidden items-center gap-3 rounded-full bg-gold px-4.5 py-3 text-[10px] font-bold uppercase tracking-[0.25em] text-white shadow-luxury transition-all duration-200 hover:bg-gold-dark hover:gap-4 md:bottom-8 md:right-8 md:flex"
         >
             {/* Ambient breathing gold aura */}
             <motion.span
@@ -36,8 +36,8 @@ export default function WhatsappButton() {
             {/* Ping animation */}
             <span className="absolute -inset-0.5 animate-ping rounded-full bg-gold/40 opacity-0 group-hover:opacity-100 z-0" />
 
-            <MessageCircle size={17} strokeWidth={2.5} className="relative z-10" />
-            <span className="relative z-10">Order Now</span>
+            <MessageCircle size={17} strokeWidth={1.75} className="relative z-10" />
+            <span className="relative z-10">Order via WhatsApp</span>
         </motion.a>
     );
 }

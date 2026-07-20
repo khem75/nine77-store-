@@ -2,38 +2,37 @@
 // NINE77 — Master Luxury Editorial Motion Settings
 // ============================================================
 
-export const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
-export const EASE_IN_OUT = [0.42, 0, 0.58, 1] as [number, number, number, number];
+export const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
+export const EASE_IN_OUT = [0.22, 1, 0.36, 1] as [number, number, number, number];
 
 export const SPRING_BUTTON = {
   type: 'spring',
-  stiffness: 260,
+  stiffness: 140,
   damping: 20,
+  mass: 0.8,
 };
 
-// Master Editorial Slide Transitions
-// Enter: opacity 0->1, scale 1.12->1.05, y 10->0, duration 1.2s, easeInOut
-// Exit: opacity 1->0, scale 1.05->1.08, duration 1.2s, easeInOut
+// Master Editorial Slide Transitions (900ms Hero Target)
 export const masterSlideVariants = {
   enter: {
     opacity: 0,
-    scale: 1.12,
-    y: 10,
+    scale: 1.1,
+    y: 8,
   },
   center: {
     opacity: 1,
-    scale: 1.05,
+    scale: 1.04,
     y: 0,
     transition: {
-      duration: 1.2,
+      duration: 0.9,
       ease: EASE_IN_OUT,
     },
   },
   exit: {
     opacity: 0,
-    scale: 1.08,
+    scale: 1.06,
     transition: {
-      duration: 1.2,
+      duration: 0.9,
       ease: EASE_IN_OUT,
     },
   },

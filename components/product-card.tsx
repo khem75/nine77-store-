@@ -9,7 +9,7 @@ import { slugify } from '@/utils';
 import type { AdminProduct } from '@/types/admin';
 import type { Product } from '@/types/product';
 
-const luxuryEase = [0.16, 1, 0.3, 1] as const;
+const luxuryEase = [0.22, 1, 0.36, 1] as const;
 
 interface ProductCardProps {
     product: AdminProduct | Product;
@@ -34,68 +34,87 @@ export default function ProductCard({ product, index = 0, showPrice = true }: Pr
             ref={cardRef}
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: index * 0.06, ease: luxuryEase }}
+            transition={{ duration: 0.35, delay: index * 0.05, ease: luxuryEase }}
             className="w-full group"
         >
             <Link 
                 href={`/product/${slug}`} 
-                className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 rounded-2xl active:scale-[0.98] transition-transform"
+                className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded-[18px] active:scale-[0.98] transition-transform duration-200"
                 aria-label={`${product.name} — Rs. ${product.price.toLocaleString()}`}
             >
                 <article
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
-                    className="relative flex flex-col overflow-hidden rounded-2xl bg-card border border-border transition-all duration-500 ease-luxury hover:shadow-card-hover hover:-translate-y-1"
+                    className="relative flex flex-col overflow-hidden rounded-[18px] bg-card border border-[#E8E3DC] transition-all duration-350 ease-luxury hover:shadow-card-hover hover:-translate-y-1"
                 >
                     {/* Image Container with 4:5 aspect ratio */}
-                    <div className="relative w-full overflow-hidden bg-surface" style={{ paddingBottom: '133.3%' }}>
+                    <div className="relative w-full aspect-[4/5] overflow-hidden bg-[#F1EEE8] rounded-[20px] m-1.5 w-[calc(100%-12px)]">
 
                         {/* Featured Badge */}
                         {isFeatured && (
                             <div className="absolute left-3 top-3 z-10">
-                                <span className="rounded-full bg-gold text-white px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.15em] leading-none shadow-sm">
+                                <span className="rounded-[12px] bg-gold text-white px-2.5 py-1 text-[8px] font-bold uppercase tracking-[0.18em] leading-none shadow-sm">
                                     Featured
                                 </span>
                             </div>
                         )}
 
-                        {/* Wishlist Heart Fade & Lift */}
-                        <button
+                        {/* Wishlist Heart Toggle with Spring Animation */}
+                        <motion.button
                             type="button"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 setLiked(!liked);
                             }}
+                            whileTap={{ scale: 0.85 }}
+                            animate={{ scale: liked ? [1, 1.25, 1] : 1 }}
+                            transition={{ type: 'spring', stiffness: 140, damping: 20, mass: 0.8 }}
                             aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
-                            className="absolute right-3 top-3 z-10 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-border flex items-center justify-center transition-all duration-300 opacity-80 group-hover:opacity-100 scale-95 group-hover:scale-100 hover:bg-white hover:shadow-soft"
+                            className="absolute right-3 top-3 z-10 w-8 h-8 rounded-full bg-white/85 backdrop-blur-sm border border-[#E8E3DC] flex items-center justify-center transition-all duration-200 opacity-90 group-hover:opacity-100 hover:bg-white hover:shadow-soft"
                         >
                             <Heart
                                 size={14}
-                                className={`transition-colors duration-300 ${liked ? 'text-red-500 fill-red-500' : 'text-secondary'}`}
+                                strokeWidth={1.75}
+                                className={`transition-colors duration-200 ${liked ? 'text-[#111111] fill-[#111111]' : 'text-secondary'}`}
                             />
-                        </button>
+                        </motion.button>
 
-                        {/* Product Image — Scale 1 -> 1.06 on hover */}
+                        {/* Product Primary Image */}
                         <Image
-                            src={hovered && img2Src ? img2Src : imgSrc}
+                            src={imgSrc}
                             alt={product.name}
                             fill
                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                            className="object-cover transition-transform duration-700 ease-luxury group-hover:scale-[1.06]"
+                            className={`object-cover transition-all duration-500 ease-luxury group-hover:scale-[1.04] ${
+                                hovered && img2Src ? 'opacity-0' : 'opacity-100'
+                            }`}
                             onError={() => setImgSrc('/luxury-streetwear-garment.png')}
                         />
+
+                        {/* Secondary Image Hover Reveal */}
+                        {img2Src && (
+                            <Image
+                                src={img2Src}
+                                alt={`${product.name} alternate view`}
+                                fill
+                                sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+                                className={`object-cover transition-all duration-500 ease-luxury group-hover:scale-[1.04] ${
+                                    hovered ? 'opacity-100' : 'opacity-0'
+                                }`}
+                            />
+                        )}
                     </div>
 
-                    {/* Product Info — Price lift on hover */}
+                    {/* Product Info */}
                     <div className="p-3.5 md:p-4 space-y-1.5 bg-card">
-                        <h3 className="text-[12px] md:text-[13px] font-bold text-primary uppercase tracking-tight truncate group-hover:text-gold transition-colors duration-300">
+                        <h3 className="text-[12px] md:text-[13px] font-bold text-[#111111] uppercase tracking-tight truncate group-hover:text-gold transition-colors duration-200">
                             {product.name}
                         </h3>
 
                         {showPrice && (
                             <div className="flex items-center justify-between">
-                                <p className="text-[12px] md:text-[13px] font-semibold text-secondary transition-transform duration-300 group-hover:-translate-y-0.5">
+                                <p className="text-[12px] md:text-[13px] font-semibold text-[#666666] transition-transform duration-200 group-hover:-translate-y-0.5">
                                     Rs. {product.price.toLocaleString()}
                                 </p>
 
@@ -110,11 +129,11 @@ export default function ProductCard({ product, index = 0, showPrice = true }: Pr
                                             '_blank'
                                         );
                                     }}
-                                    className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] text-gold hover:text-gold-dark transition-colors duration-300"
+                                    className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[0.14em] text-gold hover:text-gold-dark transition-colors duration-200"
                                     aria-label={`Order ${product.name} on WhatsApp`}
                                 >
-                                    <MessageCircle size={11} />
-                                    WhatsApp Order
+                                    <MessageCircle size={12} strokeWidth={1.75} />
+                                    Order
                                 </button>
                             </div>
                         )}

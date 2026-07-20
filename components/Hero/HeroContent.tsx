@@ -114,7 +114,7 @@ function MagneticButton({
       whileTap={{ scale: 0.97 }}
       transition={SPRING_BUTTON}
       onClick={() => trackHeroEvent('CTA Clicked', { href })}
-      className="inline-flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.24em] px-7 py-3.5 rounded-full transition-all duration-300 cursor-pointer whitespace-nowrap"
+      className="inline-flex w-full sm:w-auto min-h-[44px] justify-center items-center gap-2.5 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.22em] px-6 sm:px-7 py-3.5 rounded-[12px] transition-all duration-200 cursor-pointer whitespace-nowrap"
     >
       {children}
     </motion.a>
@@ -134,7 +134,7 @@ function GlassButton({ href, children }: { href: string; children: React.ReactNo
       }}
       whileTap={{ scale: 0.97 }}
       transition={SPRING_BUTTON}
-      className="inline-flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.24em] px-7 py-3.5 rounded-full text-white/65 hover:text-white transition-colors duration-300 cursor-pointer whitespace-nowrap"
+      className="inline-flex w-full sm:w-auto min-h-[44px] justify-center items-center gap-2.5 text-[10px] sm:text-[11px] font-black uppercase tracking-[0.22em] px-6 sm:px-7 py-3.5 rounded-[12px] text-white/70 hover:text-white transition-colors duration-200 cursor-pointer whitespace-nowrap"
       style={{
         background: 'rgba(255,255,255,0.05)',
         border: '1px solid rgba(255,255,255,0.10)',

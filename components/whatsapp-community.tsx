@@ -47,12 +47,12 @@ function CopyBtn({ variant = 'icon' }: { variant?: 'icon' | 'outline' }) {
 
     return (
         <motion.button onClick={copy} whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.97 }} aria-label={copied ? 'Copied!' : 'Copy invite link'}
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-[11px] font-black uppercase tracking-[0.22em] transition-all duration-300"
-            style={{ border: '1px solid rgba(200,155,90,0.30)', background: 'rgba(200,155,90,0.05)', color: copied ? '#D6A864' : '#C89B5A' }}
+            className="flex h-12 w-full items-center justify-center gap-2 rounded-[12px] text-[11px] font-black uppercase tracking-[0.22em] transition-all duration-200"
+            style={{ border: '1px solid rgba(138,106,68,0.30)', background: 'rgba(138,106,68,0.05)', color: copied ? '#A5804F' : '#8A6A44' }}
         >
             <AnimatePresence mode="wait" initial={false}>
                 <motion.span key={copied ? 'd' : 'i'} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.18 }} className="flex items-center gap-2">
-                    {copied ? <><Check size={14} /> Copied!</> : <><Copy size={14} /> Copy Invite Link</>}
+                    {copied ? <><Check size={14} strokeWidth={1.75} /> Copied!</> : <><Copy size={14} strokeWidth={1.75} /> Copy Invite Link</>}
                 </motion.span>
             </AnimatePresence>
         </motion.button>
@@ -176,20 +176,20 @@ export default function WhatsAppCommunity() {
                             <div className="flex flex-col gap-2.5 mt-auto">
                                 <motion.a href={INVITE_URL} target="_blank" rel="noreferrer"
                                     whileHover={{ scale: 1.02, y: -1 }} whileTap={{ scale: 0.97 }}
-                                    className="flex h-12 w-full items-center justify-center gap-2.5 rounded-2xl text-[11px] font-black uppercase tracking-[0.24em] text-white transition-all duration-300"
-                                    style={{ background: 'linear-gradient(135deg, #C89B5A, #D6A864)', boxShadow: '0 6px 28px rgba(200,155,90,0.32)' }}
+                                    className="flex h-12 w-full items-center justify-center gap-2.5 rounded-[12px] text-[11px] font-black uppercase tracking-[0.24em] text-white transition-all duration-200"
+                                    style={{ background: 'linear-gradient(135deg, #8A6A44, #A5804F)', boxShadow: '0 6px 28px rgba(138,106,68,0.32)' }}
                                     aria-label="Join the official NINE77 WhatsApp Community"
                                 >
                                     <WAIcon size={16} />
                                     Join WhatsApp Community
-                                    <ArrowUpRight size={14} strokeWidth={2.5} className="opacity-75" />
+                                    <ArrowUpRight size={14} strokeWidth={1.75} className="opacity-75" />
                                 </motion.a>
                                 <CopyBtn variant="outline" />
                             </div>
 
                             {/* Security note */}
                             <div className="flex items-center gap-2 text-[10px] font-medium" style={{ color: '#9D9D9D' }}>
-                                <Lock size={11} />
+                                <Lock size={11} strokeWidth={1.75} />
                                 <span>Safe, private &amp; spam-free.</span>
                             </div>
                         </div>

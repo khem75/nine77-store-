@@ -28,12 +28,11 @@ export default function MobileShopCard({
         >
             <Link
                 href={`/product/${product.slug}`}
-                className="block w-full overflow-hidden rounded-[18px] border border-white/[0.08] bg-[#161616] active:scale-[0.97] transition-all duration-200"
+                className="block w-full overflow-hidden rounded-[18px] border border-[#E8E3DC] bg-card active:scale-[0.97] transition-all duration-200 shadow-card"
             >
                 {/* Image (80%) */}
                 <div
-                    className="relative w-full overflow-hidden bg-[#111111]"
-                    style={{ paddingBottom: '120%' }}
+                    className="relative w-full aspect-[4/5] overflow-hidden bg-[#F1EEE8]"
                 >
                     <Image
                         src={imgSrc}
@@ -42,7 +41,7 @@ export default function MobileShopCard({
                         sizes="50vw"
                         loading="lazy"
                         onError={() => { if (!fallback) { setImgSrc('/luxury-streetwear-garment.png'); setFallback(true); } }}
-                        className="object-contain object-center"
+                        className="object-cover object-center"
                     />
 
                     {/* Wishlist */}
@@ -53,15 +52,15 @@ export default function MobileShopCard({
                             setWishlisted(!wishlisted);
                         }}
                         aria-label="Save to wishlist"
-                        className="absolute top-2.5 right-2.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-black/60 border border-white/10"
+                        className="absolute top-2.5 right-2.5 z-10 flex h-7 w-7 items-center justify-center rounded-full bg-white/85 border border-[#E8E3DC]"
                     >
-                        <Heart size={11} strokeWidth={1.5} className={wishlisted ? 'fill-gold text-gold' : 'text-white/45'} />
+                        <Heart size={12} strokeWidth={1.75} className={wishlisted ? 'fill-[#111111] text-[#111111]' : 'text-secondary'} />
                     </button>
                 </div>
 
                 {/* Info (20%) */}
-                <div className="px-3.5 py-3 border-t border-white/[0.06] bg-[#161616] flex items-center justify-between gap-1.5">
-                    <span className="truncate text-[11px] font-medium leading-tight text-white">{product.name}</span>
+                <div className="px-3.5 py-3 border-t border-[#E8E3DC] bg-card flex items-center justify-between gap-1.5">
+                    <span className="truncate text-[11px] font-bold uppercase tracking-tight text-[#111111]">{product.name}</span>
                     <span className="text-[12px] font-semibold text-gold shrink-0">{formatPrice(product.price)}</span>
                 </div>
             </Link>

@@ -95,25 +95,25 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                     <div className="grid gap-8 lg:grid-cols-[1.15fr_0.85fr] items-start">
                         
                         {/* ── Left side: Product Image Gallery ── */}
-                        <div className="space-y-4">
+                        <div className="space-y-4 lg:sticky lg:top-[100px]">
                             {/* Main Display container */}
-                            <div className="group relative overflow-hidden rounded-[18px] border border-border bg-white aspect-[4/5] md:aspect-auto">
+                            <div className="group relative overflow-hidden rounded-[20px] border border-[#E8E3DC] bg-white aspect-[4/5] md:aspect-auto">
                                 <div
                                     ref={scrollRef}
                                     onScroll={handleScroll}
-                                    className="relative flex w-full snap-x snap-mandatory overflow-x-auto hide-scrollbar select-none scroll-smooth h-[340px] md:h-[480px] lg:h-[540px]"
+                                    className="relative flex w-full snap-x snap-mandatory overflow-x-auto hide-scrollbar select-none scroll-smooth h-[360px] md:h-[500px] lg:h-[560px]"
                                 >
                                     {galleryImages.map((img, idx) => (
                                         <div
                                             key={idx}
-                                            className="relative w-full h-full flex-shrink-0 snap-start flex items-center justify-center p-4"
+                                            className="relative w-full h-full flex-shrink-0 snap-start flex items-center justify-center p-4 bg-[#F1EEE8]"
                                         >
                                             <Image
                                                 src={img}
                                                 alt={`${product.name} ${idx + 1}`}
                                                 fill
                                                 priority={idx === 0}
-                                                className="object-contain object-center"
+                                                className="object-contain object-center transition-transform duration-300"
                                                 sizes="(max-width: 1024px) 100vw, 50vw"
                                                 onError={() => {
                                                     const copy = [...galleryImages];
@@ -130,24 +130,24 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                     <>
                                         <button
                                             onClick={() => scrollToImage(Math.max(0, currentImage - 1))}
-                                            className="absolute left-4 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-primary border border-border opacity-70 hover:opacity-100 transition-opacity z-30 shadow-sm"
+                                            className="absolute left-4 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-white/85 text-primary border border-[#E8E3DC] opacity-80 hover:opacity-100 transition-all z-30 shadow-sm"
                                             aria-label="Previous"
                                         >
-                                            <ChevronLeft size={16} />
+                                            <ChevronLeft size={16} strokeWidth={1.75} />
                                         </button>
                                         <button
                                             onClick={() => scrollToImage(Math.min(galleryImages.length - 1, currentImage + 1))}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-white/70 text-primary border border-border opacity-70 hover:opacity-100 transition-opacity z-30 shadow-sm"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 flex h-9 w-9 items-center justify-center rounded-full bg-white/85 text-primary border border-[#E8E3DC] opacity-80 hover:opacity-100 transition-all z-30 shadow-sm"
                                             aria-label="Next"
                                         >
-                                            <ChevronRight size={16} />
+                                            <ChevronRight size={16} strokeWidth={1.75} />
                                         </button>
                                     </>
                                 )}
 
                                 {/* Slider Page Indicator dot/numbers */}
                                 {galleryImages.length > 1 && (
-                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-border bg-white/80 px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] font-medium text-secondary backdrop-blur-sm z-30 shadow-sm">
+                                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full border border-[#E8E3DC] bg-white/85 px-3 py-1.5 text-[9px] uppercase tracking-[0.2em] font-medium text-secondary backdrop-blur-sm z-30 shadow-sm">
                                         {currentImage + 1} / {galleryImages.length}
                                     </div>
                                 )}
@@ -160,10 +160,10 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                         <button
                                             key={idx}
                                             onClick={() => scrollToImage(idx)}
-                                            className={`relative shrink-0 w-[54px] h-[54px] overflow-hidden rounded-[8px] border transition-all duration-200 ${
+                                            className={`relative shrink-0 w-[58px] h-[58px] overflow-hidden rounded-[14px] border transition-all duration-200 ${
                                                 currentImage === idx
                                                     ? 'border-gold bg-white'
-                                                    : 'border-border opacity-50 hover:opacity-100 bg-white'
+                                                    : 'border-[#E8E3DC] opacity-50 hover:opacity-100 bg-white'
                                             }`}
                                         >
                                             <Image
@@ -182,7 +182,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                         {/* ── Right side: Product Information Details ── */}
                         <div className="space-y-4">
                             {/* Product Header */}
-                            <div className="rounded-[18px] border border-border bg-white p-6 space-y-4 shadow-luxury">
+                            <div className="rounded-[18px] border border-[#E8E3DC] bg-card p-6 space-y-4 shadow-luxury">
                                 <div className="flex items-start justify-between gap-3">
                                     <div>
                                         <span className="text-[9px] uppercase tracking-[0.35em] text-gold font-bold">
@@ -194,10 +194,10 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                     </div>
                                     <button
                                         onClick={handleShare}
-                                        className="flex h-8 w-8 items-center justify-center rounded-full border border-border bg-background text-secondary hover:text-primary"
+                                        className="flex h-9 w-9 items-center justify-center rounded-full border border-[#E8E3DC] bg-surface text-secondary hover:text-primary transition-colors"
                                         aria-label="Share"
                                     >
-                                        <Share2 size={13} strokeWidth={1.5} />
+                                        <Share2 size={14} strokeWidth={1.75} />
                                     </button>
                                 </div>
 
@@ -205,7 +205,7 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                     {product.description}
                                 </p>
 
-                                <div className="border-t border-border pt-4">
+                                <div className="border-t border-[#E8E3DC] pt-4">
                                     <span className="text-[9px] uppercase tracking-[0.25em] text-muted">Price</span>
                                     <p className="text-2xl font-semibold text-gold mt-0.5">
                                         {formatPrice(product.price)}
@@ -214,13 +214,13 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                             </div>
 
                             {/* Size selector & WhatsApp Order */}
-                            <div className="rounded-[18px] border border-border bg-white p-6 space-y-6 shadow-luxury">
+                            <div className="rounded-[18px] border border-[#E8E3DC] bg-card p-6 space-y-6 shadow-luxury">
                                 {/* Size block */}
                                 <div className="space-y-2.5">
                                     <div className="flex items-center justify-between">
-                                        <span className="text-[10px] uppercase tracking-[0.3em] text-secondary">Select Size</span>
+                                        <span className="text-[10px] uppercase tracking-[0.3em] text-secondary font-semibold">Select Size</span>
                                         <span className="text-[9px] uppercase tracking-wider text-gold flex items-center gap-1 font-semibold">
-                                            <Ruler size={10} /> Sizing Chart
+                                            <Ruler size={11} strokeWidth={1.75} /> Sizing Guide
                                         </span>
                                     </div>
                                     <div className="flex gap-2">
@@ -228,10 +228,10 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                             <button
                                                 key={s}
                                                 onClick={() => setSize(s as any)}
-                                                className={`h-11 w-11 rounded-[8px] border text-[13px] font-bold uppercase transition-all duration-200 ${
+                                                className={`h-11 w-11 rounded-[12px] border text-[13px] font-bold uppercase transition-all duration-200 ${
                                                     size === s
-                                                        ? 'border-gold bg-gold text-white'
-                                                        : 'border-border bg-background text-secondary hover:text-primary'
+                                                        ? 'border-gold bg-gold text-white shadow-sm'
+                                                        : 'border-[#E8E3DC] bg-surface text-secondary hover:text-primary'
                                                 }`}
                                             >
                                                 {s}
@@ -242,24 +242,24 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
 
                                 {/* Quantity block */}
                                 <div className="space-y-2.5">
-                                    <span className="text-[10px] uppercase tracking-[0.3em] text-secondary block">Select Quantity</span>
+                                    <span className="text-[10px] uppercase tracking-[0.3em] text-secondary block font-semibold">Select Quantity</span>
                                     <div className="flex items-center gap-3">
-                                        <div className="flex items-center rounded-[8px] border border-border bg-background p-1">
+                                        <div className="flex items-center rounded-[12px] border border-[#E8E3DC] bg-surface p-1">
                                             <button
                                                 type="button"
                                                 onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                                                className="flex h-9 w-9 items-center justify-center text-secondary hover:text-primary transition-colors"
+                                                className="flex h-9 w-9 items-center justify-center text-secondary hover:text-primary transition-colors font-bold"
                                                 aria-label="Decrease quantity"
                                             >
                                                 -
                                             </button>
-                                            <span className="w-10 text-center text-sm font-semibold select-none text-primary">
+                                            <span className="w-10 text-center text-sm font-bold select-none text-primary">
                                                 {quantity}
                                             </span>
                                             <button
                                                 type="button"
                                                 onClick={() => setQuantity(quantity + 1)}
-                                                className="flex h-9 w-9 items-center justify-center text-secondary hover:text-primary transition-colors"
+                                                className="flex h-9 w-9 items-center justify-center text-secondary hover:text-primary transition-colors font-bold"
                                                 aria-label="Increase quantity"
                                             >
                                                 +
@@ -268,47 +268,47 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                                     </div>
                                 </div>
 
-                                {/* Product Specifications Tabs */}
-                                <div className="space-y-3">
-                                    <div className="flex border-b border-border text-xs font-semibold uppercase tracking-wider">
+                                {/* Specifications Accordion */}
+                                <div className="space-y-3 pt-2">
+                                    <div className="flex border-b border-[#E8E3DC] text-xs font-semibold uppercase tracking-wider">
                                         <button
                                             onClick={() => setActiveTab('details')}
-                                            className={`pb-2 pr-4 transition-colors ${activeTab === 'details' ? 'text-primary border-b border-gold' : 'text-secondary/50'}`}
+                                            className={`pb-2 pr-4 transition-colors ${activeTab === 'details' ? 'text-primary border-b-2 border-gold' : 'text-secondary/50'}`}
                                         >
-                                            Fabric Details
+                                            Fabric &amp; Details
                                         </button>
                                         <button
                                             onClick={() => setActiveTab('fit')}
-                                            className={`pb-2 px-4 transition-colors ${activeTab === 'fit' ? 'text-primary border-b border-gold' : 'text-secondary/50'}`}
+                                            className={`pb-2 px-4 transition-colors ${activeTab === 'fit' ? 'text-primary border-b-2 border-gold' : 'text-secondary/50'}`}
                                         >
                                             Fit Guide
                                         </button>
                                     </div>
                                     <div className="text-[12px] leading-relaxed text-secondary font-light min-h-[40px]">
                                         {activeTab === 'details' ? (
-                                            <p>100% luxury pre-shrunk cotton weight weave, crafted for visual longevity and comfort drape. Meticulous stitch trims.</p>
+                                            <p>100% premium heavy cotton weave, pre-shrunk for lasting structure, visual drape, and maximum comfort.</p>
                                         ) : (
-                                            <p>Relaxed oversized fit silhouettes. We suggest ordering your true standard size for the intended modern fashion drape.</p>
+                                            <p>Tailored relaxed modern silhouette. Select your true standard size for an ideal luxury fashion fit.</p>
                                         )}
                                     </div>
                                 </div>
 
-                                {/* Order Action */}
+                                {/* Order Action Button */}
                                 <a
                                     href={orderUrl}
                                     target="_blank"
                                     rel="noreferrer"
                                     onClick={handleOrder}
-                                    className="flex w-full h-[50px] items-center justify-center gap-3 rounded-full bg-gold text-[12px] font-bold uppercase tracking-[0.25em] text-white transition-all hover:bg-gold-light shadow-[0_4px_18px_rgba(183,134,74,0.22)]"
+                                    className="flex w-full h-[52px] items-center justify-center gap-3 rounded-[12px] bg-gold text-[11px] font-black uppercase tracking-[0.24em] text-white transition-all hover:bg-gold-dark shadow-luxury active:scale-[0.98]"
                                 >
                                     {addedToOrder ? (
                                         <>
-                                            <Check size={14} strokeWidth={2.5} />
+                                            <Check size={15} strokeWidth={2} />
                                             Redirecting to WhatsApp...
                                         </>
                                     ) : (
                                         <>
-                                            <MessageCircle size={14} strokeWidth={2.5} />
+                                            <MessageCircle size={15} strokeWidth={1.75} />
                                             Order via WhatsApp
                                         </>
                                     )}
@@ -320,17 +320,17 @@ export default function ProductDetail({ product, relatedProducts }: ProductDetai
                 </div>
             </section>
 
-            {/* Sticky mobile checkout button — above the floating bottom nav */}
-            <div className="fixed bottom-0 left-0 right-0 z-30 bg-white/90 border-t border-border px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] md:hidden backdrop-blur-md shadow-luxury-lg">
+            {/* Sticky mobile checkout button */}
+            <div className="fixed bottom-0 left-0 right-0 z-30 bg-white/90 border-t border-[#E8E3DC] px-4 pt-3 pb-[calc(12px+env(safe-area-inset-bottom))] md:hidden backdrop-blur-md shadow-luxury-lg">
                 <a
                     href={orderUrl}
                     target="_blank"
                     rel="noreferrer"
                     onClick={handleOrder}
-                    className="flex w-full h-12 items-center justify-center gap-2 rounded-full bg-gold text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-[0_4px_20px_rgba(183,134,74,0.25)] transition-all hover:bg-gold-light active:scale-[0.98]"
+                    className="flex w-full h-12 items-center justify-center gap-2 rounded-[12px] bg-gold text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-luxury transition-all hover:bg-gold-dark active:scale-[0.98]"
                     aria-label={`Order ${product.name} via WhatsApp`}
                 >
-                    <MessageCircle size={14} strokeWidth={2.5} aria-hidden="true" />
+                    <MessageCircle size={15} strokeWidth={1.75} aria-hidden="true" />
                     Order Now — {formatPrice(product.price)}
                 </a>
             </div>

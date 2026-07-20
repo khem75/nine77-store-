@@ -121,17 +121,17 @@ export default function ShopClient({ initialProducts = [] }: { initialProducts?:
             <div className="mx-auto max-w-[1440px] px-6 lg:px-8 mt-10">
                 
                 {/* ── 2. Filters & Options Sticky Header Bar ── */}
-                <div className="sticky top-[92px] md:top-[72px] z-30 mb-8 -mx-6 px-6 md:mx-0 md:px-0 border-b border-border bg-background/92 py-4 backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div className="sticky top-[92px] md:top-[72px] z-30 mb-8 -mx-6 px-6 md:mx-0 md:px-0 border-b border-[#E8E3DC] bg-[#F7F5F2]/95 py-4 backdrop-blur-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     {/* Category list chips */}
                     <div className="flex gap-2 overflow-x-auto hide-scrollbar pb-1 sm:pb-0" style={{ scrollSnapType: 'x mandatory' }}>
                         {categories.map((cat) => (
                             <button
                                 key={cat}
                                 onClick={() => updateCategory(cat)}
-                                className={`shrink-0 snap-start rounded-full border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.2em] transition-all duration-200 ${
+                                className={`shrink-0 snap-start min-h-[44px] rounded-[12px] border px-4.5 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] transition-all duration-200 cursor-pointer ${
                                     category === cat
-                                        ? 'border-gold bg-gold text-white'
-                                        : 'border-border bg-white text-secondary/70 hover:border-gold/30 hover:text-primary hover:shadow-soft'
+                                        ? 'border-gold bg-gold text-white shadow-sm'
+                                        : 'border-[#E8E3DC] bg-white text-secondary/70 hover:border-gold/40 hover:text-primary hover:shadow-soft'
                                 }`}
                             >
                                 {cat}
@@ -143,19 +143,19 @@ export default function ShopClient({ initialProducts = [] }: { initialProducts?:
                     <div className="flex items-center gap-3 shrink-0">
                         {/* Search Input field */}
                         <div className="relative flex-1 sm:flex-initial">
-                            <Search size={13} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary/50" />
+                            <Search size={13} strokeWidth={1.75} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary/50" />
                             <input
                                 type="text"
-                                placeholder="Search..."
+                                placeholder="Search products..."
                                 value={search}
                                 onChange={(e) => setSearch(e.target.value)}
-                                className="h-9 w-full sm:w-36 rounded-full border border-border bg-white pl-8.5 pr-3 text-[11px] text-primary placeholder:text-secondary/40 outline-none transition-all duration-300 focus:border-gold/40 focus:w-48"
+                                className="h-11 w-full sm:w-44 rounded-[14px] border border-[#E8E3DC] bg-white pl-9 pr-3 text-[11px] text-primary placeholder:text-secondary/45 outline-none transition-all duration-200 focus:border-gold/60 caret-gold"
                             />
                         </div>
 
                         {/* Sort Trigger */}
-                        <div className="flex items-center gap-2 rounded-full border border-border bg-white px-3.5 py-2">
-                            <SlidersHorizontal size={12} className="text-secondary/50" />
+                        <div className="flex items-center gap-2 min-h-[44px] rounded-[12px] border border-[#E8E3DC] bg-white px-3.5 py-2">
+                            <SlidersHorizontal size={13} strokeWidth={1.75} className="text-secondary/50 shrink-0" />
                             <select
                                 value={sort}
                                 onChange={(e) => setSort(e.target.value as any)}

@@ -165,18 +165,18 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                     top: scrolled ? "0px" : "32px"
                 }}
                 transition={reduceMotion ? { duration: 0 } : {
-                    y: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
-                    top: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+                    y: { duration: 0.55, ease: [0.22, 1, 0.36, 1] },
+                    top: { duration: 0.4, ease: [0.22, 1, 0.36, 1] },
                     opacity: { duration: 0.4 },
                 }}
-                className={`fixed inset-x-0 z-40 transition-all duration-500 ${
+                className={`fixed inset-x-0 z-40 transition-all duration-300 ${
                     scrolled
-                        ? 'bg-white/80 border-b border-border shadow-luxury backdrop-blur-xl'
+                        ? 'bg-[#F7F5F2]/85 border-b border-[#E8E3DC] shadow-luxury backdrop-blur-xl'
                         : 'bg-transparent border-b border-transparent'
                 }`}
                 role="banner"
             >
-                <div className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 lg:px-12 transition-all duration-500 ${
+                <div className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 lg:px-12 transition-all duration-300 ${
                     scrolled ? 'h-[54px] md:h-[64px]' : 'h-[64px] md:h-[76px]'
                 }`}>
 
@@ -184,12 +184,12 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                     <div className="flex items-center gap-4">
                         <button
                             onClick={() => setDrawerOpen(true)}
-                            className={`group flex h-10 w-10 items-center justify-center rounded-full border ${borderClass} ${bgClass} ${textClass} transition-all duration-300 ${hoverBorderClass} ${hoverBgClass} hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60`}
+                            className={`group flex h-10 w-10 items-center justify-center rounded-full border ${borderClass} ${bgClass} ${textClass} transition-all duration-200 ${hoverBorderClass} ${hoverBgClass} hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60`}
                             aria-label="Open navigation menu"
                             aria-expanded={drawerOpen}
                             aria-controls="nav-drawer"
                         >
-                            <Menu size={16} strokeWidth={1.4} />
+                            <Menu size={16} strokeWidth={1.75} />
                         </button>
 
                         {/* Desktop nav links */}
@@ -201,7 +201,7 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                                         key={item.href}
                                         href={item.href}
                                         data-cursor="magnetic"
-                                        className={`relative px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] transition-colors duration-300 rounded-sm group ${
+                                        className={`relative px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.22em] transition-colors duration-200 rounded-sm group ${
                                             isActive 
                                                 ? (isDarkHeader ? 'text-white' : 'text-primary')
                                                 : (isDarkHeader ? 'text-white/45 hover:text-white' : 'text-secondary hover:text-primary')
@@ -210,7 +210,7 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                                     >
                                         {item.label}
                                         <span
-                                            className={`absolute bottom-0.5 left-3 right-3 h-px bg-gold transition-transform duration-300 origin-left ${
+                                            className={`absolute bottom-0.5 left-3 right-3 h-px bg-gold transition-transform duration-200 origin-left ${
                                                 isActive ? 'scale-x-100' : 'scale-x-0 group-hover:scale-x-100'
                                             }`}
                                         />
@@ -231,10 +231,10 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                         <Link
                             href="/shop"
                             data-cursor="magnetic"
-                            className={`h-10 w-10 flex items-center justify-center rounded-full border ${borderClass} ${bgClass} ${textMutedClass} transition-all duration-300 hover:text-primary ${hoverBorderClass} hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60`}
+                            className={`h-10 w-10 flex items-center justify-center rounded-full border ${borderClass} ${bgClass} ${textMutedClass} transition-all duration-200 hover:text-primary ${hoverBorderClass} hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60`}
                             aria-label="Browse shop"
                         >
-                            <Search size={14} strokeWidth={1.4} />
+                            <Search size={14} strokeWidth={1.75} />
                         </Link>
 
                         {/* WhatsApp support */}
@@ -243,7 +243,7 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                             target="_blank"
                             rel="noreferrer"
                             data-cursor="magnetic"
-                            className={`hidden md:flex h-10 w-10 items-center justify-center rounded-full border ${borderClass} ${bgClass} ${textMutedClass} transition-all duration-300 hover:border-[#25D366]/40 hover:text-[#25D366] hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/40`}
+                            className={`hidden md:flex h-10 w-10 items-center justify-center rounded-full border ${borderClass} ${bgClass} ${textMutedClass} transition-all duration-200 hover:border-[#25D366]/40 hover:text-[#25D366] hover:scale-105 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366]/40`}
                             aria-label="WhatsApp Support"
                         >
                             <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true">
@@ -286,54 +286,36 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                         <motion.aside
                             variants={drawerVariants}
                             data-lenis-prevent
-                            className="relative flex h-full w-[88%] max-w-[360px] flex-col overflow-y-auto overflow-x-hidden border-r border-border z-10"
+                            className="relative flex h-full w-[88%] max-w-[360px] flex-col overflow-y-auto overflow-x-hidden border-r border-[#E8E3DC] z-10 bg-[#F7F5F2]"
                             style={{
-                                background: 'linear-gradient(160deg, #F8F6F2 0%, #F3EFE8 100%)',
                                 boxShadow: '20px 0 60px rgba(0,0,0,0.05)',
                             }}
                         >
-                            {/* Grain texture overlay */}
-                            <div
-                                className="pointer-events-none absolute inset-0 z-0 opacity-[0.025]"
-                                style={{
-                                    backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-                                    backgroundSize: '200px 200px',
-                                }}
-                                aria-hidden="true"
-                            />
-
-                            {/* Radial ambient glow top */}
-                            <div
-                                className="pointer-events-none absolute top-0 left-0 w-full h-64 z-0 opacity-[0.06]"
-                                style={{ background: 'radial-gradient(ellipse 80% 60% at 20% -10%, #B7864A, transparent)' }}
-                                aria-hidden="true"
-                            />
-
-                            {/* ── Header ─────────────────────────── */}
-                            <div className="relative z-10 flex items-center justify-between px-7 pt-7 pb-5 border-b border-border">
+                            {/* Header */}
+                            <div className="relative z-10 flex items-center justify-between px-7 pt-7 pb-5 border-b border-[#E8E3DC]">
                                 <Logo variant="drawer" onClick={closeDrawer} />
 
                                 <button
                                     onClick={closeDrawer}
-                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-white/40 text-primary transition-all duration-300 hover:border-primary/20 hover:rotate-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
+                                    className="flex h-10 w-10 items-center justify-center rounded-full border border-[#E8E3DC] bg-white/60 text-primary transition-all duration-200 hover:border-primary/20 hover:rotate-90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50"
                                     aria-label="Close navigation menu"
                                 >
-                                    <X size={15} strokeWidth={1.5} />
+                                    <X size={15} strokeWidth={1.75} />
                                 </button>
                             </div>
 
-                            {/* ── Search ─────────────────────────── */}
+                            {/* Search */}
                             <div className="relative z-10 px-7 pt-6 pb-2">
                                 <form onSubmit={handleSearchSubmit} role="search" aria-label="Search products">
                                     <div className="relative">
-                                        <Search size={13} strokeWidth={1.5} className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" aria-hidden="true" />
+                                        <Search size={13} strokeWidth={1.75} className="absolute left-4 top-1/2 -translate-y-1/2 text-secondary pointer-events-none" aria-hidden="true" />
                                         <input
                                             ref={searchRef}
                                             type="search"
                                             placeholder="Search products..."
                                             value={searchQuery}
                                             onChange={(e) => setSearchQuery(e.target.value)}
-                                            className="w-full h-11 rounded-full border border-border bg-white/50 pl-10 pr-4 text-[12px] text-primary placeholder:text-secondary/55 outline-none transition-all duration-300 focus:border-gold/40 focus:bg-white caret-gold"
+                                            className="w-full h-11 rounded-[14px] border border-[#E8E3DC] bg-white pl-10 pr-4 text-[12px] text-primary placeholder:text-secondary/55 outline-none transition-all duration-200 focus:border-gold/60 caret-gold"
                                             aria-label="Search products"
                                         />
                                     </div>

@@ -83,12 +83,45 @@ export default function RootLayout({
 }: {
     children: React.ReactNode;
 }) {
+    const jsonLd = {
+        '@context': 'https://schema.org',
+        '@graph': [
+            {
+                '@type': 'Organization',
+                '@id': 'https://nine77-store.vercel.app/#organization',
+                name: 'NINE77',
+                url: 'https://nine77-store.vercel.app',
+                logo: 'https://nine77-store.vercel.app/og-image.png',
+                sameAs: [
+                    'https://www.instagram.com/nine.77___/',
+                    'https://wa.me/9779810605409'
+                ],
+                description: 'NINE77 — Next-generation luxury streetwear in Mahendranagar, Nepal.'
+            },
+            {
+                '@type': 'WebSite',
+                '@id': 'https://nine77-store.vercel.app/#website',
+                url: 'https://nine77-store.vercel.app',
+                name: 'NINE77 Streetwear',
+                publisher: {
+                    '@id': 'https://nine77-store.vercel.app/#organization'
+                }
+            }
+        ]
+    };
+
     return (
         <html
             lang="en"
             className={`${inter.variable}`}
             suppressHydrationWarning
         >
+            <head>
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                />
+            </head>
             <body suppressHydrationWarning>
                 {children}
                 <Toaster
