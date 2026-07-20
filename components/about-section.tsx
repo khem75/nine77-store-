@@ -2,65 +2,71 @@
 
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import Logo from './logo';
 
 export default function AboutSection() {
     return (
-        <section className="border-t border-white/10 px-6 py-16 lg:px-8">
-            <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+        <section className="border-t border-border bg-background px-5 py-20 lg:px-16 md:py-28">
+            <div className="mx-auto grid max-w-[1440px] gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
                 <motion.div
-                    initial={{ opacity: 0, x: -30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    transition={{ duration: 0.7 }}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    <p className="text-sm uppercase tracking-[0.35em] text-gold">
+                    {/* Brand Logo in About Section — Ultra-subtle compact luxury mark */}
+                    <div className="mb-4 inline-block">
+                        <Logo variant="about" />
+                    </div>
+
+                    <p className="text-[10px] uppercase tracking-[0.35em] text-gold font-bold">
                         About NINE77
                     </p>
 
-                    <h2 className="mt-4 text-4xl font-black uppercase tracking-[0.04em] text-white sm:text-5xl">
-                        A brand defined by premium streetwear identity.
+                    <h2 className="mt-3 text-[clamp(2rem,4vw,3.5rem)] font-black uppercase tracking-tight text-primary leading-[0.95]">
+                        A brand defined by luxury streetwear identity.
                     </h2>
 
-                    <p className="mt-6 max-w-xl text-sm leading-8 text-white/70">
-                        NINE77 was created for those who demand luxury with attitude.
-                        Each piece balances quiet sophistication with bold streetwear
-                        spirit, crafted to become a signature statement in every wardrobe.
+                    <p className="mt-6 max-w-xl text-[clamp(0.95rem,2vw,1.1rem)] leading-[1.8] text-secondary font-light">
+                        NINE77 was created for those who demand quiet luxury with visual attitude.
+                        Each garment balances understated sophistication with high-fashion proportions.
                     </p>
 
-                    <div className="mt-8 grid gap-4 sm:grid-cols-2">
-                        <div className="rounded-[24px] border border-white/10 bg-white/5 p-6">
-                            <p className="font-semibold uppercase tracking-[0.25em] text-gold">
+                    <div className="mt-10 grid gap-4 sm:grid-cols-2">
+                        <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold">
                                 Quiet Luxury
                             </p>
 
-                            <p className="mt-3 text-sm leading-7 text-white/70">
-                                Refined finishes designed for premium everyday wear.
+                            <p className="mt-2 text-[12px] leading-relaxed text-secondary font-light">
+                                Museum-grade finishes tailored for modern everyday wear.
                             </p>
                         </div>
 
-                        <div className="rounded-[24px] border border-white/10 bg-white/5 p-6">
-                            <p className="font-semibold uppercase tracking-[0.25em] text-gold">
+                        <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-gold">
                                 Editorial Edge
                             </p>
 
-                            <p className="mt-3 text-sm leading-7 text-white/70">
-                                Modern silhouettes inspired by luxury streetwear culture.
+                            <p className="mt-2 text-[12px] leading-relaxed text-secondary font-light">
+                                Architectural silhouettes inspired by international runway culture.
                             </p>
                         </div>
                     </div>
                 </motion.div>
 
                 <motion.div
-                    initial={{ opacity: 0, x: 30 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.4 }}
-                    transition={{ duration: 0.7 }}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.3 }}
+                    transition={{ duration: 0.7, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    <div className="relative h-[550px] overflow-hidden rounded-[40px] border border-white/10 bg-black shadow-[0_0_80px_rgba(212,175,55,0.12)]">
+                    <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-surface shadow-card">
                         <Image
                             src="/about-image.jpg"
                             alt="About NINE77"
                             fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
                             className="object-cover"
                         />
                     </div>

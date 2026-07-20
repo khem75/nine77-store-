@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useState, useEffect, useCallback, useMemo } from 'react';
+import React, { createContext, useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import type { ResolvedCampaign } from '@/types/campaign';
 import { trackHeroEvent } from './hooks/useAnalytics';
 
@@ -16,6 +16,7 @@ interface HeroContextType {
   nextSlide: (source: 'autoplay' | 'swipe' | 'arrow' | 'navigator') => void;
   prevSlide: (source: 'autoplay' | 'swipe' | 'arrow' | 'navigator') => void;
   setAutoplayPaused: (paused: boolean) => void;
+  triggerUserInteraction: () => void;
 }
 
 export const HeroContext = createContext<HeroContextType | null>(null);
@@ -23,6 +24,7 @@ export const HeroContext = createContext<HeroContextType | null>(null);
 const STATE_CACHE_KEY = 'nine77-hero-active-index';
 const TIMESTAMP_CACHE_KEY = 'nine77-hero-active-timestamp';
 const SESSION_EXPIRY_MS = 10 * 60 * 1000; // 10 minutes in milliseconds
+const RESUME_AUTOPLAY_DELAY = 4000; // Resume autoplay after 4 seconds of inactivity
 
 export function HeroProvider({
   campaigns,
@@ -37,6 +39,19 @@ export function HeroProvider({
   const [prevIndex, setPrevIndex] = useState(0);
   const [isAutoplayPaused, setAutoplayPaused] = useState(false);
   const [transitionDirection, setTransitionDirection] = useState<'next' | 'prev'>('next');
+  
+  const resumeTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Trigger interaction pause & set 4-second resume timer
+  const triggerUserInteraction = useCallback(() => {
+    setAutoplayPaused(true);
+    if (resumeTimerRef.current) {
+      clearTimeout(resumeTimerRef.current);
+    }
+    resumeTimerRef.current = setTimeout(() => {
+      setAutoplayPaused(false);
+    }, RESUME_AUTOPLAY_DELAY);
+  }, []);
 
   // Recover state from sessionStorage if it has not expired (less than 10 min old)
   useEffect(() => {
@@ -58,12 +73,23 @@ export function HeroProvider({
     }
   }, [campaigns.length]);
 
+  // Cleanup interaction timer on unmount
+  useEffect(() => {
+    return () => {
+      if (resumeTimerRef.current) clearTimeout(resumeTimerRef.current);
+    };
+  }, []);
+
   const setActiveIndex = useCallback(
     (index: number, source: 'autoplay' | 'swipe' | 'arrow' | 'navigator' | 'initial') => {
       if (campaigns.length === 0) return;
       
       const newIndex = (index + campaigns.length) % campaigns.length;
       if (newIndex === activeIndex) return;
+
+      if (source !== 'autoplay') {
+        triggerUserInteraction();
+      }
 
       setPrevIndex(activeIndex);
       setTransitionDirection(newIndex > activeIndex ? 'next' : 'prev');
@@ -87,7 +113,7 @@ export function HeroProvider({
         viewport: typeof window !== 'undefined' && window.innerWidth < 768 ? 'mobile' : 'desktop',
       });
     },
-    [activeIndex, campaigns]
+    [activeIndex, campaigns, triggerUserInteraction]
   );
 
   const nextSlide = useCallback(
@@ -117,6 +143,7 @@ export function HeroProvider({
       nextSlide,
       prevSlide,
       setAutoplayPaused,
+      triggerUserInteraction,
     }),
     [
       campaigns,
@@ -128,6 +155,7 @@ export function HeroProvider({
       setActiveIndex,
       nextSlide,
       prevSlide,
+      triggerUserInteraction,
     ]
   );
 

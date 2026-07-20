@@ -1,15 +1,52 @@
 // ============================================================
-// NINE77 — Hero Motion and Transitions Settings
+// NINE77 — Master Luxury Editorial Motion Settings
 // ============================================================
 
 export const EASE = [0.16, 1, 0.3, 1] as [number, number, number, number];
+export const EASE_IN_OUT = [0.42, 0, 0.58, 1] as [number, number, number, number];
 
-export const TRANSITION_CONFIGS = {
-  duration: 0.95,
-  ease: EASE,
+export const SPRING_BUTTON = {
+  type: 'spring',
+  stiffness: 260,
+  damping: 20,
 };
 
-// Framer Motion variant overrides for slide entrance/exits
+// Master Editorial Slide Transitions
+// Enter: opacity 0->1, scale 1.12->1.05, y 10->0, duration 1.2s, easeInOut
+// Exit: opacity 1->0, scale 1.05->1.08, duration 1.2s, easeInOut
+export const masterSlideVariants = {
+  enter: {
+    opacity: 0,
+    scale: 1.12,
+    y: 10,
+  },
+  center: {
+    opacity: 1,
+    scale: 1.05,
+    y: 0,
+    transition: {
+      duration: 1.2,
+      ease: EASE_IN_OUT,
+    },
+  },
+  exit: {
+    opacity: 0,
+    scale: 1.08,
+    transition: {
+      duration: 1.2,
+      ease: EASE_IN_OUT,
+    },
+  },
+};
+
+// Reduced motion fallback variant
+export const reducedMotionSlideVariants = {
+  enter: { opacity: 0 },
+  center: { opacity: 1, transition: { duration: 0.4 } },
+  exit: { opacity: 0, transition: { duration: 0.4 } },
+};
+
+// Legacy slide variants preserved for backward compatibility
 export const slideVariants = {
   enter: (direction: 'next' | 'prev') => ({
     x: direction === 'next' ? '100%' : '-100%',
@@ -33,40 +70,24 @@ export const slideVariants = {
   }),
 };
 
-// Framer Motion headline word-crop animations (legacy, preserved)
-export const wordCropVariants = {
-  initial: { y: '108%', opacity: 0, filter: 'blur(6px)' },
-  animate: (i: number) => ({
-    y: 0,
-    opacity: 1,
-    filter: 'blur(0px)',
+// 100ms Staggered Text Animations (Badge -> Heading -> Description -> Buttons -> Metadata)
+export const textStaggerContainer = {
+  animate: {
     transition: {
-      duration: 0.95,
-      delay: 0.06 + i * 0.12,
-      ease: EASE,
+      staggerChildren: 0.1,
     },
-  }),
+  },
 };
 
-// Generic slide elements fade-in (legacy, preserved)
-export const elementFadeVariants = {
+export const badgeVariants = {
   initial: { opacity: 0, y: 12 },
-  animate: (delay = 0) => ({
+  animate: {
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.8,
-      delay,
-      ease: EASE,
-    },
-  }),
+    transition: { duration: 0.7, ease: EASE },
+  },
 };
 
-// ──────────────────────────────────────────────────────────────
-// NEW — Editorial Luxury Variants
-// ──────────────────────────────────────────────────────────────
-
-/** Large headline line reveal — clip from bottom, blur fade, staggered per line */
 export const titleLineVariants = {
   initial: { y: '112%', opacity: 0, filter: 'blur(10px)' },
   animate: (i: number) => ({
@@ -75,67 +96,52 @@ export const titleLineVariants = {
     filter: 'blur(0px)',
     transition: {
       duration: 1.0,
-      delay: 0.08 + i * 0.14,
+      delay: 0.08 + i * 0.1,
       ease: EASE,
     },
   }),
 };
 
-/** Outlined "NEW STANDARD" reveal — slides up from slightly below with blur */
 export const outlinedTextVariants = {
   initial: { y: '112%', opacity: 0, filter: 'blur(8px)' },
   animate: {
     y: 0,
     opacity: 1,
     filter: 'blur(0px)',
-    transition: { duration: 1.0, delay: 0.42, ease: EASE },
+    transition: { duration: 1.0, delay: 0.3, ease: EASE },
   },
 };
 
-/** Section label (DROP 01 · EDITORIAL COLLECTION) fade-in */
-export const labelVariants = {
-  initial: { opacity: 0, y: 10 },
-  animate: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.65, delay: 0.04, ease: EASE },
-  },
-};
-
-/** Description paragraph reveal */
 export const descVariants = {
   initial: { opacity: 0, y: 14 },
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.8, delay: 0.58, ease: EASE },
+    transition: { duration: 0.8, delay: 0.4, ease: EASE },
   },
 };
 
-/** CTA button group slides up */
 export const buttonGroupVariants = {
   initial: { opacity: 0, y: 18 },
   animate: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.75, delay: 0.72, ease: EASE },
+    transition: { duration: 0.75, delay: 0.5, ease: EASE },
   },
 };
 
-/** Scroll indicator, trust strip — delayed fade in after rest of content */
 export const scrollIndicatorVariants = {
   initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    transition: { duration: 0.7, delay: 1.1, ease: EASE },
+    transition: { duration: 0.7, delay: 0.6, ease: EASE },
   },
 };
 
-/** Brand mark at top of hero */
 export const brandMarkVariants = {
   initial: { opacity: 0 },
   animate: {
     opacity: 1,
-    transition: { duration: 1.2, delay: 0.05, ease: EASE },
+    transition: { duration: 1.0, delay: 0.05, ease: EASE },
   },
 };

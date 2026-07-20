@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { useHero } from './useHero';
 
-export function useAutoplay(duration = 7000) {
+export function useAutoplay(duration = 6000) {
   const { isPlaying, activeIndex, nextSlide } = useHero();
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -16,7 +16,7 @@ export function useAutoplay(duration = 7000) {
       return;
     }
 
-    // Set up the recurring interval
+    // Set up the recurring 6-second interval
     timerRef.current = setInterval(() => {
       nextSlide('autoplay');
     }, duration);

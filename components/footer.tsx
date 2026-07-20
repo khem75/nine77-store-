@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { Instagram, Facebook, Music2, ArrowRight } from 'lucide-react';
+import Logo from './logo';
 
 const WHATSAPP = 'https://wa.me/9779810605409?text=Hello%20NINE77%2C%20I%20have%20an%20inquiry.';
 const INSTAGRAM = 'https://www.instagram.com/nine.77___/';
@@ -13,9 +14,7 @@ export default function Footer() {
                 <div className="grid gap-8 md:grid-cols-5">
                     {/* Brand */}
                     <div className="md:col-span-2 flex flex-col gap-3">
-                        <h3 className="text-xl font-black uppercase tracking-[0.08em] text-white">
-                            NINE<span className="text-gold">77</span>
-                        </h3>
+                        <Logo variant="footer" />
                         <p className="text-[12px] leading-relaxed text-white/40 max-w-xs font-light">
                             Premium streetwear engineered for those who refuse to blend in. Mahendranagar, Nepal.
                         </p>

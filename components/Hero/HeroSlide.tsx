@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { motion, useReducedMotion } from 'framer-motion';
 import type { ResolvedCampaign } from '@/types/campaign';
+import { masterSlideVariants, reducedMotionSlideVariants } from './HeroAnimations';
 
 interface HeroSlideProps {
   campaign: ResolvedCampaign;
   isActive: boolean;
   isPreload: boolean;
+  isFirstSlide: boolean;
   featureFlags?: {
     videoEnabled?: boolean;
     sceneEnabled?: boolean;
@@ -18,12 +21,14 @@ export default function HeroSlide({
   campaign,
   isActive,
   isPreload,
+  isFirstSlide,
   featureFlags = { videoEnabled: true, sceneEnabled: false }
 }: HeroSlideProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [loadError, setLoadError] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
-  // Reset states on campaign change + defensive timeout to clear blur
+  // Reset states on campaign change
   useEffect(() => {
     setImgLoaded(false);
     setLoadError(false);
@@ -31,7 +36,7 @@ export default function HeroSlide({
     return () => clearTimeout(timer);
   }, [campaign.id, campaign.version]);
 
-  // Versioned URL helper for cache-busting (skips local/base64 paths)
+  // Versioned URL helper for cache-busting
   const getVersionedUrl = (url: string) => {
     if (!url) return '';
     if (url.startsWith('data:') || url.startsWith('/')) return url;
@@ -56,11 +61,22 @@ export default function HeroSlide({
 
   const isVideo = campaign.type === 'video' && featureFlags.videoEnabled;
 
+  if (!isActive && !isPreload) return null;
+
   return (
-    <div
-      className={`absolute inset-0 w-full h-full transition-opacity duration-[1100ms] ${
-        isActive ? 'opacity-100 z-[6]' : 'opacity-0 z-[5] pointer-events-none'
+    <motion.div
+      key={campaign.id}
+      variants={shouldReduceMotion ? reducedMotionSlideVariants : masterSlideVariants}
+      initial="enter"
+      animate={isActive ? "center" : "exit"}
+      exit="exit"
+      className={`absolute inset-0 w-full h-full ${
+        isActive ? 'z-[6] pointer-events-auto' : 'z-[5] pointer-events-none'
       }`}
+      style={{
+        willChange: 'transform, opacity',
+        transform: 'translateZ(0)',
+      }}
     >
       {/* Loading placeholder */}
       {(!imgLoaded || loadError) && (
@@ -71,27 +87,16 @@ export default function HeroSlide({
         </div>
       )}
 
-      {/* Load-error fallback */}
-      {loadError && (
-        <div className="absolute inset-0 z-[2] bg-neutral-900/50 backdrop-blur-md flex flex-col items-center justify-center">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/25">
-            Campaign Media Unavailable
-          </p>
-        </div>
-      )}
-
       {/* Media layer with Ken Burns zoom */}
       {!loadError && (
         <div
-          // Key forces Ken Burns to restart when new slide becomes active
-          key={isActive ? `${campaign.id}-active` : campaign.id}
-          className={`w-full h-full relative transition-all duration-[1200ms] ease-[var(--theme-motion-hero)] ${
-            imgLoaded ? 'scale-100 blur-0' : 'scale-[1.03] blur-[10px]'
+          className={`w-full h-full relative transition-all duration-[1200ms] ${
+            imgLoaded ? 'blur-0' : 'blur-[10px]'
           }`}
           style={{
-            // Ken Burns: slow 25s zoom — only on active slide
-            animation: isActive ? 'kenBurns 25s ease-in-out forwards' : 'none',
+            animation: isActive && !shouldReduceMotion ? 'kenBurns 25s ease-in-out forwards' : 'none',
             willChange: 'transform',
+            transform: 'translateZ(0)',
           }}
         >
           {isVideo ? (
@@ -125,13 +130,14 @@ export default function HeroSlide({
             </>
           ) : (
             <>
-              {/* Desktop image — focal-point right for model placement */}
+              {/* Desktop image — Priority ONLY on first slide */}
               <div className="hidden md:block absolute inset-0">
                 <Image
                   src={getVersionedUrl(desktopMedia.url)}
                   alt={desktopMedia.alt || 'NINE77 Campaign'}
                   fill
-                  priority={isActive}
+                  priority={isFirstSlide}
+                  loading={isFirstSlide ? 'eager' : 'lazy'}
                   sizes="100vw"
                   className="object-cover transition-opacity duration-[1100ms]"
                   style={{
@@ -143,13 +149,14 @@ export default function HeroSlide({
                 />
               </div>
 
-              {/* Mobile image */}
+              {/* Mobile image — Priority ONLY on first slide */}
               <div className="block md:hidden absolute inset-0">
                 <Image
                   src={getVersionedUrl(mobileMedia.url)}
                   alt={mobileMedia.alt || 'NINE77 Campaign'}
                   fill
-                  priority={isActive}
+                  priority={isFirstSlide}
+                  loading={isFirstSlide ? 'eager' : 'lazy'}
                   sizes="100vw"
                   className="object-cover transition-opacity duration-[1100ms]"
                   style={{
@@ -163,7 +170,7 @@ export default function HeroSlide({
             </>
           )}
 
-          {/* LEFT text-contrast gradient — deep shadow for readability */}
+          {/* Vignette & Gradient Overlay */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
@@ -175,6 +182,6 @@ export default function HeroSlide({
           />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

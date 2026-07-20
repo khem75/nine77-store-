@@ -16,13 +16,24 @@ export async function getProducts(): Promise<AdminProduct[]> {
     const { mockGetProducts } = await import('./mock-data');
     return mockGetProducts();
   }
-  const supabase = await getSupabaseClient();
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .order('updated_at', { ascending: false });
-  if (error) throw new Error(error.message);
-  return data ?? [];
+  try {
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('updated_at', { ascending: false });
+      
+    if (error) {
+      console.warn('[Supabase] getProducts error:', error.message);
+      const { mockGetProducts } = await import('./mock-data');
+      return mockGetProducts();
+    }
+    return data ?? [];
+  } catch (e: any) {
+    console.warn('[Supabase] getProducts exception (falling back to mock data):', e?.message || e);
+    const { mockGetProducts } = await import('./mock-data');
+    return mockGetProducts();
+  }
 }
 
 export async function getProductById(id: string): Promise<AdminProduct | null> {
@@ -30,10 +41,20 @@ export async function getProductById(id: string): Promise<AdminProduct | null> {
     const { mockGetProductById } = await import('./mock-data');
     return mockGetProductById(id);
   }
-  const supabase = await getSupabaseClient();
-  const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
-  if (error) return null;
-  return data;
+  try {
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase.from('products').select('*').eq('id', id).single();
+    if (error) {
+      console.warn('[Supabase] getProductById error:', error.message);
+      const { mockGetProductById } = await import('./mock-data');
+      return mockGetProductById(id);
+    }
+    return data;
+  } catch (e: any) {
+    console.warn('[Supabase] getProductById exception:', e?.message || e);
+    const { mockGetProductById } = await import('./mock-data');
+    return mockGetProductById(id);
+  }
 }
 
 export async function createProduct(values: ProductFormValues): Promise<{ success: boolean; id?: string; error?: string }> {
@@ -44,17 +65,21 @@ export async function createProduct(values: ProductFormValues): Promise<{ succes
     revalidatePath('/admin');
     return { success: true, id: product.id };
   }
-  const supabase = await getSupabaseClient();
-  const now = new Date().toISOString();
-  const { data, error } = await supabase
-    .from('products')
-    .insert([{ ...values, created_at: now, updated_at: now }])
-    .select('id')
-    .single();
-  if (error) return { success: false, error: error.message };
-  revalidatePath('/admin/products');
-  revalidatePath('/admin');
-  return { success: true, id: data.id };
+  try {
+    const supabase = await getSupabaseClient();
+    const now = new Date().toISOString();
+    const { data, error } = await supabase
+      .from('products')
+      .insert([{ ...values, created_at: now, updated_at: now }])
+      .select('id')
+      .single();
+    if (error) return { success: false, error: error.message };
+    revalidatePath('/admin/products');
+    revalidatePath('/admin');
+    return { success: true, id: data?.id };
+  } catch (e: any) {
+    return { success: false, error: e?.message || 'Failed to create product' };
+  }
 }
 
 export async function updateProduct(id: string, values: Partial<ProductFormValues>): Promise<{ success: boolean; error?: string }> {
@@ -65,15 +90,19 @@ export async function updateProduct(id: string, values: Partial<ProductFormValue
     revalidatePath('/admin');
     return ok ? { success: true } : { success: false, error: 'Product not found' };
   }
-  const supabase = await getSupabaseClient();
-  const { error } = await supabase
-    .from('products')
-    .update({ ...values, updated_at: new Date().toISOString() })
-    .eq('id', id);
-  if (error) return { success: false, error: error.message };
-  revalidatePath('/admin/products');
-  revalidatePath('/admin');
-  return { success: true };
+  try {
+    const supabase = await getSupabaseClient();
+    const { error } = await supabase
+      .from('products')
+      .update({ ...values, updated_at: new Date().toISOString() })
+      .eq('id', id);
+    if (error) return { success: false, error: error.message };
+    revalidatePath('/admin/products');
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e?.message || 'Failed to update product' };
+  }
 }
 
 export async function deleteProduct(id: string): Promise<{ success: boolean; error?: string }> {
@@ -84,12 +113,16 @@ export async function deleteProduct(id: string): Promise<{ success: boolean; err
     revalidatePath('/admin');
     return ok ? { success: true } : { success: false, error: 'Product not found' };
   }
-  const supabase = await getSupabaseClient();
-  const { error } = await supabase.from('products').delete().eq('id', id);
-  if (error) return { success: false, error: error.message };
-  revalidatePath('/admin/products');
-  revalidatePath('/admin');
-  return { success: true };
+  try {
+    const supabase = await getSupabaseClient();
+    const { error } = await supabase.from('products').delete().eq('id', id);
+    if (error) return { success: false, error: error.message };
+    revalidatePath('/admin/products');
+    revalidatePath('/admin');
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e?.message || 'Failed to delete product' };
+  }
 }
 
 export async function duplicateProduct(id: string): Promise<{ success: boolean; error?: string }> {
@@ -122,4 +155,3 @@ export async function getProductBySlug(slug: string): Promise<AdminProduct | nul
   const products = await getProducts();
   return products.find((p) => slugify(p.name) === slug) ?? null;
 }
-

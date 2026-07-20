@@ -15,25 +15,25 @@ module.exports = {
                 mono: ['var(--font-sans)', 'monospace'],
             },
             colors: {
-                /* ── Light Theme (Primary) ── */
-                background: '#F8F6F2',
-                'background-2': '#F3EFE8',
-                surface: '#F3EFE8',
+                /* ── Luxury Master Palette ── */
+                background: '#F5F3EF',
+                'background-2': '#EEE9E2',
+                surface: '#EEE9E2',
                 card: '#FFFFFF',
 
                 /* ── Text ── */
                 primary: '#111111',
-                secondary: '#5F5F5F',
+                secondary: '#6B6B6B',
                 muted: '#8A8A8A',
 
                 /* ── Accent ── */
-                gold: '#B7864A',
-                'gold-light': '#C99B5F',
-                'gold-dark': '#9A6F3A',
+                gold: '#8B6A3E',
+                'gold-light': '#A5804F',
+                'gold-dark': '#6E522E',
 
                 /* ── Borders ── */
-                border: '#E6DFD5',
-                'border-subtle': '#EDE8E0',
+                border: 'rgba(0, 0, 0, 0.08)',
+                'border-subtle': 'rgba(0, 0, 0, 0.04)',
 
                 /* ── Dark Sections ── */
                 'hero-dark': '#0C0A08',

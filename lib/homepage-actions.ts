@@ -17,10 +17,18 @@ export async function getHomepageSettings(): Promise<HomepageSettings | null> {
     const { mockGetHomepage } = await import('./mock-data');
     return mockGetHomepage();
   }
-  const supabase = await getSupabaseClient();
-  const { data, error } = await supabase.from('homepage').select('*').eq('id', 1).single();
-  if (error) return null;
-  return data;
+  try {
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase.from('homepage').select('*').eq('id', 1).single();
+    if (error) {
+      const { mockGetHomepage } = await import('./mock-data');
+      return mockGetHomepage();
+    }
+    return data;
+  } catch {
+    const { mockGetHomepage } = await import('./mock-data');
+    return mockGetHomepage();
+  }
 }
 
 export async function updateHomepageSettings(
@@ -32,14 +40,18 @@ export async function updateHomepageSettings(
     revalidatePath('/admin/homepage');
     return { success: true };
   }
-  const supabase = await getSupabaseClient();
-  const { error } = await supabase
-    .from('homepage')
-    .upsert({ id: 1, ...values, updated_at: new Date().toISOString() });
-  if (error) return { success: false, error: error.message };
-  revalidatePath('/admin/homepage');
-  revalidatePath('/');
-  return { success: true };
+  try {
+    const supabase = await getSupabaseClient();
+    const { error } = await supabase
+      .from('homepage')
+      .upsert({ id: 1, ...values, updated_at: new Date().toISOString() });
+    if (error) return { success: false, error: error.message };
+    revalidatePath('/admin/homepage');
+    revalidatePath('/');
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e?.message || 'Failed to update homepage settings' };
+  }
 }
 
 // ── Settings ─────────────────────────────────────────────────────
@@ -49,10 +61,18 @@ export async function getStoreSettings(): Promise<StoreSettings | null> {
     const { mockGetSettings } = await import('./mock-data');
     return mockGetSettings();
   }
-  const supabase = await getSupabaseClient();
-  const { data, error } = await supabase.from('settings').select('*').eq('id', 1).single();
-  if (error) return null;
-  return data;
+  try {
+    const supabase = await getSupabaseClient();
+    const { data, error } = await supabase.from('settings').select('*').eq('id', 1).single();
+    if (error) {
+      const { mockGetSettings } = await import('./mock-data');
+      return mockGetSettings();
+    }
+    return data;
+  } catch {
+    const { mockGetSettings } = await import('./mock-data');
+    return mockGetSettings();
+  }
 }
 
 export async function updateStoreSettings(
@@ -64,11 +84,15 @@ export async function updateStoreSettings(
     revalidatePath('/admin/settings');
     return { success: true };
   }
-  const supabase = await getSupabaseClient();
-  const { error } = await supabase
-    .from('settings')
-    .upsert({ id: 1, ...values, updated_at: new Date().toISOString() });
-  if (error) return { success: false, error: error.message };
-  revalidatePath('/admin/settings');
-  return { success: true };
+  try {
+    const supabase = await getSupabaseClient();
+    const { error } = await supabase
+      .from('settings')
+      .upsert({ id: 1, ...values, updated_at: new Date().toISOString() });
+    if (error) return { success: false, error: error.message };
+    revalidatePath('/admin/settings');
+    return { success: true };
+  } catch (e: any) {
+    return { success: false, error: e?.message || 'Failed to update store settings' };
+  }
 }

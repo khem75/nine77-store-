@@ -4,6 +4,7 @@ import Footer from '@/components/footer';
 import MobileBottomNav from '@/components/mobile-bottom-nav';
 import SmoothScrollProvider from '@/components/smooth-scroll-provider';
 import CustomCursor from '@/components/custom-cursor';
+import PageTransition from '@/components/page-transition';
 import { getProducts } from '@/lib/product-actions';
 
 export default async function StoreLayout({
@@ -20,7 +21,7 @@ export default async function StoreLayout({
             {/* Skip to main content — accessibility */}
             <a
                 href="#main-content"
-                className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:rounded-lg focus:bg-gold focus:px-4 focus:py-2 focus:text-[11px] focus:font-bold focus:uppercase focus:tracking-widest focus:text-black"
+                className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:rounded-lg focus:bg-gold focus:px-4 focus:py-2 focus:text-[11px] focus:font-bold focus:uppercase focus:tracking-widest focus:text-white"
             >
                 Skip to content
             </a>
@@ -36,7 +37,7 @@ export default async function StoreLayout({
                     className="relative pb-mobile-nav md:pb-0"
                     tabIndex={-1}
                 >
-                    {children}
+                    <PageTransition>{children}</PageTransition>
                 </main>
                 <Footer />
                 <MobileBottomNav />
@@ -44,4 +45,3 @@ export default async function StoreLayout({
         </SmoothScrollProvider>
     );
 }
-

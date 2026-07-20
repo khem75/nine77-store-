@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { adminLogout } from '@/lib/auth-actions';
 import { useTransition } from 'react';
+import Logo from '@/components/logo';
 
 interface SidebarProps {
   onClose?: () => void;
@@ -49,15 +50,7 @@ export default function AdminSidebar({ onClose, isMobile = false }: SidebarProps
     <aside className="flex flex-col h-full bg-white border-r border-black/[0.06] select-none">
       {/* Logo */}
       <div className="flex items-center justify-between px-5 pt-5 pb-4 border-b border-black/[0.06]">
-        <Link href="/admin" className="flex items-center gap-2.5 group" onClick={onClose}>
-          <div className="w-8 h-8 rounded-xl bg-[#111111] flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow">
-            <Sparkles size={14} className="text-[#C9A227]" />
-          </div>
-          <div>
-            <p className="text-[13px] font-black tracking-wider text-[#111111] uppercase leading-none">NINE77</p>
-            <p className="text-[10px] text-[#9B9BA4] font-medium mt-0.5 leading-none">Admin Panel</p>
-          </div>
-        </Link>
+        <Logo variant="admin" onClick={onClose} />
         {isMobile && (
           <button
             onClick={onClose}

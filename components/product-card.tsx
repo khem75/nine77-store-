@@ -37,13 +37,17 @@ export default function ProductCard({ product, index = 0, showPrice = true }: Pr
             transition={{ duration: 0.6, delay: index * 0.06, ease: luxuryEase }}
             className="w-full group"
         >
-            <Link href={`/product/${slug}`} className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 rounded-2xl">
+            <Link 
+                href={`/product/${slug}`} 
+                className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/40 rounded-2xl active:scale-[0.98] transition-transform"
+                aria-label={`${product.name} — Rs. ${product.price.toLocaleString()}`}
+            >
                 <article
                     onMouseEnter={() => setHovered(true)}
                     onMouseLeave={() => setHovered(false)}
                     className="relative flex flex-col overflow-hidden rounded-2xl bg-card border border-border transition-all duration-500 ease-luxury hover:shadow-card-hover hover:-translate-y-1"
                 >
-                    {/* Image Container */}
+                    {/* Image Container with 4:5 aspect ratio */}
                     <div className="relative w-full overflow-hidden bg-surface" style={{ paddingBottom: '133.3%' }}>
 
                         {/* Featured Badge */}
@@ -55,46 +59,49 @@ export default function ProductCard({ product, index = 0, showPrice = true }: Pr
                             </div>
                         )}
 
-                        {/* Favourite Heart */}
+                        {/* Wishlist Heart Fade & Lift */}
                         <button
+                            type="button"
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
                                 setLiked(!liked);
                             }}
-                            className="absolute right-3 top-3 z-10 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-border flex items-center justify-center transition-all hover:bg-white hover:shadow-soft"
+                            aria-label={liked ? "Remove from wishlist" : "Add to wishlist"}
+                            className="absolute right-3 top-3 z-10 w-8 h-8 rounded-full bg-white/80 backdrop-blur-sm border border-border flex items-center justify-center transition-all duration-300 opacity-80 group-hover:opacity-100 scale-95 group-hover:scale-100 hover:bg-white hover:shadow-soft"
                         >
                             <Heart
                                 size={14}
-                                className={`transition-colors ${liked ? 'text-red-500 fill-red-500' : 'text-secondary'}`}
+                                className={`transition-colors duration-300 ${liked ? 'text-red-500 fill-red-500' : 'text-secondary'}`}
                             />
                         </button>
 
-                        {/* Product Image */}
+                        {/* Product Image — Scale 1 -> 1.06 on hover */}
                         <Image
                             src={hovered && img2Src ? img2Src : imgSrc}
                             alt={product.name}
                             fill
                             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
-                            className="object-cover transition-all duration-700 ease-luxury group-hover:scale-105"
+                            className="object-cover transition-transform duration-700 ease-luxury group-hover:scale-[1.06]"
                             onError={() => setImgSrc('/luxury-streetwear-garment.png')}
                         />
                     </div>
 
-                    {/* Product Info */}
-                    <div className="p-3 md:p-4 space-y-1.5">
-                        <h3 className="text-[12px] md:text-[13px] font-bold text-primary uppercase tracking-[0.04em] truncate">
+                    {/* Product Info — Price lift on hover */}
+                    <div className="p-3.5 md:p-4 space-y-1.5 bg-card">
+                        <h3 className="text-[12px] md:text-[13px] font-bold text-primary uppercase tracking-tight truncate group-hover:text-gold transition-colors duration-300">
                             {product.name}
                         </h3>
 
                         {showPrice && (
                             <div className="flex items-center justify-between">
-                                <p className="text-[12px] md:text-[13px] font-semibold text-secondary">
+                                <p className="text-[12px] md:text-[13px] font-semibold text-secondary transition-transform duration-300 group-hover:-translate-y-0.5">
                                     Rs. {product.price.toLocaleString()}
                                 </p>
 
                                 {/* Quick WhatsApp */}
                                 <button
+                                    type="button"
                                     onClick={(e) => {
                                         e.preventDefault();
                                         e.stopPropagation();
@@ -103,7 +110,8 @@ export default function ProductCard({ product, index = 0, showPrice = true }: Pr
                                             '_blank'
                                         );
                                     }}
-                                    className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] text-gold hover:text-gold-dark transition-colors"
+                                    className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] text-gold hover:text-gold-dark transition-colors duration-300"
+                                    aria-label={`Order ${product.name} on WhatsApp`}
                                 >
                                     <MessageCircle size={11} />
                                     WhatsApp Order

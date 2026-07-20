@@ -11,18 +11,18 @@
     color-scheme: light;
     --font-sans: var(--font-sans), system-ui, -apple-system, sans-serif;
 
-    /* ── Core Palette ── */
-    --bg: #F8F6F2;
-    --bg-secondary: #F3EFE8;
+    /* ── Master Luxury Palette ── */
+    --bg: #F5F3EF;
+    --bg-secondary: #EEE9E2;
     --card: #FFFFFF;
     --text: #111111;
-    --text-secondary: #5F5F5F;
+    --text-secondary: #6B6B6B;
     --text-muted: #8A8A8A;
-    --gold: #B7864A;
-    --gold-light: #C99B5F;
-    --gold-dark: #9A6F3A;
-    --border: #E6DFD5;
-    --shadow: rgba(0, 0, 0, 0.06);
+    --gold: #8B6A3E;
+    --gold-light: #A5804F;
+    --gold-dark: #6E522E;
+    --border: rgba(0, 0, 0, 0.08);
+    --shadow: rgba(0, 0, 0, 0.04);
 
     /* ── Dark Sections ── */
     --dark-bg: #0C0A08;

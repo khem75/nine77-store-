@@ -6,6 +6,7 @@ import { useEffect, useRef, useState, useCallback } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion, useScroll } from 'framer-motion';
 import { Menu, X, Search, Instagram, MessageCircle, ArrowUpRight } from 'lucide-react';
+import Logo from './logo';
 import { products as staticProducts } from '@/data/products';
 import { slugify } from '@/utils';
 import type { AdminProduct } from '@/types/admin';
@@ -21,23 +22,23 @@ const navLinks = [
 const WHATSAPP = 'https://wa.me/9779810605409?text=Hello%20NINE77%2C%20I%20have%20an%20inquiry.';
 const INSTAGRAM = 'https://www.instagram.com/nine.77___/';
 
-/* ─── Drawer Spring Config ───────────────────────────── */
+/* ─── Drawer 400ms Slide & 50ms Stagger Config ───────────────────── */
 const drawerVariants = {
     closed: { x: '-100%' },
     open: {
         x: 0,
-        transition: { type: 'spring', stiffness: 300, damping: 32, mass: 0.9 },
+        transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
     },
     exit: {
         x: '-100%',
-        transition: { type: 'spring', stiffness: 350, damping: 38, mass: 0.8 },
+        transition: { duration: 0.35, ease: [0.16, 1, 0.3, 1] },
     },
 };
 
 const backdropVariants = {
     closed: { opacity: 0 },
-    open: { opacity: 1, transition: { duration: 0.25 } },
-    exit: { opacity: 0, transition: { duration: 0.22 } },
+    open: { opacity: 1, transition: { duration: 0.3 } },
+    exit: { opacity: 0, transition: { duration: 0.25 } },
 };
 
 const linkStagger = {
@@ -45,13 +46,12 @@ const linkStagger = {
         opacity: 1,
         x: 0,
         transition: {
-            type: 'spring',
-            stiffness: 260,
-            damping: 24,
-            delay: 0.08 + i * 0.07,
+            duration: 0.4,
+            ease: [0.16, 1, 0.3, 1],
+            delay: 0.06 + i * 0.05, // 50ms stagger per item
         },
     }),
-    closed: { opacity: 0, x: -24 },
+    closed: { opacity: 0, x: -20 },
 };
 
 const cardStagger = {
@@ -176,7 +176,9 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
                 }`}
                 role="banner"
             >
-                <div className="mx-auto flex h-[60px] md:h-[72px] max-w-[1440px] items-center justify-between px-5 lg:px-12">
+                <div className={`mx-auto flex max-w-[1440px] items-center justify-between px-5 lg:px-12 transition-all duration-500 ${
+                    scrolled ? 'h-[54px] md:h-[64px]' : 'h-[64px] md:h-[76px]'
+                }`}>
 
                     {/* Left: Hamburger (mobile) / menu icon (desktop) */}
                     <div className="flex items-center gap-4">
@@ -220,25 +222,7 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
 
                     {/* Center: Brand Logo */}
                     <div className="absolute left-1/2 -translate-x-1/2 pointer-events-auto">
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: logoMounted ? 1 : 0 }}
-                            transition={reduceMotion ? { duration: 0 } : { duration: 0.5, ease: 'easeOut' }}
-                        >
-                            <Link
-                                href="/"
-                                data-cursor="magnetic"
-                                className="flex flex-col items-center justify-center text-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/60 rounded-sm"
-                                aria-label="NINE77 — Home"
-                            >
-                                <span className={`text-[12px] font-black uppercase tracking-[0.55em] ${textClass} transition-all duration-400 ease-luxury group-hover:tracking-[0.62em] group-hover:text-gold leading-none`}>
-                                    N I N E <span className="text-gold group-hover:text-gold-light transition-colors duration-400">7 7</span>
-                                </span>
-                                <span className={`text-[7px] font-bold uppercase tracking-[0.42em] ${textMutedClass} mt-1 transition-all duration-400 group-hover:text-primary select-none leading-none`}>
-                                    PREMIUM STREETWEAR
-                                </span>
-                            </Link>
-                        </motion.div>
+                        <Logo variant="navbar" scrolled={scrolled} />
                     </div>
 
                     {/* Right: Actions */}
@@ -327,19 +311,7 @@ export default function Navbar({ products = [] }: { products?: AdminProduct[] })
 
                             {/* ── Header ─────────────────────────── */}
                             <div className="relative z-10 flex items-center justify-between px-7 pt-7 pb-5 border-b border-border">
-                                <Link
-                                    href="/"
-                                    onClick={closeDrawer}
-                                    className="flex flex-col gap-1 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/50 rounded-sm"
-                                    aria-label="NINE77 — Home"
-                                >
-                                    <span className="text-[13px] font-black uppercase tracking-[0.52em] text-primary transition-all duration-400 group-hover:text-gold leading-none">
-                                        N I N E <span className="text-gold group-hover:text-gold-light transition-colors duration-400">7 7</span>
-                                    </span>
-                                    <span className="text-[7px] font-bold uppercase tracking-[0.4em] text-secondary leading-none">
-                                        PREMIUM STREETWEAR
-                                    </span>
-                                </Link>
+                                <Logo variant="drawer" onClick={closeDrawer} />
 
                                 <button
                                     onClick={closeDrawer}

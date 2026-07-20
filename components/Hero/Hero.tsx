@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
+import { AnimatePresence } from 'framer-motion';
 import { HeroProvider } from './HeroProvider';
 import { useHero } from './hooks/useHero';
 import { useAutoplay } from './hooks/useAutoplay';
@@ -13,16 +14,14 @@ import HeroContent from './HeroContent';
 import HeroControls from './HeroControls';
 import HeroNavigator from './HeroNavigator';
 import HeroProgress from './HeroProgress';
-import type { Campaign, ResolvedCampaign } from '@/types/campaign';
+import type { Campaign } from '@/types/campaign';
 
-// Visual feature flags to toggle advanced assets or debugging modes
 const FEATURE_FLAGS = {
   videoEnabled: true,
-  sceneEnabled: false, // 3D dial logo disabled by default in first release
+  sceneEnabled: false,
   analyticsEnabled: true,
 };
 
-/* React Class Error Boundary to prevent failures in Three.js or media loops from breaking the homepage */
 class HeroErrorBoundary extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean }
@@ -42,27 +41,25 @@ class HeroErrorBoundary extends React.Component<
 
   render() {
     if (this.state.hasError) {
-      // Graceful branding recovery layout
       return (
         <section className="relative w-full min-h-[100svh] bg-[#050505] flex flex-col justify-center px-6 md:px-16 lg:px-24">
           <div className="max-w-lg z-10">
-            <span className="block text-[9px] font-black uppercase tracking-[0.55em] text-[#c8a84b] mb-4">
+            <span className="block text-[9px] font-black uppercase tracking-[0.55em] text-[#8B6A3E] mb-4">
               NINE77 / STORE
             </span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-black uppercase text-white tracking-tight leading-none mb-6">
               BUILD DIFFERENT.
             </h1>
             <p className="text-white/40 text-sm font-light mb-8 max-w-sm leading-relaxed">
-              Premium streetwear engineered for those who refuse to blend in. Fusing architectural geometry with museum-grade craftsmanship.
+              Premium luxury streetwear crafted for the bold.
             </p>
             <a
               href="/shop"
-              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] px-7 py-3.5 rounded-full bg-[#c8a84b] text-[#050505] transition-transform hover:scale-105"
+              className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] px-7 py-3.5 rounded-full bg-[#8B6A3E] text-white transition-transform hover:scale-105"
             >
               SHOP COLLECTION
             </a>
           </div>
-          {/* Faux vignette layer */}
           <div className="absolute inset-0 bg-radial-gradient from-transparent to-black/80 pointer-events-none" />
         </section>
       );
@@ -71,15 +68,50 @@ class HeroErrorBoundary extends React.Component<
   }
 }
 
-function HeroInner({ autoplayDuration = 7000 }: { autoplayDuration?: number }) {
-  const { campaigns, activeIndex, isAutoplayPaused, setAutoplayPaused } = useHero();
-  const { mouseRef, onMouseMove } = useParallax();
+function HeroInner({ autoplayDuration = 6000 }: { autoplayDuration?: number }) {
+  const { campaigns, activeIndex, nextSlide, prevSlide, isAutoplayPaused, setAutoplayPaused, triggerUserInteraction } = useHero();
+  const { onMouseMove } = useParallax();
   const [stage, setStage] = useState(0);
+  const heroRef = useRef<HTMLElement>(null);
 
-  // Run autoplay loop
+  // Run 6000ms autoplay loop
   useAutoplay(autoplayDuration);
 
-  // intro stage timer triggers for text slide reveal sequences
+  // Intersection Observer to pause autoplay when Hero is out of viewport
+  useEffect(() => {
+    if (!heroRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          setAutoplayPaused(true);
+        } else {
+          setAutoplayPaused(false);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    observer.observe(heroRef.current);
+    return () => observer.disconnect();
+  }, [setAutoplayPaused]);
+
+  // Keyboard arrow navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        triggerUserInteraction();
+        prevSlide('arrow');
+      } else if (e.key === 'ArrowRight') {
+        triggerUserInteraction();
+        nextSlide('arrow');
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [nextSlide, prevSlide, triggerUserInteraction]);
+
+  // Intro stages for initial sequence
   useEffect(() => {
     const timers = [
       setTimeout(() => setStage(1), 50),
@@ -90,7 +122,6 @@ function HeroInner({ autoplayDuration = 7000 }: { autoplayDuration?: number }) {
       setTimeout(() => setStage(6), 1800),
     ];
 
-    // Analytics: track initial hero render
     if (FEATURE_FLAGS.analyticsEnabled && campaigns.length > 0) {
       trackHeroEvent('Hero Viewed', {
         campaignCount: campaigns.length,
@@ -102,9 +133,8 @@ function HeroInner({ autoplayDuration = 7000 }: { autoplayDuration?: number }) {
   }, [campaigns.length]);
 
   const activeCamp = campaigns[activeIndex];
-  const accentColor = activeCamp?.theme?.accent || '#c8a84b';
+  const accentColor = activeCamp?.theme?.accent || '#8B6A3E';
 
-  // Intelligent loading bounds: only mount active, previous, and next slides
   const isSlideMounted = (index: number) => {
     const total = campaigns.length;
     if (total <= 1) return true;
@@ -115,15 +145,16 @@ function HeroInner({ autoplayDuration = 7000 }: { autoplayDuration?: number }) {
 
   return (
     <section
+      ref={heroRef}
       onMouseMove={onMouseMove}
-      onMouseEnter={() => setAutoplayPaused(true)}
-      onMouseLeave={() => setAutoplayPaused(false)}
-      className="relative w-full min-h-[100svh] overflow-hidden"
+      onMouseEnter={triggerUserInteraction}
+      className="relative w-full min-h-[100svh] overflow-hidden select-none"
       style={{
         backgroundColor: '#050505',
         '--theme-color-accent': accentColor,
       } as React.CSSProperties}
-      aria-label="NINE77 Hero campaigns"
+      aria-label="NINE77 Editorial Hero Carousel"
+      role="region"
     >
       {/* Autoplay loading indicator line */}
       <HeroProgress duration={autoplayDuration} />
@@ -131,29 +162,32 @@ function HeroInner({ autoplayDuration = 7000 }: { autoplayDuration?: number }) {
       {/* Atmospheric backgrounds */}
       <HeroBackground visible={stage >= 1} />
 
-      {/* Left-side vertical indicator dot pagination */}
+      {/* Left-side vertical indicator dot pagination & navigation */}
       <HeroNavigator stage={stage} />
 
-      {/* Slide controller: mobile swipe tracking & desktop edge cursors */}
+      {/* Slide controller: mobile swipe tracking & desktop edge hit areas */}
       <HeroControls>
-        {/* Slides rendering block */}
+        {/* Slides rendering block with Framer Motion AnimatePresence */}
         <div className="absolute inset-0 w-full h-full z-[5]">
-          {campaigns.map((c, i) => {
-            if (!isSlideMounted(i)) return null;
-            return (
-              <HeroSlide
-                key={c.id}
-                campaign={c}
-                isActive={i === activeIndex}
-                isPreload={i === (activeIndex + 1) % campaigns.length}
-                featureFlags={FEATURE_FLAGS}
-              />
-            );
-          })}
+          <AnimatePresence mode="popLayout" initial={false}>
+            {campaigns.map((c, i) => {
+              if (!isSlideMounted(i)) return null;
+              return (
+                <HeroSlide
+                  key={c.id}
+                  campaign={c}
+                  isActive={i === activeIndex}
+                  isPreload={i === (activeIndex + 1) % campaigns.length}
+                  isFirstSlide={i === 0}
+                  featureFlags={FEATURE_FLAGS}
+                />
+              );
+            })}
+          </AnimatePresence>
         </div>
       </HeroControls>
 
-      {/* Foreground overlay content block (captures titles, CTA coordinates, trust strip) */}
+      {/* Foreground overlay content block */}
       <HeroContent stage={stage} />
     </section>
   );
@@ -165,8 +199,7 @@ interface HeroProps {
   autoplayDuration?: number;
 }
 
-export default function Hero({ initialCampaigns, locale = 'en', autoplayDuration = 7000 }: HeroProps) {
-  // Resolve campaigns with defaults fallback if empty or fetch error occurs
+export default function Hero({ initialCampaigns, locale = 'en', autoplayDuration = 6000 }: HeroProps) {
   const sourceCampaigns =
     initialCampaigns && initialCampaigns.length > 0 ? initialCampaigns : DEFAULT_CAMPAIGNS;
 

@@ -14,9 +14,10 @@ import { useHero } from './hooks/useHero';
 import { trackHeroEvent } from './hooks/useAnalytics';
 import {
   EASE,
+  SPRING_BUTTON,
   titleLineVariants,
   outlinedTextVariants,
-  labelVariants,
+  badgeVariants,
   descVariants,
   buttonGroupVariants,
   scrollIndicatorVariants,
@@ -39,7 +40,7 @@ const SOCIAL_PROOF = [
   'Everyday Luxury',
 ] as const;
 
-/* ─── Magnetic primary CTA button ───────────────────────── */
+/* ─── Magnetic Spring CTA button (stiffness: 260, damping: 20) ─── */
 function MagneticButton({
   href,
   children,
@@ -54,8 +55,8 @@ function MagneticButton({
   const ref = useRef<HTMLAnchorElement>(null);
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const springX = useSpring(mx, { stiffness: 300, damping: 22 });
-  const springY = useSpring(my, { stiffness: 300, damping: 22 });
+  const springX = useSpring(mx, { stiffness: 260, damping: 20 });
+  const springY = useSpring(my, { stiffness: 260, damping: 20 });
 
   const onMouseMove = useCallback((e: React.MouseEvent) => {
     if (!ref.current) return;
@@ -73,25 +74,25 @@ function MagneticButton({
   const getStyle = (): React.CSSProperties => {
     if (buttonType === 'gold') {
       return {
-        background: `linear-gradient(135deg, #C89B5A 0%, #D6A864 50%, #C89B5A 100%)`,
+        background: `linear-gradient(135deg, #8B6A3E 0%, #A5804F 50%, #8B6A3E 100%)`,
         backgroundSize: '200% 100%',
         border: '1px solid rgba(255,255,255,0.12)',
-        color: '#060606',
-        boxShadow: '0 4px 20px rgba(200,155,90,0.28), inset 0 1px 0 rgba(255,255,255,0.15)',
+        color: '#FFFFFF',
+        boxShadow: '0 4px 20px rgba(139,106,62,0.28), inset 0 1px 0 rgba(255,255,255,0.15)',
       };
     }
     if (buttonType === 'white') {
       return {
-        background: '#ffffff',
+        background: '#FFFFFF',
         border: '1px solid rgba(255,255,255,0.2)',
-        color: '#050505',
+        color: '#111111',
         boxShadow: '0 4px 16px rgba(255,255,255,0.12)',
       };
     }
     return {
       background: 'rgba(5,5,5,0.85)',
       border: '1px solid rgba(255,255,255,0.08)',
-      color: '#ffffff',
+      color: '#FFFFFF',
     };
   };
 
@@ -103,14 +104,15 @@ function MagneticButton({
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
       whileHover={{
-        scale: 1.04,
+        scale: 1.03,
         y: -2,
         boxShadow:
           buttonType === 'gold'
-            ? '0 8px 32px rgba(200,155,90,0.42), inset 0 1px 0 rgba(255,255,255,0.18)'
+            ? '0 8px 32px rgba(139,106,62,0.42), inset 0 1px 0 rgba(255,255,255,0.18)'
             : '0 8px 24px rgba(255,255,255,0.14)',
       }}
-      whileTap={{ scale: 0.96 }}
+      whileTap={{ scale: 0.97 }}
+      transition={SPRING_BUTTON}
       onClick={() => trackHeroEvent('CTA Clicked', { href })}
       className="inline-flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.24em] px-7 py-3.5 rounded-full transition-all duration-300 cursor-pointer whitespace-nowrap"
     >
@@ -130,7 +132,8 @@ function GlassButton({ href, children }: { href: string; children: React.ReactNo
         backgroundColor: 'rgba(255,255,255,0.10)',
         borderColor: 'rgba(255,255,255,0.22)',
       }}
-      whileTap={{ scale: 0.96 }}
+      whileTap={{ scale: 0.97 }}
+      transition={SPRING_BUTTON}
       className="inline-flex items-center gap-2.5 text-[10px] font-black uppercase tracking-[0.24em] px-7 py-3.5 rounded-full text-white/65 hover:text-white transition-colors duration-300 cursor-pointer whitespace-nowrap"
       style={{
         background: 'rgba(255,255,255,0.05)',
@@ -191,7 +194,7 @@ export default function HeroContent({ stage }: { stage: number }) {
       role="main"
     >
       {/* ─── CONTENT WRAPPER ──────────────────────────── */}
-      <div className="flex flex-1 flex-col px-6 md:px-10 lg:px-16 xl:px-24">
+      <div className="flex flex-1 flex-col px-5 md:px-10 lg:px-16 xl:px-24">
 
         {/* Navbar spacer */}
         <div className="h-20 md:h-[88px] lg:h-[96px] flex-shrink-0" />
@@ -201,7 +204,7 @@ export default function HeroContent({ stage }: { stage: number }) {
           variants={brandMarkVariants}
           initial="initial"
           animate="animate"
-          className="flex justify-center items-center mb-10 lg:mb-12"
+          className="flex justify-center items-center mb-8 lg:mb-12"
           aria-hidden="true"
         >
           <div className="flex items-center gap-3">
@@ -234,7 +237,7 @@ export default function HeroContent({ stage }: { stage: number }) {
           </div>
         </motion.div>
 
-        {/* ── EDITORIAL CONTENT — left 45% ───────────── */}
+        {/* ── EDITORIAL CONTENT — 100ms staggered ───────────── */}
         <div className="flex-1 flex flex-col justify-center">
           <AnimatePresence mode="wait">
             <motion.div
@@ -244,7 +247,6 @@ export default function HeroContent({ stage }: { stage: number }) {
               exit={{ opacity: 0 }}
               transition={{ duration: 0.45, ease: EASE }}
             >
-              {/* Headline block with subtle mouse parallax */}
               <motion.div
                 style={{
                   x: shouldReduceMotion ? 0 : parallaxX,
@@ -252,12 +254,12 @@ export default function HeroContent({ stage }: { stage: number }) {
                 }}
               >
 
-                {/* Section label */}
+                {/* 1. Badge / Section label */}
                 <motion.div
-                  variants={labelVariants}
+                  variants={badgeVariants}
                   initial="initial"
                   animate="animate"
-                  className="flex items-center gap-4 mb-7 md:mb-8"
+                  className="flex items-center gap-4 mb-6 md:mb-8"
                 >
                   <span
                     className="text-[9px] font-black uppercase tracking-[0.48em]"
@@ -265,25 +267,24 @@ export default function HeroContent({ stage }: { stage: number }) {
                   >
                     {tagline}
                   </span>
-                  {/* Animated gold line */}
                   <motion.div
                     className="h-px"
                     initial={{ width: 0, opacity: 0 }}
                     animate={{ width: 36, opacity: 1 }}
-                    transition={{ duration: 0.85, delay: 0.3, ease: EASE }}
+                    transition={{ duration: 0.85, delay: 0.2, ease: EASE }}
                     style={{
                       background: `linear-gradient(to right, ${accentColor}, transparent)`,
                     }}
                   />
                 </motion.div>
 
-                {/* Main headline — massive, two-line reveal */}
+                {/* 2. Main Heading — clamp(3rem, 8vw, 8rem) */}
                 <div className="overflow-visible mb-1" aria-label={`${headlineLines.join(' ')} — New Standard`}>
                   {headlineLines.map((line, i) => (
                     <div
                       key={i}
                       className="overflow-hidden"
-                      style={{ lineHeight: 0.88 }}
+                      style={{ lineHeight: 0.95 }}
                     >
                       <motion.div
                         custom={i}
@@ -293,22 +294,22 @@ export default function HeroContent({ stage }: { stage: number }) {
                       >
                         {isFirstSlide && i === 0 ? (
                           <h1
-                            className="font-black uppercase text-white"
+                            className="font-black uppercase text-white tracking-tight"
                             style={{
-                              fontSize: 'clamp(4.2rem, 9.5vw, 8.5rem)',
-                              letterSpacing: '-0.03em',
-                              lineHeight: 0.88,
+                              fontSize: 'clamp(3rem, 8vw, 8rem)',
+                              letterSpacing: '-0.02em',
+                              lineHeight: 0.95,
                             }}
                           >
                             {line}
                           </h1>
                         ) : (
                           <p
-                            className="font-black uppercase text-white"
+                            className="font-black uppercase text-white tracking-tight"
                             style={{
-                              fontSize: 'clamp(4.2rem, 9.5vw, 8.5rem)',
-                              letterSpacing: '-0.03em',
-                              lineHeight: 0.88,
+                              fontSize: 'clamp(3rem, 8vw, 8rem)',
+                              letterSpacing: '-0.02em',
+                              lineHeight: 0.95,
                             }}
                           >
                             {line}
@@ -318,8 +319,8 @@ export default function HeroContent({ stage }: { stage: number }) {
                     </div>
                   ))}
 
-                  {/* Outlined headline — NEW STANDARD */}
-                  <div className="overflow-hidden mt-1" style={{ lineHeight: 0.88 }}>
+                  {/* Outlined headline */}
+                  <div className="overflow-hidden mt-1" style={{ lineHeight: 0.95 }}>
                     <motion.div
                       variants={outlinedTextVariants}
                       initial="initial"
@@ -328,9 +329,9 @@ export default function HeroContent({ stage }: { stage: number }) {
                       <p
                         className="font-black uppercase"
                         style={{
-                          fontSize: 'clamp(4.2rem, 9.5vw, 8.5rem)',
-                          letterSpacing: '-0.03em',
-                          lineHeight: 0.88,
+                          fontSize: 'clamp(3rem, 8vw, 8rem)',
+                          letterSpacing: '-0.02em',
+                          lineHeight: 0.95,
                           WebkitTextStroke: `1.5px ${accentColor}`,
                           color: 'transparent',
                         }}
@@ -342,12 +343,12 @@ export default function HeroContent({ stage }: { stage: number }) {
                   </div>
                 </div>
 
-                {/* Gold accent underline */}
+                {/* Accent line */}
                 <motion.div
                   className="mt-6"
                   initial={{ scaleX: 0, opacity: 0 }}
                   animate={{ scaleX: 1, opacity: 1 }}
-                  transition={{ duration: 0.85, delay: 0.55, ease: EASE }}
+                  transition={{ duration: 0.85, delay: 0.35, ease: EASE }}
                   style={{ transformOrigin: 'left center' }}
                 >
                   <div
@@ -356,21 +357,23 @@ export default function HeroContent({ stage }: { stage: number }) {
                   />
                 </motion.div>
 
-                {/* Description */}
+                {/* 3. Description — clamp(.95rem, 2vw, 1.1rem) with line-height 1.8 */}
                 <motion.p
                   variants={descVariants}
                   initial="initial"
                   animate="animate"
-                  className="mt-6 text-[13px] md:text-[14px] leading-[1.8] font-light"
+                  className="mt-6 font-light"
                   style={{
-                    color: 'rgba(255,255,255,0.40)',
-                    maxWidth: '420px',
+                    fontSize: 'clamp(0.95rem, 2vw, 1.1rem)',
+                    lineHeight: 1.8,
+                    color: 'rgba(255,255,255,0.50)',
+                    maxWidth: '440px',
                   }}
                 >
                   {subtitle}
                 </motion.p>
 
-                {/* CTA Buttons */}
+                {/* 4. Spring Buttons */}
                 <motion.div
                   variants={buttonGroupVariants}
                   initial="initial"
@@ -394,12 +397,12 @@ export default function HeroContent({ stage }: { stage: number }) {
                   )}
                 </motion.div>
 
-                {/* Social proof */}
+                {/* 5. Bottom Metadata */}
                 <motion.div
                   className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  transition={{ duration: 0.6, delay: 0.9, ease: EASE }}
+                  transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
                 >
                   {SOCIAL_PROOF.map((item, i) => (
                     <div key={item} className="flex items-center gap-2">
@@ -430,7 +433,7 @@ export default function HeroContent({ stage }: { stage: number }) {
         <div className="h-20 md:h-24 flex-shrink-0" />
       </div>
 
-      {/* ─── TRUST STRIP — bottom left floating glass pill ── */}
+      {/* ─── TRUST STRIP ─────────────────────────────── */}
       <motion.div
         variants={scrollIndicatorVariants}
         initial="initial"
@@ -453,7 +456,7 @@ export default function HeroContent({ stage }: { stage: number }) {
               <div key={item.label} className="flex items-center gap-2 flex-shrink-0">
                 <Icon
                   size={10}
-                  style={{ color: activeCampaign?.theme.accent || '#C89B5A' }}
+                  style={{ color: activeCampaign?.theme.accent || '#8B6A3E' }}
                   aria-hidden="true"
                 />
                 <span
@@ -475,7 +478,7 @@ export default function HeroContent({ stage }: { stage: number }) {
         </div>
       </motion.div>
 
-      {/* ─── SCROLL INDICATOR — bottom right ─────────────── */}
+      {/* ─── SCROLL INDICATOR ────────────────────────── */}
       <motion.div
         variants={scrollIndicatorVariants}
         initial="initial"
@@ -487,7 +490,6 @@ export default function HeroContent({ stage }: { stage: number }) {
         tabIndex={0}
         onKeyDown={(e) => e.key === 'Enter' && scrollToNext()}
       >
-        {/* SCROLL TO DISCOVER — vertical text */}
         <span
           className="text-[8px] font-bold uppercase"
           style={{
@@ -501,7 +503,6 @@ export default function HeroContent({ stage }: { stage: number }) {
           SCROLL TO DISCOVER
         </span>
 
-        {/* Mouse icon */}
         <div
           className="relative flex items-start justify-center overflow-hidden rounded-full transition-all duration-300 group-hover:border-white/35"
           style={{
@@ -511,20 +512,18 @@ export default function HeroContent({ stage }: { stage: number }) {
             paddingTop: '6px',
           }}
         >
-          {/* Moving gold dot */}
           <motion.div
             className="rounded-full"
             style={{
               width: '2px',
               height: '8px',
-              background: `linear-gradient(to bottom, ${activeCampaign?.theme.accent || '#C89B5A'}, transparent)`,
+              background: `linear-gradient(to bottom, ${activeCampaign?.theme.accent || '#8B6A3E'}, transparent)`,
             }}
             animate={{ y: [0, 14, 0], opacity: [1, 0.3, 1] }}
             transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut' }}
           />
         </div>
 
-        {/* Vertical line below mouse */}
         <div
           className="w-px h-6"
           style={{ background: 'linear-gradient(to bottom, rgba(255,255,255,0.18), transparent)' }}

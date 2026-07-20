@@ -5,15 +5,15 @@ import { useHero } from './hooks/useHero';
 import { motion } from 'framer-motion';
 
 export default function HeroControls({ children }: { children: React.ReactNode }) {
-  const { nextSlide, prevSlide, campaigns, setAutoplayPaused } = useHero();
+  const { nextSlide, prevSlide, campaigns, triggerUserInteraction } = useHero();
 
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [hoverSide, setHoverSide] = useState<'left' | 'right' | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Drag end callback using Framer Motion drag gestures
+  // Drag end callback with 50px threshold & velocity flick
   const handleDragEnd = (event: any, info: any) => {
-    setAutoplayPaused(false);
+    triggerUserInteraction();
     
     const swipeThreshold = 50;
     const diff = info.offset.x;
@@ -28,7 +28,6 @@ export default function HeroControls({ children }: { children: React.ReactNode }
     }
   };
 
-  // Cursor edge tracking for premium floating arrow experience on desktop
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -37,7 +36,7 @@ export default function HeroControls({ children }: { children: React.ReactNode }
     
     setMousePos({ x: relativeX, y: relativeY });
 
-    const widthThreshold = rect.width * 0.12; // Active zone: outer 12% edges
+    const widthThreshold = rect.width * 0.15; // Active hit zone: 15% outer edges
     if (relativeX < widthThreshold) {
       setHoverSide('left');
     } else if (relativeX > rect.width - widthThreshold) {
@@ -51,14 +50,6 @@ export default function HeroControls({ children }: { children: React.ReactNode }
     setHoverSide(null);
   };
 
-  const handleEdgeClick = () => {
-    if (hoverSide === 'left') {
-      prevSlide('arrow');
-    } else if (hoverSide === 'right') {
-      nextSlide('arrow');
-    }
-  };
-
   if (campaigns.length <= 1) {
     return <div className="absolute inset-0 w-full h-full">{children}</div>;
   }
@@ -68,23 +59,44 @@ export default function HeroControls({ children }: { children: React.ReactNode }
       ref={containerRef}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      onClick={handleEdgeClick}
       className={`absolute inset-0 w-full h-full overflow-hidden select-none ${
         hoverSide ? 'cursor-none' : ''
       }`}
     >
+      {/* Framer Motion Drag Container with dragElastic=0.2 */}
       <motion.div
         drag="x"
         dragConstraints={{ left: 0, right: 0 }}
-        dragElastic={0.4}
-        onDragStart={() => setAutoplayPaused(true)}
+        dragElastic={0.2}
+        onDragStart={triggerUserInteraction}
         onDragEnd={handleDragEnd}
         className="w-full h-full relative cursor-grab active:cursor-grabbing"
       >
         {children}
       </motion.div>
 
-      {/* Premium floating indicators mapping to pointer coordinates (desktop only) */}
+      {/* Invisible Edge Hit Areas (Accessibility & Touch/Click) */}
+      <button
+        type="button"
+        onClick={() => {
+          triggerUserInteraction();
+          prevSlide('arrow');
+        }}
+        className="absolute left-0 top-0 bottom-0 w-[15%] z-20 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30 cursor-pointer"
+        aria-label="Previous slide"
+      />
+
+      <button
+        type="button"
+        onClick={() => {
+          triggerUserInteraction();
+          nextSlide('arrow');
+        }}
+        className="absolute right-0 top-0 bottom-0 w-[15%] z-20 focus:outline-none focus-visible:ring-1 focus-visible:ring-white/30 cursor-pointer"
+        aria-label="Next slide"
+      />
+
+      {/* Floating directional cursor indicator for desktop */}
       {hoverSide && (
         <div
           className="hidden md:flex pointer-events-none fixed z-[99] w-12 h-12 rounded-full border border-white/20 bg-black/60 backdrop-blur-md items-center justify-center -translate-x-1/2 -translate-y-1/2 transition-transform duration-100 ease-out"
@@ -92,6 +104,7 @@ export default function HeroControls({ children }: { children: React.ReactNode }
             left: `${mousePos.x}px`,
             top: `${mousePos.y}px`,
           }}
+          aria-hidden="true"
         >
           {hoverSide === 'left' ? (
             <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>

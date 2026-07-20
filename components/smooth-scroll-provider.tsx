@@ -37,15 +37,18 @@ export default function SmoothScrollProvider({
         }
 
         // Defer Lenis init so React fully commits the DOM before we touch it.
-        // On first mount this also acts as the hydration guard.
         const timer = setTimeout(() => {
             isFirstMount.current = false;
+            // Respect prefers-reduced-motion user setting
+            const prefersReducedMotion = typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) return;
+
             try {
                 const lenis = new Lenis({
-                    duration: 1.4,
+                    duration: 1.2,
                     easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
                     smoothWheel: true,
-                    wheelMultiplier: 0.8,
+                    wheelMultiplier: 0.9,
                     touchMultiplier: 1.5,
                     infinite: false,
                 });
