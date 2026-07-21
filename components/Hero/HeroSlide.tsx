@@ -24,16 +24,14 @@ export default function HeroSlide({
   isFirstSlide,
   featureFlags = { videoEnabled: true, sceneEnabled: false }
 }: HeroSlideProps) {
-  const [imgLoaded, setImgLoaded] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(true);
   const [loadError, setLoadError] = useState(false);
   const shouldReduceMotion = useReducedMotion();
 
   // Reset states on campaign change
   useEffect(() => {
-    setImgLoaded(false);
+    setImgLoaded(true);
     setLoadError(false);
-    const timer = setTimeout(() => setImgLoaded(true), 1200);
-    return () => clearTimeout(timer);
   }, [campaign.id, campaign.version]);
 
   // Versioned URL helper for cache-busting (Next.js Image requires clean local paths without query strings)
@@ -48,9 +46,9 @@ export default function HeroSlide({
   const mobileMedia  = campaign.media.mobile || desktopMedia;
 
   const desktopFocalX = desktopMedia.focalPoint?.x ?? 50;
-  const desktopFocalY = desktopMedia.focalPoint?.y ?? 25;
+  const desktopFocalY = desktopMedia.focalPoint?.y ?? 22;
   const mobileFocalX  = mobileMedia.focalPoint?.x ?? 50;
-  const mobileFocalY  = mobileMedia.focalPoint?.y ?? 20;
+  const mobileFocalY  = mobileMedia.focalPoint?.y ?? 18;
 
   const accentColor = campaign.theme.accent;
 
@@ -79,7 +77,7 @@ export default function HeroSlide({
       }}
     >
       {/* Loading placeholder */}
-      {(!imgLoaded || loadError) && (
+      {loadError && (
         <div className="absolute inset-0 z-[1] w-full h-full" style={bgPlaceholderStyle}>
           <div className="absolute inset-0 flex items-center justify-center opacity-20">
             <span className="text-[10px] font-black tracking-[0.65em] text-white">NINE77</span>
@@ -90,9 +88,7 @@ export default function HeroSlide({
       {/* Media layer with Ken Burns zoom */}
       {!loadError && (
         <div
-          className={`w-full h-full relative transition-all duration-[1200ms] ${
-            imgLoaded ? 'blur-0' : 'blur-[10px]'
-          }`}
+          className="w-full h-full relative transition-opacity duration-700 opacity-100"
           style={{
             animation: isActive && !shouldReduceMotion ? 'kenBurns 25s ease-in-out forwards' : 'none',
             willChange: 'transform',
@@ -111,7 +107,7 @@ export default function HeroSlide({
                 preload={isActive ? 'auto' : 'metadata'}
                 onLoadedData={() => setImgLoaded(true)}
                 onError={() => setLoadError(true)}
-                className="hidden md:block absolute inset-0 w-full h-full object-cover opacity-80"
+                className="hidden md:block absolute inset-0 w-full h-full object-cover opacity-90"
                 style={{ objectPosition: `${desktopFocalX}% ${desktopFocalY}%` }}
               />
               {/* Mobile video */}
@@ -124,13 +120,13 @@ export default function HeroSlide({
                 preload={isActive ? 'auto' : 'metadata'}
                 onLoadedData={() => setImgLoaded(true)}
                 onError={() => setLoadError(true)}
-                className="block md:hidden absolute inset-0 w-full h-full object-cover opacity-88"
+                className="block md:hidden absolute inset-0 w-full h-full object-cover opacity-95"
                 style={{ objectPosition: `${mobileFocalX}% ${mobileFocalY}%` }}
               />
             </>
           ) : (
             <>
-              {/* Desktop image — Priority ONLY on first slide */}
+              {/* Desktop image — Full HD 100% Uncompressed Quality */}
               <div className="hidden md:block absolute inset-0 w-full h-full">
                 <Image
                   src={getVersionedUrl(desktopMedia.url)}
@@ -138,18 +134,20 @@ export default function HeroSlide({
                   fill
                   priority={isFirstSlide}
                   loading={isFirstSlide ? 'eager' : 'lazy'}
+                  quality={100}
+                  unoptimized
                   sizes="100vw"
-                  className="object-cover transition-opacity duration-[1100ms]"
+                  className="object-cover"
                   style={{
                     objectPosition: `${desktopFocalX}% ${desktopFocalY}%`,
-                    opacity: imgLoaded ? 0.85 : 0,
+                    opacity: 0.95,
                   }}
                   onLoad={() => setImgLoaded(true)}
                   onError={() => setLoadError(true)}
                 />
               </div>
 
-              {/* Mobile image — Priority ONLY on first slide */}
+              {/* Mobile image — Full HD 100% Uncompressed Quality */}
               <div className="block md:hidden absolute inset-0 w-full h-full">
                 <Image
                   src={getVersionedUrl(mobileMedia.url)}
@@ -157,11 +155,13 @@ export default function HeroSlide({
                   fill
                   priority={isFirstSlide}
                   loading={isFirstSlide ? 'eager' : 'lazy'}
+                  quality={100}
+                  unoptimized
                   sizes="100vw"
-                  className="object-cover transition-opacity duration-[1100ms]"
+                  className="object-cover"
                   style={{
                     objectPosition: `${mobileFocalX}% ${mobileFocalY}%`,
-                    opacity: imgLoaded ? 0.90 : 0,
+                    opacity: 0.95,
                   }}
                   onLoad={() => setImgLoaded(true)}
                   onError={() => setLoadError(true)}
