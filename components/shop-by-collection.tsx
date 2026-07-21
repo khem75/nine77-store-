@@ -28,9 +28,9 @@ const collections = [
     },
     {
         name: 'Accessories',
-        subtitle: 'Essentials',
-        image: '/products/linen-shirt-1.jpg',
-        href: '/shop',
+        subtitle: 'Distressed Caps',
+        image: '/products/distressed-cap-1.jpg',
+        href: '/shop?category=Accessories',
     },
 ];
 

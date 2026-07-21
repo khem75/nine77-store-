@@ -4,7 +4,7 @@ export type Product = {
     slug: string;
     price: number;
     description: string;
-    category: 'Tops' | 'Pants' | 'Outerwear';
+    category: 'Tops' | 'Pants' | 'Outerwear' | 'Accessories';
     images: string[];
     sizes: Array<'S' | 'M' | 'L' | 'XL'>;
     colors?: string[];

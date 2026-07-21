@@ -191,4 +191,24 @@ export const products: Product[] = [
         featured: false,
         newArrival: true,
     },
+    {
+        id: 'distressed-cap',
+        name: 'Original Vintage Distressed Cap',
+        slug: 'distressed-cap',
+        price: 1250,
+        description:
+            'Signature vintage distressed dad cap featuring 3D "ORIGINAL THE BLACK" embroidery, custom distressing, and an adjustable strap.',
+        category: 'Accessories',
+        images: [
+            '/products/distressed-cap-1.jpg',
+            '/products/distressed-cap-2.jpg',
+            '/products/distressed-cap-3.jpg',
+            '/products/distressed-cap-4.jpg',
+            '/products/distressed-cap-5.jpg',
+        ],
+        sizes: ['S', 'M', 'L', 'XL'],
+        colors: ['#7A2938', '#CBB28A', '#5C5449'],
+        featured: true,
+        newArrival: true,
+    },
 ];
