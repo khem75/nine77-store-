@@ -378,7 +378,7 @@ export default function HeroContent({ stage }: { stage: number }) {
                   variants={buttonGroupVariants}
                   initial="initial"
                   animate="animate"
-                  className="mt-8 flex flex-wrap gap-3"
+                  className="mt-6 md:mt-8 flex flex-wrap gap-3 z-10"
                 >
                   <MagneticButton
                     href={activeCampaign.ctaLink}
@@ -397,9 +397,54 @@ export default function HeroContent({ stage }: { stage: number }) {
                   )}
                 </motion.div>
 
-                {/* 5. Bottom Metadata */}
+                {/* 5. Trust Strip — Inline to avoid CTA button overlap */}
                 <motion.div
-                  className="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2"
+                  variants={scrollIndicatorVariants}
+                  initial="initial"
+                  animate={stage >= 6 ? 'animate' : 'initial'}
+                  className="mt-6 flex flex-wrap items-center"
+                >
+                  <div
+                    className="flex flex-wrap items-center gap-3 sm:gap-4 md:gap-5 rounded-full px-4 py-2"
+                    style={{
+                      background: 'rgba(0,0,0,0.45)',
+                      backdropFilter: 'blur(16px)',
+                      WebkitBackdropFilter: 'blur(16px)',
+                      border: '1px solid rgba(255,255,255,0.08)',
+                      boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+                    }}
+                  >
+                    {TRUST_ITEMS.map((item, idx) => {
+                      const Icon = item.icon;
+                      return (
+                        <div key={item.label} className="flex items-center gap-2 flex-shrink-0">
+                          <Icon
+                            size={10}
+                            style={{ color: activeCampaign?.theme.accent || '#8B6A3E' }}
+                            aria-hidden="true"
+                          />
+                          <span
+                            className="text-[8px] font-semibold uppercase tracking-[0.2em]"
+                            style={{ color: 'rgba(255,255,255,0.55)' }}
+                          >
+                            {item.label}
+                          </span>
+                          {idx < TRUST_ITEMS.length - 1 && (
+                            <div
+                              className="hidden sm:block w-px h-3 ml-2 md:ml-3"
+                              style={{ background: 'rgba(255,255,255,0.12)' }}
+                              aria-hidden="true"
+                            />
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </motion.div>
+
+                {/* 6. Bottom Metadata */}
+                <motion.div
+                  className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ duration: 0.6, delay: 0.6, ease: EASE }}
@@ -430,53 +475,8 @@ export default function HeroContent({ stage }: { stage: number }) {
         </div>
 
         {/* Bottom spacer */}
-        <div className="h-20 md:h-24 flex-shrink-0" />
+        <div className="h-12 md:h-16 flex-shrink-0" />
       </div>
-
-      {/* ─── TRUST STRIP ─────────────────────────────── */}
-      <motion.div
-        variants={scrollIndicatorVariants}
-        initial="initial"
-        animate={stage >= 6 ? 'animate' : 'initial'}
-        className="absolute bottom-8 left-6 md:left-10 lg:left-16 xl:left-24 hidden md:flex"
-      >
-        <div
-          className="flex items-center gap-5 rounded-full px-5 py-2"
-          style={{
-            background: 'rgba(0,0,0,0.42)',
-            backdropFilter: 'blur(16px)',
-            WebkitBackdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
-          }}
-        >
-          {TRUST_ITEMS.map((item, idx) => {
-            const Icon = item.icon;
-            return (
-              <div key={item.label} className="flex items-center gap-2 flex-shrink-0">
-                <Icon
-                  size={10}
-                  style={{ color: activeCampaign?.theme.accent || '#8B6A3E' }}
-                  aria-hidden="true"
-                />
-                <span
-                  className="text-[8px] font-semibold uppercase tracking-[0.2em]"
-                  style={{ color: 'rgba(255,255,255,0.45)' }}
-                >
-                  {item.label}
-                </span>
-                {idx < TRUST_ITEMS.length - 1 && (
-                  <div
-                    className="hidden lg:block w-px h-3 ml-3"
-                    style={{ background: 'rgba(255,255,255,0.10)' }}
-                    aria-hidden="true"
-                  />
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </motion.div>
 
       {/* ─── SCROLL INDICATOR ────────────────────────── */}
       <motion.div
