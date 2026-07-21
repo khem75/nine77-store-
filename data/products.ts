@@ -204,6 +204,7 @@ export const products: Product[] = [
             '/products/distressed-cap-2.jpg',
             '/products/distressed-cap-3.jpg',
             '/products/distressed-cap-4.jpg',
+            '/products/distressed-cap-5.jpg',
         ],
         sizes: ['S', 'M', 'L', 'XL'],
         colors: ['#7A2938', '#CBB28A', '#5C5449'],

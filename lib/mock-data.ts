@@ -146,6 +146,7 @@ let mockProducts: AdminProduct[] = [
       '/products/distressed-cap-2.jpg',
       '/products/distressed-cap-3.jpg',
       '/products/distressed-cap-4.jpg',
+      '/products/distressed-cap-5.jpg',
     ],
     featured: true,
     status: 'active',
