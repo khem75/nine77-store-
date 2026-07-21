@@ -7,7 +7,7 @@ import ProductCard from '@/components/product-card';
 import { products as staticProducts } from '@/data/products';
 import type { AdminProduct } from '@/types/admin';
 
-const categories = ['All', 'Tops', 'Pants', 'Outerwear'] as const;
+const categories = ['All', 'Tops', 'Pants', 'Outerwear', 'Accessories'] as const;
 const sortOptions = ['Price High to Low', 'Price Low to High', 'Newest First'] as const;
 
 // Campaign metadata for each category
@@ -31,6 +31,11 @@ const campaignData: Record<string, { title: string; description: string; image: 
         title: 'Outerwear Drop',
         description: 'Designed for every season. Technical construction meets high visual edge.',
         image: '/products/windcheater-1.jpg',
+    },
+    Accessories: {
+        title: 'Accessories Drop',
+        description: 'Vintage distressed caps and statement essentials. Designed with custom 3D embroidery and museum-grade finishes.',
+        image: '/products/distressed-cap-1.jpg',
     },
 };
 
