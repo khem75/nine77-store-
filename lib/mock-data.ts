@@ -171,10 +171,10 @@ let mockSettings: StoreSettings = {
   id: 1,
   store_name: 'NINE77',
   logo: null,
-  whatsapp: '9779812345678',
-  instagram: 'https://instagram.com/nine77store',
-  facebook: 'https://facebook.com/nine77store',
-  footer: '© 2025 NINE77. All rights reserved.',
+  whatsapp: '9779810605409',
+  instagram: 'https://www.instagram.com/nine.77___/',
+  facebook: 'https://www.facebook.com/profile.php?id=61590493074666',
+  footer: '© 2026 NINE77. All rights reserved.',
   updated_at: new Date().toISOString(),
 };
 

@@ -7,6 +7,8 @@ import Logo from './logo';
 
 const WHATSAPP = 'https://wa.me/9779810605409?text=Hello%20NINE77%2C%20I%20have%20an%20inquiry.';
 const INSTAGRAM = 'https://www.instagram.com/nine.77___/';
+const FACEBOOK = 'https://www.facebook.com/profile.php?id=61590493074666';
+const TIKTOK = 'https://www.tiktok.com/@nine.77___';
 
 export default function Footer() {
     const [email, setEmail] = useState('');
@@ -40,11 +42,11 @@ export default function Footer() {
                             <form onSubmit={handleSubscribe} className="relative flex items-center">
                                 <input
                                     type="email"
-                                    placeholder="Enter your email for private drops..."
+                                    required
+                                    placeholder="Enter your email address..."
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full h-11 rounded-[14px] border border-white/10 bg-white/[0.04] px-4 pr-24 text-[11px] text-white placeholder:text-white/35 outline-none transition-all duration-200 focus:border-gold/60 focus:bg-white/[0.06] caret-gold"
-                                    required
+                                    className="w-full h-11 pl-4 pr-24 rounded-[14px] bg-white/[0.05] border border-white/10 text-[11px] text-white placeholder:text-white/30 focus:outline-none focus:border-gold/50 transition-colors"
                                 />
                                 <button
                                     type="submit"
@@ -67,8 +69,8 @@ export default function Footer() {
                         <div className="flex gap-3 mt-2">
                             {[
                                 { icon: Instagram, href: INSTAGRAM, label: 'Instagram' },
-                                { icon: Facebook, href: '#', label: 'Facebook' },
-                                { icon: Music2, href: '#', label: 'TikTok' },
+                                { icon: Facebook, href: FACEBOOK, label: 'Facebook' },
+                                { icon: Music2, href: TIKTOK, label: 'TikTok' },
                             ].map(({ icon: Icon, href, label }) => (
                                 <a
                                     key={label}
