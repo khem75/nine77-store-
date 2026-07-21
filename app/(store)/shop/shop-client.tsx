@@ -74,7 +74,13 @@ export default function ShopClient({ initialProducts = [] }: { initialProducts?:
     };
 
     const filteredProducts = useMemo(() => {
-        const sourceProducts = initialProducts.length > 0 ? initialProducts : staticProducts;
+        // Merge initialProducts (from DB) with staticProducts fallback so new categories/products always render
+        const dbNames = new Set(initialProducts.map((p) => p.name.toLowerCase()));
+        const combined = [
+            ...initialProducts,
+            ...staticProducts.filter((sp) => !dbNames.has(sp.name.toLowerCase())),
+        ];
+        const sourceProducts = combined.length > 0 ? combined : staticProducts;
         let base = category === 'All' ? sourceProducts : sourceProducts.filter((p) => p.category === category);
         if (search.trim()) {
             const q = search.toLowerCase();
