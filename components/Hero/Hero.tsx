@@ -148,7 +148,7 @@ function HeroInner({ autoplayDuration = 6000 }: { autoplayDuration?: number }) {
       ref={heroRef}
       onMouseMove={onMouseMove}
       onMouseEnter={triggerUserInteraction}
-      className="relative w-full min-h-[100svh] overflow-hidden select-none"
+      className="relative w-full h-[100dvh] min-h-[100dvh] max-h-[100dvh] overflow-hidden select-none"
       style={{
         backgroundColor: '#050505',
         '--theme-color-accent': accentColor,

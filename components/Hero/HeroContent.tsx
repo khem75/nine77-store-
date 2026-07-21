@@ -190,7 +190,7 @@ export default function HeroContent({ stage }: { stage: number }) {
 
   return (
     <div
-      className="relative z-[20] flex flex-col min-h-[100svh] overflow-hidden select-none"
+      className="relative z-[20] flex flex-col h-full min-h-[100dvh] max-h-[100dvh] overflow-hidden select-none"
       role="main"
     >
       {/* ─── CONTENT WRAPPER ──────────────────────────── */}

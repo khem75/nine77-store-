@@ -36,26 +36,26 @@ export default function HeroSlide({
     return () => clearTimeout(timer);
   }, [campaign.id, campaign.version]);
 
-  // Versioned URL helper for cache-busting
+  // Versioned URL helper for cache-busting (Next.js Image requires clean local paths without query strings)
   const getVersionedUrl = (url: string) => {
     if (!url) return '';
     if (url.startsWith('data:') || url.startsWith('/')) return url;
     const separator = url.includes('?') ? '&' : '?';
-    return `${url}${separator}v=${campaign.version}`;
+    return `${url}${separator}v=${campaign.version || 1}`;
   };
 
   const desktopMedia = campaign.media.desktop;
   const mobileMedia  = campaign.media.mobile || desktopMedia;
 
-  const desktopFocalX = desktopMedia.focalPoint?.x ?? 65;
-  const desktopFocalY = desktopMedia.focalPoint?.y ?? 45;
-  const mobileFocalX  = mobileMedia.focalPoint?.x ?? 55;
-  const mobileFocalY  = mobileMedia.focalPoint?.y ?? 40;
+  const desktopFocalX = desktopMedia.focalPoint?.x ?? 50;
+  const desktopFocalY = desktopMedia.focalPoint?.y ?? 25;
+  const mobileFocalX  = mobileMedia.focalPoint?.x ?? 50;
+  const mobileFocalY  = mobileMedia.focalPoint?.y ?? 20;
 
   const accentColor = campaign.theme.accent;
 
   const bgPlaceholderStyle: React.CSSProperties = {
-    background: `radial-gradient(circle at 65% 45%, ${accentColor}14 0%, #050505 75%)`,
+    background: `radial-gradient(circle at 50% 30%, ${accentColor}14 0%, #050505 75%)`,
     transition: 'opacity 0.8s ease-in-out',
   };
 
@@ -111,7 +111,7 @@ export default function HeroSlide({
                 preload={isActive ? 'auto' : 'metadata'}
                 onLoadedData={() => setImgLoaded(true)}
                 onError={() => setLoadError(true)}
-                className="hidden md:block absolute inset-0 w-full h-full object-cover opacity-60"
+                className="hidden md:block absolute inset-0 w-full h-full object-cover opacity-80"
                 style={{ objectPosition: `${desktopFocalX}% ${desktopFocalY}%` }}
               />
               {/* Mobile video */}
@@ -124,14 +124,14 @@ export default function HeroSlide({
                 preload={isActive ? 'auto' : 'metadata'}
                 onLoadedData={() => setImgLoaded(true)}
                 onError={() => setLoadError(true)}
-                className="block md:hidden absolute inset-0 w-full h-full object-cover opacity-72"
+                className="block md:hidden absolute inset-0 w-full h-full object-cover opacity-88"
                 style={{ objectPosition: `${mobileFocalX}% ${mobileFocalY}%` }}
               />
             </>
           ) : (
             <>
               {/* Desktop image — Priority ONLY on first slide */}
-              <div className="hidden md:block absolute inset-0">
+              <div className="hidden md:block absolute inset-0 w-full h-full">
                 <Image
                   src={getVersionedUrl(desktopMedia.url)}
                   alt={desktopMedia.alt || 'NINE77 Campaign'}
@@ -142,7 +142,7 @@ export default function HeroSlide({
                   className="object-cover transition-opacity duration-[1100ms]"
                   style={{
                     objectPosition: `${desktopFocalX}% ${desktopFocalY}%`,
-                    opacity: imgLoaded ? 0.62 : 0,
+                    opacity: imgLoaded ? 0.85 : 0,
                   }}
                   onLoad={() => setImgLoaded(true)}
                   onError={() => setLoadError(true)}
@@ -150,7 +150,7 @@ export default function HeroSlide({
               </div>
 
               {/* Mobile image — Priority ONLY on first slide */}
-              <div className="block md:hidden absolute inset-0">
+              <div className="block md:hidden absolute inset-0 w-full h-full">
                 <Image
                   src={getVersionedUrl(mobileMedia.url)}
                   alt={mobileMedia.alt || 'NINE77 Campaign'}
@@ -161,7 +161,7 @@ export default function HeroSlide({
                   className="object-cover transition-opacity duration-[1100ms]"
                   style={{
                     objectPosition: `${mobileFocalX}% ${mobileFocalY}%`,
-                    opacity: imgLoaded ? 0.72 : 0,
+                    opacity: imgLoaded ? 0.90 : 0,
                   }}
                   onLoad={() => setImgLoaded(true)}
                   onError={() => setLoadError(true)}
@@ -175,8 +175,8 @@ export default function HeroSlide({
             className="absolute inset-0 pointer-events-none"
             style={{
               background: `
-                linear-gradient(to right, rgba(5,5,5,0.88) 0%, rgba(5,5,5,0.52) 38%, rgba(5,5,5,0.12) 60%, transparent 100%),
-                linear-gradient(to top, #050505 0%, rgba(5,5,5,0.5) 22%, transparent 55%)
+                linear-gradient(to right, rgba(5,5,5,0.78) 0%, rgba(5,5,5,0.42) 42%, rgba(5,5,5,0.1) 70%, transparent 100%),
+                linear-gradient(to top, #050505 0%, rgba(5,5,5,0.45) 25%, transparent 60%)
               `,
             }}
           />

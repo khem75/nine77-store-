@@ -246,14 +246,14 @@ let mockCampaigns: Campaign[] = [
     tagline: { en: 'DROP 01 / EDITORIAL', np: 'ड्रप ०१ / सम्पादकीय' },
     media: {
       desktop: {
-        url: '/products/campaign-new-season.png',
+        url: '/hero/hero-1-v4.jpg',
         alt: 'NINE77 New Season Autumn Campaign Model',
-        focalPoint: { x: 50, y: 45 }
+        focalPoint: { x: 50, y: 22 }
       },
       mobile: {
-        url: '/products/campaign-new-season.png',
+        url: '/hero/hero-1-v4.jpg',
         alt: 'NINE77 New Season Portrait Crop',
-        focalPoint: { x: 50, y: 40 }
+        focalPoint: { x: 50, y: 18 }
       }
     },
     type: 'image',
@@ -274,20 +274,20 @@ let mockCampaigns: Campaign[] = [
     tagline: 'CORE ESSENTIALS',
     media: {
       desktop: {
-        url: '/products/campaign-everyday-uniform.png',
+        url: '/hero/hero-2-v4.jpg',
         alt: 'NINE77 Everyday Uniform Core Styling',
-        focalPoint: { x: 50, y: 50 }
+        focalPoint: { x: 50, y: 22 }
       },
       mobile: {
-        url: '/products/campaign-everyday-uniform.png',
+        url: '/hero/hero-2-v4.jpg',
         alt: 'NINE77 Everyday Uniform Portrait Crop',
-        focalPoint: { x: 50, y: 50 }
+        focalPoint: { x: 50, y: 18 }
       }
     },
     type: 'image',
     cta: 'Discover Fits',
     ctaLink: '/shop',
-    theme: { accent: '#bcc8e0', overlay: 'dark', text: 'light', button: 'white' },
+    theme: { accent: '#4A7BB0', overlay: 'dark', text: 'light', button: 'white' },
     status: 'published',
     order: 1,
     version: 1,
@@ -296,19 +296,19 @@ let mockCampaigns: Campaign[] = [
   },
   {
     id: 'campaign-003',
-    title: 'LIMITED DROP',
-    subtitle: 'High-demand outerwear and pants engineered for those who refuse to blend in.',
-    tagline: 'TECHNICAL GARMENTS',
+    title: 'RULES THE WORLD',
+    subtitle: 'Bold oversized back graphic prints engineered for those who refuse to blend in.',
+    tagline: 'GRAPHIC SERIES',
     media: {
       desktop: {
-        url: '/products/campaign-limited-drop.png',
-        alt: 'NINE77 Limited Drop Technical Outerwear',
-        focalPoint: { x: 50, y: 50 }
+        url: '/hero/hero-3-v4.jpg',
+        alt: 'NINE77 Rules The World Graphic Tee Editorial',
+        focalPoint: { x: 50, y: 30 }
       },
       mobile: {
-        url: '/products/campaign-limited-drop.png',
-        alt: 'NINE77 Limited Drop Portrait Crop',
-        focalPoint: { x: 50, y: 50 }
+        url: '/hero/hero-3-v4.jpg',
+        alt: 'NINE77 Rules The World Graphic Tee Portrait',
+        focalPoint: { x: 50, y: 25 }
       }
     },
     type: 'image',

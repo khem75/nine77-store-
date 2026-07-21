@@ -25,14 +25,14 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
     },
     media: {
       desktop: {
-        url: '/products/henley-1.jpg',
-        alt: 'NINE77 New Season Campaign — Henley Knitted Tee',
-        focalPoint: { x: 50, y: 35 }
+        url: '/hero/hero-1-v4.jpg',
+        alt: 'NINE77 New Season Campaign — Signature Jordan Tee',
+        focalPoint: { x: 50, y: 22 }
       },
       mobile: {
-        url: '/products/henley-1.jpg',
+        url: '/hero/hero-1-v4.jpg',
         alt: 'NINE77 New Season Portrait',
-        focalPoint: { x: 50, y: 30 }
+        focalPoint: { x: 50, y: 18 }
       }
     },
     type: 'image',
@@ -58,14 +58,14 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
     tagline: 'CORE ESSENTIALS · SS26',
     media: {
       desktop: {
-        url: '/products/windcheater-1.jpg',
-        alt: 'NINE77 Everyday Uniform Windcheater',
-        focalPoint: { x: 50, y: 35 }
+        url: '/hero/hero-2-v4.jpg',
+        alt: 'NINE77 Everyday Uniform Henley',
+        focalPoint: { x: 50, y: 22 }
       },
       mobile: {
-        url: '/products/windcheater-1.jpg',
-        alt: 'NINE77 Everyday Uniform Windcheater Mobile',
-        focalPoint: { x: 50, y: 35 }
+        url: '/hero/hero-2-v4.jpg',
+        alt: 'NINE77 Everyday Uniform Henley Mobile',
+        focalPoint: { x: 50, y: 18 }
       }
     },
     type: 'image',
@@ -73,7 +73,7 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
     secondaryCta: 'VIEW LOOKBOOK',
     ctaLink: '/shop',
     theme: {
-      accent: '#bcc8e0',
+      accent: '#4A7BB0',
       overlay: 'dark',
       text: 'light',
       button: 'white'
@@ -86,19 +86,19 @@ export const DEFAULT_CAMPAIGNS: Campaign[] = [
   },
   {
     id: 'fallback-limited-drop',
-    title: 'LIMITED\nDROP',
-    subtitle: 'High-demand outerwear engineered for those who refuse to blend in. Made in limited numbers. Gone forever.',
-    tagline: 'TECHNICAL GARMENTS · AW26',
+    title: 'RULES THE\nWORLD',
+    subtitle: 'Bold oversized graphic prints engineered for those who refuse to blend in. Limited numbers crafted.',
+    tagline: 'GRAPHIC SERIES · RULES THE WORLD',
     media: {
       desktop: {
-        url: '/products/old-money-tee-1.jpg',
-        alt: 'NINE77 Limited Drop Premium Tee',
-        focalPoint: { x: 50, y: 35 }
+        url: '/hero/hero-3-v4.jpg',
+        alt: 'NINE77 Rules The World Graphic Tee Editorial',
+        focalPoint: { x: 50, y: 30 }
       },
       mobile: {
-        url: '/products/old-money-tee-1.jpg',
-        alt: 'NINE77 Limited Drop Premium Tee Mobile',
-        focalPoint: { x: 50, y: 35 }
+        url: '/hero/hero-3-v4.jpg',
+        alt: 'NINE77 Rules The World Graphic Tee Mobile',
+        focalPoint: { x: 50, y: 25 }
       }
     },
     type: 'image',
